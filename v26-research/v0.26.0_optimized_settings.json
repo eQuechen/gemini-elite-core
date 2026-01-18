@@ -1,0 +1,123 @@
+{
+  "agents": {
+    "codebaseInvestigator": {
+      "enabled": true,
+      "modelConfig": {
+        "temperature": 0.3,
+        "topP": 0.9,
+        "maxOutputTokens": 4096
+      },
+      "runConfig": {
+        "maxTurns": 100,
+        "timeout": 600000,
+        "retryCount": 3
+      }
+    },
+    "codeReviewer": {
+      "enabled": true,
+      "modelConfig": {
+        "temperature": 0.5,
+        "topP": 0.95,
+        "maxOutputTokens": 2048
+      },
+      "runConfig": {
+        "maxTurns": 30,
+        "timeout": 300000,
+        "retryCount": 2
+      }
+    },
+    "bugFixer": {
+      "enabled": true,
+      "modelConfig": {
+        "temperature": 0.2,
+        "topP": 0.85,
+        "maxOutputTokens": 3000
+      },
+      "runConfig": {
+        "maxTurns": 50,
+        "timeout": 300000,
+        "retryCount": 3
+      }
+    },
+    "skillCreator": {
+      "enabled": true,
+      "modelConfig": {
+        "temperature": 0.7,
+        "topP": 0.95,
+        "maxOutputTokens": 4096
+      },
+      "runConfig": {
+        "maxTurns": 50,
+        "timeout": 600000,
+        "retryCount": 2
+      }
+    }
+  },
+  "experimental": {
+    "plan": true,
+    "planningMode": "auto",
+    "planVisualization": true,
+    "requirePlanApproval": false,
+    "maxPlanDepth": 5,
+    "planTimeout": 60000,
+    "skillCreator": true
+  },
+  "security": {
+    "requireSkillApproval": true,
+    "allowAutoInstall": false,
+    "trustedAuthors": [
+      "google-gemini"
+    ],
+    "skillPermissions": {
+      "allowFileWrite": true,
+      "allowNetworkAccess": true,
+      "allowCommandExecution": false
+    }
+  },
+  "mcp": {
+    "servers": {
+      "supabase": {
+        "enabled": true,
+        "command": "npx",
+        "args": ["@supabase/mcp-server-supabase@latest"]
+      },
+      "context7": {
+        "enabled": true,
+        "command": "npx",
+        "args": ["context7@latest"]
+      },
+      "github": {
+        "enabled": true,
+        "command": "npx",
+        "args": ["@github/github-mcp-server@latest"]
+      },
+      "neon": {
+        "enabled": true,
+        "command": "npx",
+        "args": ["neon-mcp@latest"]
+      },
+      "chrome-devtools": {
+        "enabled": true,
+        "command": "npx",
+        "args": ["chrome-devtools-mcp@latest"]
+      },
+      "playwright": {
+        "enabled": true,
+        "command": "npx",
+        "args": ["@playwright/mcp@latest"]
+      }
+    }
+  },
+  "ui": {
+    "theme": "dark",
+    "fontSize": 14,
+    "fontFamily": "Monaco, Courier New, monospace",
+    "lineHeight": 1.5
+  },
+  "logging": {
+    "level": "info",
+    "enableDebugMode": false,
+    "logFile": "~/.gemini/logs/gemini.log",
+    "maxLogSize": 10485760
+  }
+}
