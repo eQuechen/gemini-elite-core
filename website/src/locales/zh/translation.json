@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "强化您的 Gemini CLI",
+    "subtitle": "先进的专家技能、自动化工作流以及为精英软件工程设计的强大配置。",
+    "cta_setup": "开始使用",
+    "cta_github": "在 GitHub 上查看"
+  },
+  "features": {
+    "title": "包含的专家技能",
+    "nextjs": {
+      "title": "Next.js 16 专家",
+      "desc": "深入了解 App Router、Server Components 和优化渲染。"
+    },
+    "tailwind": {
+      "title": "Tailwind 4 大师",
+      "desc": "现代 CSS-First 架构和优化的设计系统。"
+    },
+    "supabase": {
+      "title": "Supabase 专家",
+      "desc": "安全的 RLS 执行、SSR 处理和数据库完整性。"
+    },
+    "automation": {
+      "title": "智能自动化",
+      "desc": "自动类型检查和 Git hooks，确保代码质量。"
+    }
+  },
+  "community": {
+    "title": "100% 开源",
+    "text": "此配置由社区驱动。Fork 它，改进它，并帮助我们构建 AI 驱动工程的未来。",
+    "fork": "在 GitHub 上 Fork"
+  },
+  "footer": {
+    "made_by": "由 YuniorGlez 制作",
+    "community": "为 Gemini 社区精心制作"
+  }
+}

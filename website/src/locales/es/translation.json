@@ -1,0 +1,43 @@
+{
+  "hero": {
+    "title": "La Capa de Inteligencia Definitiva para Gemini CLI",
+    "subtitle": "Desbloquea todo el poder de Gemini v0.26 con agentes avanzados, hooks de ciclo de vida y el protocolo Conductor.",
+    "cta_setup": "Desplegar Core",
+    "cta_github": "Explorar Código"
+  },
+  "features": {
+    "title": "Ingeniería diseñada para la Excelencia",
+    "agents": {
+      "title": "Agentes Autónomos",
+      "desc": "Integración nativa con codebase_investigator y cli_help para análisis profundo."
+    },
+    "hooks": {
+      "title": "Hooks de Ciclo de Vida",
+      "desc": "Gestión automatizada de sesiones con disparadores de inicio y validación post-herramienta."
+    },
+    "conductor": {
+      "title": "Protocolo Conductor",
+      "desc": "Gestión estructurada de tracks y planes de ejecución para proyectos complejos."
+    },
+    "v26": {
+      "title": "Optimizado v0.26",
+      "desc": "Soporte para Experimental Plan flags y configuraciones de agentes optimizadas."
+    }
+  },
+  "install": {
+    "title": "Instalación Instantánea",
+    "step1": "Clona el repositorio core",
+    "step2": "Entra en el directorio",
+    "step3": "Ejecuta el script de setup",
+    "ready": "¡Ya estás listo!"
+  },
+  "community": {
+    "title": "El Futuro de la Ingeniería con IA",
+    "text": "Gemini Elite Core es un movimiento open-source para redefinir cómo interactuamos con la IA en la terminal.",
+    "fork": "Fork en GitHub"
+  },
+  "footer": {
+    "made_by": "Comisariado por YuniorGlez",
+    "community": "Comunidad Gemini Elite"
+  }
+}

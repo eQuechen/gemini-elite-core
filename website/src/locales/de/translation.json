@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "Maximiere dein Gemini CLI",
+    "subtitle": "Fortgeschrittene Experten-Skills, automatisierte Workflows und eine leistungsstarke Konfiguration für Elite-Software-Engineering.",
+    "cta_setup": "Loslegen",
+    "cta_github": "Auf GitHub ansehen"
+  },
+  "features": {
+    "title": "Inklusive Experten-Skills",
+    "nextjs": {
+      "title": "Next.js 16 Experte",
+      "desc": "Tiefes Wissen über App Router, Server Components und optimiertes Rendering."
+    },
+    "tailwind": {
+      "title": "Tailwind 4 Master",
+      "desc": "Moderne CSS-First Architektur und optimierte Design-Systeme."
+    },
+    "supabase": {
+      "title": "Supabase Spezialist",
+      "desc": "Sichere RLS-Durchsetzung, SSR-Handling und Datenbankintegrität."
+    },
+    "automation": {
+      "title": "Intelligente Automatisierung",
+      "desc": "Automatisierte Typprüfung und Git-Hooks zur Sicherstellung der Codequalität."
+    }
+  },
+  "community": {
+    "title": "100% Open Source",
+    "text": "Diese Konfiguration ist community-getrieben. Forke es, verbessere es und hilf uns, die Zukunft des KI-gestützten Engineerings zu bauen.",
+    "fork": "Auf GitHub forken"
+  },
+  "footer": {
+    "made_by": "Erstellt von YuniorGlez",
+    "community": "Für die Gemini-Community"
+  }
+}

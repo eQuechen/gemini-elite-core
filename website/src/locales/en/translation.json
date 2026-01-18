@@ -1,0 +1,43 @@
+{
+  "hero": {
+    "title": "The Ultimate Intelligence Layer for Gemini CLI",
+    "subtitle": "Unlock the full power of Gemini v0.26 with advanced agents, lifecycle hooks, and the Conductor protocol for elite engineering.",
+    "cta_setup": "Deploy Core",
+    "cta_github": "Explore Source"
+  },
+  "features": {
+    "title": "Engineered for Professional Excellence",
+    "agents": {
+      "title": "Autonomous Agents",
+      "desc": "Native integration with codebase_investigator and cli_help for deep repository analysis."
+    },
+    "hooks": {
+      "title": "Lifecycle Hooks",
+      "desc": "Automated session management with start triggers and post-tool validation hooks."
+    },
+    "conductor": {
+      "title": "Conductor Protocol",
+      "desc": "Structured track management and execution plans for complex software projects."
+    },
+    "v26": {
+      "title": "v0.26 Optimized",
+      "desc": "Experimental Plan flags, enhanced security consent, and optimized agent configurations."
+    }
+  },
+  "install": {
+    "title": "Instant Installation",
+    "step1": "Clone the core repository",
+    "step2": "Navigate to the directory",
+    "step3": "Run the setup script",
+    "ready": "You're ready to go!"
+  },
+  "community": {
+    "title": "The Future of AI Engineering",
+    "text": "Gemini Elite Core is an open-source movement to redefine how developers interact with AI in the terminal. Join us in building the next frontier.",
+    "fork": "Fork on GitHub"
+  },
+  "footer": {
+    "made_by": "Curated by YuniorGlez",
+    "community": "Gemini Elite Community"
+  }
+}

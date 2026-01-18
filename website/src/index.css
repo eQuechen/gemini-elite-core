@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gemini-bg: #0e0e10;
+  --color-gemini-blue: #4c8df6;
+  --color-gemini-purple: #8e5cf1;
+  --color-gemini-pink: #f15ca2;
+  --color-gemini-text: #e8eaed;
+  --color-gemini-muted: #9aa0a6;
+  --color-gemini-surface: #1e1f20;
+  
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "Fira Code", monospace;
+
+  --animate-gradient: gradient 8s ease infinite;
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-gemini-bg text-gemini-text antialiased;
+  }
+}
+
+@utility bg-gemini-gradient {
+  background: linear-gradient(-45deg, var(--color-gemini-blue), var(--color-gemini-purple), var(--color-gemini-pink), var(--color-gemini-blue));
+  background-size: 400% 400%;
+}
+
+@utility glass-panel {
+  @apply bg-white/5 backdrop-blur-md border border-white/10;
+}
