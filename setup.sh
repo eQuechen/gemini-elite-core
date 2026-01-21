@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Gemini Elite Core Setup Script - v5.4 "Generalist Edition"
+# Gemini Elite Core Setup Script - v5.5 "Skill Mastery Edition"
 # Optimized for Gemini CLI v0.26.0+ (Nightly 20260119)
 # CLI + Skills + Generalist Agent + Planning Policies
 
@@ -108,7 +108,7 @@ else
     MSG_STATUS_CLI="CLI: Nightly (v0.26.0-nightly.20260119)"
     MSG_STATUS_AGENTS="Agents: Generalist + Specialists (Active)"
     MSG_STATUS_PLANNING="Planning: Enabled (Experimental)"
-    MSG_STATUS_SKILLS="Skills: Deployed (25+ Tactical MDs)"
+    MSG_STATUS_SKILLS="Skills: Deployed (40+ Tactical MDs)"
     MSG_STATUS_HOOKS="Hooks: Monitoring active"
     YES_REGEX="^[Yy]?$"
 fi
@@ -376,6 +376,7 @@ This core installs a tactical skill library and the new **Generalist Agent**.
 - **Generalist Agent**: Just type your request (e.g., `> Refactor my code`). It will automatically orchestrate experts.
 - `activate_skill commit-sentinel`: Before committing (Git Protocol).
 - `activate_skill next16-expert`: For Next.js 16 development.
+
 
 ## ⚙️ Configured MCPs
 You have the agent's eyes and hands ready:
