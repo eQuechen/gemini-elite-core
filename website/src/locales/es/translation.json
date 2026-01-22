@@ -1,7 +1,7 @@
 {
   "hero": {
     "title": "La Capa de Inteligencia Definitiva para Gemini CLI",
-    "subtitle": "Desbloquea todo el poder de Gemini v0.27 Nightly con navegación autónoma, orquestación multi-agente y hooks avanzados.",
+    "subtitle": "Potencia tu flujo de trabajo con 51 habilidades especializadas, orquestación multi-agente y protocolos Elite Core.",
     "cta_setup": "Desplegar Core",
     "cta_github": "Explorar Código"
   },
@@ -16,12 +16,12 @@
       "desc": "Protocolos estrictos Elite Core con type-checking automático, validación de commits y triggers de sesión."
     },
     "conductor": {
-      "title": "Protocolo Conductor",
-      "desc": "Gestión estructurada de tracks y planes de ejecución para proyectos de software complejos."
+      "title": "51 Skills Especialistas",
+      "desc": "Una vasta librería de habilidades tácticas listas para usar, desde optimización de costos hasta auditoría de seguridad."
     },
     "browser": {
-      "title": "Automatización Web",
-      "desc": "MCP browser-use integrado para navegación autónoma, extracción de datos y tareas online."
+      "title": "Setup Inteligente",
+      "desc": "Instalación automatizada con selección de modo conservador, MCP de Rust y aprovisionamiento sin fricción."
     }
   },
   "install": {

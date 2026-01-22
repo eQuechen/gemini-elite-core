@@ -1,7 +1,7 @@
 {
   "hero": {
     "title": "The Ultimate Intelligence Layer for Gemini CLI",
-    "subtitle": "Unlock the full power of Gemini v0.27 Nightly with autonomous browsing, multi-agent orchestration, and advanced lifecycle hooks.",
+    "subtitle": "Supercharge your workflow with 51 specialized skills, multi-agent orchestration, and Elite Core protocols.",
     "cta_setup": "Deploy Core",
     "cta_github": "Explore Source"
   },
@@ -16,12 +16,12 @@
       "desc": "Strict Elite Core protocols with automated type-checking, commit validation, and session triggers."
     },
     "conductor": {
-      "title": "Conductor Protocol",
-      "desc": "Structured track management and execution plans for complex software projects."
+      "title": "51 Specialist Skills",
+      "desc": "A vast library of ready-to-use tactical skills, from cost optimization to security auditing."
     },
     "browser": {
-      "title": "Web Automation",
-      "desc": "Integrated browser-use MCP for autonomous web navigation, data extraction, and online tasks."
+      "title": "Smart Setup",
+      "desc": "Automated installation with conservative mode selection, Rust MCP, and frictionless provisioning."
     }
   },
   "install": {

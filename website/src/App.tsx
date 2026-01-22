@@ -9,7 +9,9 @@ import {
   Zap, 
   Layers,
   Copy,
-  Check
+  Check,
+  Sparkles,
+  ShieldCheck
 } from 'lucide-react';
 
 const languages = [
@@ -90,7 +92,7 @@ function App() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gemini-blue/10 border border-gemini-blue/20 text-gemini-blue text-sm mb-6"
           >
             <Zap size={14} />
-            <span>v5.6 Optimized for Gemini v0.27 Nightly</span>
+            <span>v6.0 Optimized for Gemini v0.27 Nightly</span>
           </motion.div>
           
           <motion.h1 
@@ -156,13 +158,13 @@ function App() {
               variants={itemVariants}
             />
             <FeatureCard 
-              icon={<Layers className="text-gemini-pink" />}
+              icon={<Sparkles className="text-gemini-pink" />}
               title={t('features.conductor.title')}
               desc={t('features.conductor.desc')}
               variants={itemVariants}
             />
             <FeatureCard 
-              icon={<Globe className="text-gemini-blue" />}
+              icon={<ShieldCheck className="text-gemini-blue" />}
               title={t('features.browser.title')}
               desc={t('features.browser.desc')}
               variants={itemVariants}
