@@ -29,7 +29,7 @@ This table tracks the last update for each skill within the project to ensure te
 | **git-flow** | January 22, 2026 - 19:10 | 1.1.0 | ✅ Refactored |
 | **git-pro** | January 22, 2026 - 19:10 | 2.1.0 | ✅ Refactored |
 | hydration-guardian | - | - | ⏳ Pending Refactor |
-| manus-expert | - | - | ⏳ Pending Refactor |
+| **manus-expert** | January 22, 2026 - 21:15 | 1.2.0 | ✅ Refactored |
 | **mcp-expert** | January 22, 2026 - 17:35 | 1.4.0 | ✅ Refactored |
 | **mobile-pro** | January 22, 2026 - 20:20 | 1.1.0 | ✅ Refactored |
 | pdf-pro | - | - | ⏳ Pending Refactor |
@@ -37,7 +37,7 @@ This table tracks the last update for each skill within the project to ensure te
 | **prompt-pro** | January 22, 2026 - 21:00 | 1.1.0 | ✅ Refactored |
 | **secure-ai** | January 22, 2026 - 20:50 | 1.1.0 | ✅ Refactored |
 | **seo-pro** | January 22, 2026 - 20:35 | 1.1.0 | ✅ Refactored |
-| stagehand-expert | - | - | ⏳ Pending Refactor |
+| **stagehand-expert** | January 22, 2026 - 21:20 | 4.1.0 | ✅ Refactored |
 | **strict-auditor** | January 22, 2026 - 19:45 | 2.1.0 | ✅ Refactored |
 | tldr-expert | - | - | ⏳ Pending Refactor |
 | track-master | - | - | ⏳ Pending Refactor |

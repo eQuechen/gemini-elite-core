@@ -201,27 +201,38 @@
 ### 30. seo-pro
 - **Status**: COMPLETED (v1.1.0). ~500+ lines with SGE optimization and E-E-A-T.
 - **Tasks**:
-- [x] Research Google SGE and AI Overviews.
-- [x] Add guides for authoritative content and entity SEO.
+    - [x] Research Google SGE and AI Overviews.
+    - [x] Add guides for authoritative content and entity SEO.
 
-+### 31. secure-ai
-+- **Status**: COMPLETED (v1.1.0). ~500+ lines with Prompt Injection defense and Zero-Trust agents.
-+- **Tasks**:
-+    - [x] Research 2026 AI security standards.
-+    - [x] Add guides for prompt boundaries and agent sandboxing.
-+
-+### 32. prompt-pro
-+- **Status**: COMPLETED (v1.1.0). ~500+ lines with Reasoning model optimization (o3) and ToT.
-+- **Tasks**:
-+    - [x] Research OpenAI o3 and Gemini 3 Pro reasoning patterns.
-+    - [x] Add guides for Tree-of-Thoughts and ReAct loops.
-+
- ## Priorities: Low (Niche or Stable)
+### 31. secure-ai
+- **Status**: COMPLETED (v1.1.0). ~500+ lines with Prompt Injection defense and Zero-Trust agents.
+- **Tasks**:
+    - [x] Research 2026 AI security standards.
+    - [x] Add guides for prompt boundaries and agent sandboxing.
 
+### 32. prompt-pro
+- **Status**: COMPLETED (v1.1.0). ~500+ lines with Reasoning model optimization (o3) and ToT.
+- **Tasks**:
+    - [x] Research OpenAI o3 and Gemini 3 Pro reasoning patterns.
+    - [x] Add guides for Tree-of-Thoughts and ReAct loops.
+
+### 33. manus-expert
+- **Status**: COMPLETED (v1.2.0). ~500+ lines with Mission Lifecycle and RSA Security.
+- **Tasks**:
+    - [x] Research Manus API v2 features.
+    - [x] Add guides for secure connectors and mission recovery.
+
+### 34. stagehand-expert
+- **Status**: COMPLETED (v4.1.0). ~500+ lines with Direct CDP and Agent Caching.
+- **Tasks**:
+    - [x] Research Stagehand V3 CDP communication.
+    - [x] Add guides for decision caching and shadow DOM mastery.
+
+## Priorities: Low (Niche or Stable)
 - [ ] **TLDR-expert**: Add examples for token-efficient file summaries.
 
 ---
 ## Tracking
 - **Total Skills to Refactor**: 42
-- **Completed**: 30
-- **Overall Quality Score**: 71% (Estimated)
+- **Completed**: 34
+- **Overall Quality Score**: 81% (Estimated)
