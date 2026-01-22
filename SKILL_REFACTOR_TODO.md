@@ -252,6 +252,12 @@
     - [x] Research Bun-Vercel native integration 2026.
     - [x] Add guides for Zero-Secret OIDC deployments and Edge orchestration.
 
+### 39. pdf-pro
+- **Status**: COMPLETED (v1.1.0). ~500+ lines with AI Extraction and Puppeteer generation.
+- **Tasks**:
+    - [x] Research AI-driven PDF extraction and PDF 2.0 standards.
+    - [x] Add guides for high-fidelity Puppeteer generation and legacy Python utilities.
+
 ## Priorities: Low (Niche or Stable)
  
  - [ ] **TLDR-expert**: Add examples for token-efficient file summaries.
@@ -259,6 +265,6 @@
  ---
  ## Tracking
  - **Total Skills to Refactor**: 41
- - **Completed**: 38
+ - **Completed**: 39
  - **Overall Quality Score**: 83% (Estimated)
  

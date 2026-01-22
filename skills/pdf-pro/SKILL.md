@@ -1,294 +1,153 @@
 ---
-name: pdf
-description: Comprehensive PDF manipulation toolkit for extracting text and tables, creating new PDFs, merging/splitting documents, and handling forms. When Claude needs to fill in a PDF form or programmatically process, generate, or analyze PDF documents at scale.
-license: Proprietary. LICENSE.txt has complete terms
+name: pdf-pro
+id: pdf-pro
+version: 1.1.0
+description: "Master of PDF engineering, specialized in AI-driven extraction, high-fidelity Generation (Puppeteer), and PDF 2.0 Security."
+last_updated: "2026-01-22"
 ---
 
-# PDF Processing Guide
+# Skill: PDF Pro (Standard 2026)
 
-## Overview
+**Role:** The PDF Pro is a specialized agent responsible for the entire lifecycle of document engineering. This includes "Semantic Extraction" using AI models, "High-Fidelity Generation" via headless browsers, and "Forensic Modification" using low-level byte manipulation. In 2026, the Squaads AI Core prioritizes Bun-native and JavaScript-first solutions for seamless integration with Next.js 16.2.
 
-This guide covers essential PDF processing operations using Python libraries and command-line tools. For advanced features, JavaScript libraries, and detailed examples, see reference.md. If you need to fill out a PDF form, read forms.md and follow its instructions.
+## 🎯 Primary Objectives
+1.  **Semantic Extraction:** Move beyond raw text to structured JSON using LLM-assisted OCR and layout analysis.
+2.  **High-Fidelity Generation:** Use Puppeteer/Playwright for pixel-perfect HTML-to-PDF conversion with CSS Print Support.
+3.  **PDF 2.0 Compliance:** Implement AES-256 encryption, UTF-8 metadata, and accessible (Tagged) PDF structures.
+4.  **Edge-Ready Processing:** Use lightweight libraries like `unpdf` for serverless and edge environments.
 
-## Quick Start
+---
 
-```python
-from pypdf import PdfReader, PdfWriter
+## 🏗️ The 2026 Toolbelt
 
-# Read a PDF
-reader = PdfReader("document.pdf")
-print(f"Pages: {len(reader.pages)}")
+### 1. Bun-Native & JS Libraries (Primary)
+- **pdf-lib:** Byte-level modification, merging, splitting, and form filling.
+- **unpdf:** Ultra-lightweight extraction for Edge/Serverless.
+- **Puppeteer/Playwright:** The gold standard for generating PDFs from React templates.
+- **Mistral/OpenAI OCR:** Semantic extraction for complex layouts and handwriting.
 
-# Extract text
-text = ""
-for page in reader.pages:
-    text += page.extract_text()
+### 2. Forensic Utilities (Legacy/Advanced)
+- **qpdf:** CLI tool for structural repairs and decryption.
+- **poppler-utils:** Fast C-based text and image extraction.
+
+---
+
+## 🛠️ Implementation Patterns
+
+### 1. High-Fidelity Generation (Next.js 16.2)
+Generating PDFs from React components ensures visual consistency with the web app.
+
+```tsx
+// app/api/generate-pdf/route.ts
+import puppeteer from 'puppeteer';
+
+export async function POST(req: Request) {
+  const { htmlContent } = await req.json();
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  
+  await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+  const pdfBuffer = await page.pdf({
+    format: 'A4',
+    printBackground: true,
+    margin: { top: '20px', bottom: '20px' }
+  });
+
+  await browser.close();
+  return new Response(pdfBuffer, {
+    headers: { 'Content-Type': 'application/pdf' }
+  });
+}
 ```
 
-## Python Libraries
+### 2. AI-Driven Semantic Extraction
+Using LLMs to turn unstructured PDF text into validated Zod schemas.
 
-### pypdf - Basic Operations
+```typescript
+import { unpdf } from 'unpdf';
+import { generateObject } from 'ai'; // AI SDK 2026
 
-#### Merge PDFs
-```python
-from pypdf import PdfWriter, PdfReader
-
-writer = PdfWriter()
-for pdf_file in ["doc1.pdf", "doc2.pdf", "doc3.pdf"]:
-    reader = PdfReader(pdf_file)
-    for page in reader.pages:
-        writer.add_page(page)
-
-with open("merged.pdf", "wb") as output:
-    writer.write(output)
+async function extractInvoice(buffer: Buffer) {
+  const { text } = await unpdf.extractText(buffer);
+  
+  const { object } = await generateObject({
+    model: myModel,
+    schema: invoiceSchema,
+    prompt: `Extract structured data from this PDF text: ${text}`
+  });
+  
+  return object;
+}
 ```
 
-#### Split PDF
-```python
-reader = PdfReader("input.pdf")
-for i, page in enumerate(reader.pages):
-    writer = PdfWriter()
-    writer.add_page(page)
-    with open(f"page_{i+1}.pdf", "wb") as output:
-        writer.write(output)
-```
+---
 
-#### Extract Metadata
-```python
-reader = PdfReader("document.pdf")
-meta = reader.metadata
-print(f"Title: {meta.title}")
-print(f"Author: {meta.author}")
-print(f"Subject: {meta.subject}")
-print(f"Creator: {meta.creator}")
-```
+## 🔒 PDF 2.0 Security & Integrity
 
-#### Rotate Pages
-```python
-reader = PdfReader("input.pdf")
-writer = PdfWriter()
+### AES-256 Encryption
+PDF 2.0 deprecates weak algorithms. Use `qpdf` or modern JS wrappers for secure locking.
 
-page = reader.pages[0]
-page.rotate(90)  # Rotate 90 degrees clockwise
-writer.add_page(page)
-
-with open("rotated.pdf", "wb") as output:
-    writer.write(output)
-```
-
-### pdfplumber - Text and Table Extraction
-
-#### Extract Text with Layout
-```python
-import pdfplumber
-
-with pdfplumber.open("document.pdf") as pdf:
-    for page in pdf.pages:
-        text = page.extract_text()
-        print(text)
-```
-
-#### Extract Tables
-```python
-with pdfplumber.open("document.pdf") as pdf:
-    for i, page in enumerate(pdf.pages):
-        tables = page.extract_tables()
-        for j, table in enumerate(tables):
-            print(f"Table {j+1} on page {i+1}:")
-            for row in table:
-                print(row)
-```
-
-#### Advanced Table Extraction
-```python
-import pandas as pd
-
-with pdfplumber.open("document.pdf") as pdf:
-    all_tables = []
-    for page in pdf.pages:
-        tables = page.extract_tables()
-        for table in tables:
-            if table:  # Check if table is not empty
-                df = pd.DataFrame(table[1:], columns=table[0])
-                all_tables.append(df)
-
-# Combine all tables
-if all_tables:
-    combined_df = pd.concat(all_tables, ignore_index=True)
-    combined_df.to_excel("extracted_tables.xlsx", index=False)
-```
-
-### reportlab - Create PDFs
-
-#### Basic PDF Creation
-```python
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-
-c = canvas.Canvas("hello.pdf", pagesize=letter)
-width, height = letter
-
-# Add text
-c.drawString(100, height - 100, "Hello World!")
-c.drawString(100, height - 120, "This is a PDF created with reportlab")
-
-# Add a line
-c.line(100, height - 140, 400, height - 140)
-
-# Save
-c.save()
-```
-
-#### Create PDF with Multiple Pages
-```python
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
-from reportlab.lib.styles import getSampleStyleSheet
-
-doc = SimpleDocTemplate("report.pdf", pagesize=letter)
-styles = getSampleStyleSheet()
-story = []
-
-# Add content
-title = Paragraph("Report Title", styles['Title'])
-story.append(title)
-story.append(Spacer(1, 12))
-
-body = Paragraph("This is the body of the report. " * 20, styles['Normal'])
-story.append(body)
-story.append(PageBreak())
-
-# Page 2
-story.append(Paragraph("Page 2", styles['Heading1']))
-story.append(Paragraph("Content for page 2", styles['Normal']))
-
-# Build PDF
-doc.build(story)
-```
-
-## Command-Line Tools
-
-### pdftotext (poppler-utils)
 ```bash
-# Extract text
-pdftotext input.pdf output.txt
-
-# Extract text preserving layout
-pdftotext -layout input.pdf output.txt
-
-# Extract specific pages
-pdftotext -f 1 -l 5 input.pdf output.txt  # Pages 1-5
+# Secure a PDF with 2026 standards
+qpdf --encrypt user-pass owner-pass 256 -- input.pdf secured.pdf
 ```
 
-### qpdf
-```bash
-# Merge PDFs
-qpdf --empty --pages file1.pdf file2.pdf -- merged.pdf
+### Digital Signatures (PAdES)
+Integrate with OIDC providers or Hardware Security Modules (HSMs) for legally binding signatures.
 
-# Split pages
-qpdf input.pdf --pages . 1-5 -- pages1-5.pdf
-qpdf input.pdf --pages . 6-10 -- pages6-10.pdf
+---
 
-# Rotate pages
-qpdf input.pdf output.pdf --rotate=+90:1  # Rotate page 1 by 90 degrees
+## 🚫 The "Do Not List" (Anti-Patterns)
+1.  **NEVER** use `pypdf` for complex layout extraction; it fails on multi-column or overlapping text. Use `pdfplumber` or AI OCR.
+2.  **NEVER** generate PDFs using `canvas` drawing commands if HTML/CSS templates are an option. Maintenance is a nightmare.
+3.  **NEVER** store unencrypted PDFs containing PII (Personally Identifiable Information) in public S3 buckets.
+4.  **NEVER** rely on `window.print()` for automated server-side generation. It is non-deterministic.
 
-# Remove password
-qpdf --password=mypassword --decrypt encrypted.pdf decrypted.pdf
-```
+---
 
-### pdftk (if available)
-```bash
-# Merge
-pdftk file1.pdf file2.pdf cat output merged.pdf
+## 🛠️ Troubleshooting Guide
 
-# Split
-pdftk input.pdf burst
+| Issue | Likely Cause | 2026 Corrective Action |
+| :--- | :--- | :--- |
+| **Missing Fonts** | System fonts not in container | Use Puppeteer with embedded Google Fonts or WOFF2. |
+| **Garbled Text** | Complex CID encoding | Use `poppler` with `-enc UTF-8` or an AI-OCR layer. |
+| **Huge File Size** | High-res images not optimized | Run a compression pass using `ghostscript` or `pdf-lib` scaling. |
+| **Form Filling Fails** | Flattened PDF fields | Use `pdf-lib` to inspect `AcroForm` fields before writing. |
 
-# Rotate
-pdftk input.pdf rotate 1east output rotated.pdf
-```
+---
 
-## Common Tasks
+## 📚 Reference Library
+- **[AI Extraction Patterns](./references/1-ai-extraction-patterns.md):** Mastering semantic document understanding.
+- **[High-Fidelity Generation](./references/2-high-fidelity-generation.md):** HTML-to-PDF at scale.
+- **[Legacy Utilities](./references/3-legacy-python-utilities.md):** When to reach for Python/CLI tools.
 
-### Extract Text from Scanned PDFs
-```python
-# Requires: pip install pytesseract pdf2image
-import pytesseract
-from pdf2image import convert_from_path
+---
 
-# Convert PDF to images
-images = convert_from_path('scanned.pdf')
+## 📜 Standard Operating Procedure (SOP)
+1.  **Requirement Check:** Is the goal *Creation*, *Extraction*, or *Modification*?
+2.  **Tool Selection:** 
+    - Creation -> Puppeteer.
+    - Extraction -> AI SDK + unpdf.
+    - Modification -> pdf-lib.
+3.  **Environment Check:** Is this running in an Edge Function? (If yes, avoid Puppeteer).
+4.  **Implementation:** Build with strict TypeScript typing.
+5.  **Audit:** Verify PDF 2.0 metadata and accessibility (A11y) tags.
 
-# OCR each page
-text = ""
-for i, image in enumerate(images):
-    text += f"Page {i+1}:\n"
-    text += pytesseract.image_to_string(image)
-    text += "\n\n"
+---
 
-print(text)
-```
+## 📈 Quality Metrics
+- **Extraction Accuracy:** > 98% (Measured against ground truth JSON).
+- **Generation Speed:** < 2s for a 10-page document.
+- **Security Audit:** Zero weak crypto algorithms (Verified via `qpdf`).
 
-### Add Watermark
-```python
-from pypdf import PdfReader, PdfWriter
+---
 
-# Create watermark (or load existing)
-watermark = PdfReader("watermark.pdf").pages[0]
+## 🔄 Last Refactor Details
+- **By:** Gemini Elite Conductor
+- **Date:** January 22, 2026
+- **Version:** 1.1.0 (2026 Standard)
+- **Focus:** Shift from Python-centric to JS-centric AI-integrated document engineering.
 
-# Apply to all pages
-reader = PdfReader("document.pdf")
-writer = PdfWriter()
+---
 
-for page in reader.pages:
-    page.merge_page(watermark)
-    writer.add_page(page)
-
-with open("watermarked.pdf", "wb") as output:
-    writer.write(output)
-```
-
-### Extract Images
-```bash
-# Using pdfimages (poppler-utils)
-pdfimages -j input.pdf output_prefix
-
-# This extracts all images as output_prefix-000.jpg, output_prefix-001.jpg, etc.
-```
-
-### Password Protection
-```python
-from pypdf import PdfReader, PdfWriter
-
-reader = PdfReader("input.pdf")
-writer = PdfWriter()
-
-for page in reader.pages:
-    writer.add_page(page)
-
-# Add password
-writer.encrypt("userpassword", "ownerpassword")
-
-with open("encrypted.pdf", "wb") as output:
-    writer.write(output)
-```
-
-## Quick Reference
-
-| Task | Best Tool | Command/Code |
-|------|-----------|--------------|
-| Merge PDFs | pypdf | `writer.add_page(page)` |
-| Split PDFs | pypdf | One page per file |
-| Extract text | pdfplumber | `page.extract_text()` |
-| Extract tables | pdfplumber | `page.extract_tables()` |
-| Create PDFs | reportlab | Canvas or Platypus |
-| Command line merge | qpdf | `qpdf --empty --pages ...` |
-| OCR scanned PDFs | pytesseract | Convert to image first |
-| Fill PDF forms | pdf-lib or pypdf (see forms.md) | See forms.md |
-
-## Next Steps
-
-- For advanced pypdfium2 usage, see reference.md
-- For JavaScript libraries (pdf-lib), see reference.md
-- If you need to fill out a PDF form, follow the instructions in forms.md
-- For troubleshooting guides, see reference.md
+**End of PDF Pro Standard (v1.1.0)**
