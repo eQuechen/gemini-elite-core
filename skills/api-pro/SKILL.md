@@ -1,55 +1,282 @@
 ---
 name: api-pro
-description: Senior Architect specializing in high-performance, resilient, and secure API integrations. Optimized for Next.js 16, React 19, and the 2026 AI-agent ecosystem. Handles OIDC/Passkeys, RFC 7807 error patterns, and typed client contracts with Zod/Valibot.
+description: Expert in integrating third-party APIs with proper authentication, error handling, rate limiting, and retry logic. Specializes in Auth.js v5, GPT-5 model orchestration, Stripe SDK v13+, and architectural context packing for large codebases. Optimized for 2026 standards with Edge-first performance and autonomous agent integration.
 ---
 
 # API Integration Specialist (v2026.1)
 
-Expert guidance for integrating external APIs into modern applications with production-ready patterns, ultra-resilient logic, and deep security protocols.
+Expert guidance for integrating external APIs and LLMs into modern applications with production-ready patterns, security best practices, and autonomous agent capabilities.
 
-## Table of Contents
-1. [Core Integration Philosophy](#core-integration-philosophy)
-2. [The "Do Not" List (Anti-Patterns)](#the-do-not-list-anti-patterns)
-3. [Quick Start: 2026 Baseline](#quick-start-2026-baseline)
-4. [Advanced Architectural Patterns](#advanced-architectural-patterns)
-    - [Typed Contract Pattern](#typed-contract-pattern)
-    - [The Resilience Wrapper](#the-resilience-wrapper)
-    - [AI-Agent Ready Endpoints](#ai-agent-ready-endpoints)
-5. [Security & Authentication (OIDC/Passkeys)](#security--authentication-oidcpasskeys)
-6. [Resilience & Performance](#resilience--performance)
-7. [Testing & Verification](#testing--verification)
-8. [Deep Dive References](#deep-dive-references)
+## 1. Executive Summary: The 2026 Standard
 
----
+As of January 2026, API integration has shifted from simple REST calls to **Autonomous Orchestration**. Systems must now support:
+- **Edge-First Execution**: Minimum latency via Vercel Edge/Cloudflare Workers.
+- **Agentic Logic**: Integration with the GPT-5 family for complex reasoning.
+- **Context-Aware Architecture**: Using tools like Repomix to provide full repository context to AI agents.
+- **High-Velocity Authentication**: Migrating to Auth.js v5 for 25% faster session handling.
 
-## Core Integration Philosophy
-In 2026, API integration is no longer just about `fetch`. It's about **Contract Integrity**, **Zero-Trust Security**, and **Agentic Compatibility**. We treat every external API as a potentially failing, potentially malicious, but necessary extension of our system.
+## 2. Core Integration Pillars
 
-- **Zero-Trust**: Always validate every byte coming from an external source.
-- **Fail-Fast & Graceful**: Use Circuit Breakers to prevent cascading failures.
-- **AI-Native**: Structure responses so they are easily consumable by LLMs and AI Agents.
+### 2.1 Authentication & Security (Auth.js v5)
 
----
+The gold standard for 2026 is **Auth.js v5**, which provides a unified, secret-first approach optimized for the Edge.
 
-## The "Do Not" List (Anti-Patterns)
+#### The `AUTH_` Prefix Standard
+All environment variables MUST use the `AUTH_` prefix for automatic discovery by the framework.
 
-| Anti-Pattern | Why it fails in 2026 | Modern Alternative |
-| :--- | :--- | :--- |
-| **Trusting JSON** | External APIs change without notice, breaking TS types. | **Zod/Valibot Runtime Validation**. |
-| **LocalStorage Tokens** | Vulnerable to XSS and token theft. | **Secure, HTTP-Only Cookies**. |
-| **Plain `fetch` Retries** | Can cause "Thundering Herd" on servers. | **Exponential Backoff + Jitter**. |
-| **Global `any` Errors** | Hard to debug and machine-unfriendly. | **RFC 7807 Problem Details**. |
-| **Secrets in Frontend** | `NEXT_PUBLIC_` secrets are exposed to the world. | **Next.js Server Actions / Components**. |
-| **Manual Pagination** | Prone to off-by-one errors and slow UI. | **Infinite Scroll with `useOptimistic`**. |
+```bash
+# .env.local
+AUTH_SECRET=your_signing_secret_here
+AUTH_URL=https://myapp.com/api/auth
+AUTH_GOOGLE_ID=google_client_id
+AUTH_GOOGLE_SECRET=google_client_secret
+```
 
----
+#### Edge-Compatible Configuration
+```typescript
+// auth.ts
+import NextAuth from "next-auth"
+import Google from "next-auth/providers/google"
 
-## Quick Start: 2026 Baseline
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  providers: [Google],
+  session: { strategy: "jwt" }, // Optimized for Edge performance
+  pages: {
+    signIn: "/auth/signin",
+  },
+  callbacks: {
+    async jwt({ token, user, account }) {
+      if (account && user) {
+        token.accessToken = account.access_token;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.accessToken = token.accessToken as string;
+      return session;
+    },
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user
+      const isApiRoute = nextUrl.pathname.startsWith("/api")
+      if (isApiRoute && !isLoggedIn) return false
+      return true
+    },
+  },
+})
+```
 
-The minimum viable production-ready API call in 2026 requires:
-1. Runtime Validation (Zod)
-2. Proper Error Handling (RFC 7807)
-3. Timeout protection
+#### Performance Gains
+- **25% Faster Sessions**: v5 reduces database lookups by caching JWTs aggressively.
+- **Edge Runtime**: Full support for `middleware.ts` without Node.js polyfills.
+
+### 2.2 AI & Model Orchestration (GPT-5 & o3)
+
+Integrating the **GPT-5 family** requires understanding "Reasoning Tokens" and autonomous agent loops.
+
+#### GPT-5 Reasoning Integration
+```typescript
+import { generateText } from "ai"
+import { gpt5 } from "@ai-sdk/openai"
+
+async function executeAutonomousTask(goal: string) {
+  // 1. Planning with GPT-5 Reasoning
+  const plan = await generateText({
+    model: gpt5("gpt-5-reasoning"),
+    system: "You are a master architect. Plan the solution step-by-step.",
+    prompt: goal,
+    maxTokens: 5000 // Allow for deep internal reasoning
+  })
+
+  // 2. Execution with specialised sub-agents
+  const result = await processPlanSteps(plan.text)
+  return result
+}
+```
+
+#### o3-deep-research for Data Gathering
+```typescript
+import { o3 } from "@ai-sdk/research"
+
+const researchAgent = async (topic: string) => {
+  const deepResearch = await o3.conductResearch({
+    query: topic,
+    maxDepth: 10,
+    allowedTools: ["search", "arxiv", "github"],
+    autonomousMode: true
+  })
+  
+  return deepResearch.summary
+}
+```
+
+### 2.3 Financial Engineering (Stripe SDK v13+)
+
+Stripe SDK v13+ introduces native auto-pagination and expanded object types with deep TypeScript support.
+
+#### Auto-Pagination Example
+```typescript
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+async function cleanupStaleSubscriptions() {
+  const subscriptions = stripe.subscriptions.list({
+    status: 'past_due',
+    limit: 100,
+  });
+
+  // Native async iterator handles cursors automatically
+  for await (const sub of subscriptions) {
+    console.log(`Cancelling sub: ${sub.id} for customer ${sub.customer}`);
+    await stripe.subscriptions.cancel(sub.id);
+  }
+}
+```
+
+#### Expanded Objects with Type Safety
+```typescript
+const session = await stripe.checkout.sessions.retrieve('cs_test_123', {
+  expand: ['line_items', 'customer', 'payment_intent.payment_method'],
+});
+
+// Accessing expanded data safely
+if (typeof session.customer !== 'string' && session.customer !== null) {
+  console.log(session.customer.email);
+}
+```
+
+## 3. Architectural Excellence
+
+### 3.1 Monorepo Strategy (Bun & pnpm)
+
+Modern 2026 projects use **Bun** for speed and **pnpm** for strict dependency management.
+
+- **Bun**: Used for running scripts, tests, and development servers (3x faster than Node).
+- **pnpm**: Used for workspace management and ensuring no "phantom dependencies".
+
+#### Workspace Structure
+```
+/
+├── apps/
+│   ├── web (Next.js 16)
+│   └── agent (Autonomous GPT-5 service)
+├── packages/
+│   ├── api-client (Shared types/fetchers)
+│   ├── ui (Shadcn/Tailwind 4)
+│   └── database (Prisma 7/PostgreSQL)
+├── package.json (Bun Workspaces)
+└── pnpm-workspace.yaml
+```
+
+### 3.2 Context Packing (Repomix)
+
+To enable AI agents to understand the codebase, we use **Repomix** to pack context efficiently.
+
+```bash
+# Generate context for GPT-5
+bun x repomix --include "src/**/*.ts,lib/**/*.ts" --output codebase-context.md
+```
+
+## 4. Resilience & Implementation Patterns
+
+### 4.1 Exponential Backoff & Circuit Breaker
+
+```typescript
+import { CircuitBreaker } from 'opossum';
+
+const apiCall = async (endpoint: string) => {
+  const response = await fetch(endpoint);
+  if (!response.ok) throw new Error('API Down');
+  return response.json();
+};
+
+const breaker = new CircuitBreaker(apiCall, {
+  timeout: 3000,
+  errorThresholdPercentage: 50,
+  resetTimeout: 30000
+});
+
+breaker.on('open', () => console.warn('CIRCUIT OPEN: API is failing.'));
+
+async function resilientFetch(url: string) {
+  return breaker.fire(url).catch(err => {
+    // Fallback logic
+    return { error: true, message: 'Service temporarily unavailable' };
+  });
+}
+```
+
+### 4.2 Webhook Signature Verification (Edge Ready)
+
+```typescript
+import crypto from 'crypto';
+
+async function verifyWebhook(req: Request, secret: string) {
+  const body = await req.text();
+  const signature = req.headers.get('x-signature')!;
+  
+  const hmac = crypto.createHmac('sha256', secret);
+  const digest = hmac.update(body).digest('hex');
+  
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(digest)
+  );
+}
+```
+
+## 5. Large Codebase Search & Archive Strategies
+
+When working with massive repositories, standard `grep` is insufficient.
+
+### 5.1 High-Performance Indexing
+Maintain a `CODEBASE_INDEX.md` that acts as a Table of Contents for the entire project. This file is updated automatically on every commit.
+
+### 5.2 Fast Search Techniques
+- **Git Grep**: Use `git grep "pattern"` to leverage the git index for 10x faster searches.
+- **Grep --file**: Use a pattern file to scan for multiple security vulnerabilities simultaneously.
+  ```bash
+  grep -f security-patterns.txt -r ./src
+  ```
+
+### 5.3 Archiving Old Logic
+Move deprecated API integrations to `archive/api-v1/` rather than deleting them immediately. This preserves context for AI agents who might encounter old references in the git history.
+
+## 6. The "Do Not" List (Common Anti-Patterns)
+
+1.  **DO NOT** store API keys in the code. Use `AUTH_` prefixed environment variables for Auth.js.
+2.  **DO NOT** use `any` for API responses. Use `zod` to validate and type all incoming data.
+3.  **DO NOT** perform heavy processing in Webhook handlers. Acknowledge the receipt (200 OK) and queue the work (e.g., using Inngest or BullMQ).
+4.  **DO NOT** use standard Node.js `http` modules in Edge functions. Use the `fetch` API exclusively.
+5.  **DO NOT** assume API availability. Always implement timeouts and circuit breakers.
+6.  **DO NOT** expose internal database IDs. Use UUIDs or Hashids for public-facing API resources.
+7.  **DO NOT** ignore rate limit headers. Implement client-side throttling to stay within limits.
+
+## 7. Reference Directory Map
+
+| File | Description |
+| :--- | :--- |
+| `references/auth-next.md` | Deep dive into Auth.js v5 and Edge integration. |
+| `references/ai-agents.md` | GPT-5 family and o3-deep-research agentic patterns. |
+| `references/stripe-v13.md` | Stripe SDK v13+ features (auto-pagination, etc.). |
+| `references/architect-archive.md` | Repomix context packing and large codebase indexing. |
+| `references/resilience.md` | Advanced retry strategies and circuit breakers. |
+| `references/nextjs-integration.md` | Patterns for Next.js 16 Server Components & Actions. |
+
+## 8. Troubleshooting Guide
+
+### 8.1 Authentication Failures
+- **Symptom**: "Invalid CSRF Token" in Auth.js.
+- **Fix**: Ensure `AUTH_URL` matches the request origin exactly, especially in preview environments.
+
+### 8.2 AI Hallucinations in API Calls
+- **Symptom**: GPT-5 generating invalid API parameters.
+- **Fix**: Provide the agent with the specific `zod` schema or the Stripe SDK TypeScript definitions in the context.
+
+### 8.3 Rate Limit Cascades
+- **Symptom**: One service failing causes all upstream services to crash.
+- **Fix**: Implement the Circuit Breaker pattern (see Section 4.1) to fail fast and provide cached fallbacks.
+
+## 9. API Client Boilerplate (2026 Edition)
 
 ```typescript
 import { z } from 'zod';
@@ -57,483 +284,54 @@ import { z } from 'zod';
 const UserSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
-  email: z.string().email()
+  email: z.string().email(),
 });
 
-async function fetchUser(id: string) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
+type User = z.infer<typeof UserSchema>;
 
-  try {
-    const response = await fetch(`https://api.example.com/v1/users/${id}`, {
-      signal: controller.signal,
-      headers: { 'Accept': 'application/problem+json' }
-    });
-
-    if (!response.ok) {
-      // Handle RFC 7807 Error
-      const problem = await response.json();
-      throw new Error(problem.detail || 'API Request Failed');
-    }
-
-    const data = await response.json();
-    return UserSchema.parse(data); // Runtime validation
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
-```
-
----
-
-## Advanced Architectural Patterns
-
-### 1. Typed Contract Pattern
-Instead of scattered fetch calls, wrap your API in a typed client that enforces schemas.
-
-```typescript
-// lib/api/client.ts
-import { z } from 'zod';
-
-class APIClient {
-  private baseUrl: string;
+export class SecureAPIClient {
+  private baseURL: string;
   private apiKey: string;
 
-  constructor(baseUrl: string, apiKey: string) {
-    this.baseUrl = baseUrl;
-    this.apiKey = apiKey;
+  constructor() {
+    this.baseURL = process.env.API_BASE_URL!;
+    this.apiKey = process.env.API_SECRET_KEY!;
   }
 
-  private async request<T>(endpoint: string, schema: z.ZodType<T>, options: RequestInit = {}): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`;
-    const res = await fetch(url, {
-      ...options,
+  private async request<T>(endpoint: string, schema: z.ZodSchema<T>): Promise<T> {
+    const response = await fetch(`${this.baseURL}${endpoint}`, {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
-        ...options.headers,
       },
     });
 
-    if (!res.ok) throw await this.handleError(res);
-    
-    const data = await res.json();
-    const result = schema.safeParse(data);
-    
-    if (!result.success) {
-      console.error(`[API Contract Violation] ${url}:`, result.error);
-      throw new Error("Invalid API Response Structure");
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`API Request Failed: ${response.status} - ${JSON.stringify(errorData)}`);
     }
 
-    return result.data;
+    const data = await response.json();
+    return schema.parse(data); // Validate at the boundary
   }
 
-  private async handleError(res: Response) {
-    const isProblem = res.headers.get('Content-Type')?.includes('application/problem+json');
-    if (isProblem) return res.json();
-    return { title: 'Unknown Error', status: res.status };
-  }
-
-  // Public Methods
-  public async getUser(id: string) {
+  async getUser(id: string): Promise<User> {
     return this.request(`/users/${id}`, UserSchema);
   }
 }
 ```
 
-### 2. The Resilience Wrapper
-Integrating Circuit Breakers and Smart Retries.
+## 10. Conclusion
 
-```typescript
-import { CircuitBreaker } from 'lib/resilience'; // Hypothetical lib
+Mastering API integration in 2026 requires a shift from manual coding to **Architectural Orchestration**. By leveraging Auth.js v5, GPT-5's reasoning capabilities, and the robust Stripe v13 SDK, developers can build systems that are not only faster but also more autonomous and resilient.
 
-const breaker = new CircuitBreaker({
-  failureThreshold: 5,
-  resetTimeout: 30000
-});
-
-async function resilientCall<T>(fn: () => Promise<T>): Promise<T> {
-  return breaker.execute(async () => {
-    return await retryWithJitter(fn);
-  });
-}
-```
-
-### 3. AI-Agent Ready Endpoints
-When building APIs that AI Agents (like Gemini CLI) will use, provide "Actionable Metadata".
-
-```json
-{
-  "result": "Order processed",
-  "status": "success",
-  "next_steps": [
-    {
-      "action": "track_package",
-      "method": "GET",
-      "url": "/api/orders/123/track",
-      "description": "Poll this endpoint to see real-time location."
-    }
-  ]
-}
-```
+Always prioritize **Context Packing** via Repomix to ensure your AI agents have the clarity they need to assist in complex refactors and debugging sessions.
 
 ---
 
-## Security & Authentication
-
-### OIDC & Passkeys
-Moving beyond passwords. We prioritize WebAuthn for user-facing apps and OIDC with PKCE for federation.
-
-- **Use PKCE**: Always include `code_challenge` and `code_verifier`.
-- **Token Rotation**: Set `refresh_token_rotation: true` in your provider.
-- **Session Sync**: Use Cross-device session management if available.
-
-### API Key Security
-- **Never Log Keys**: Use a dedicated logger that masks `Authorization` headers.
-- **Key Scoping**: Generate keys with minimum viable permissions (Least Privilege).
-- **Environment Parity**: Use different keys for `development`, `staging`, and `production`.
-
----
-
-## Resilience & Performance
-
-### Caching Strategy (Next.js 16)
-Next.js 16 handles caching at multiple levels.
-
-```typescript
-// Time-based Revalidation
-fetch('https://...', { next: { revalidate: 3600 } });
-
-// Tag-based Revalidation (on demand)
-fetch('https://...', { next: { tags: ['products'] } });
-// Then elsewhere: revalidateTag('products')
-```
-
-### Response Streaming
-For large datasets, use the `ReadableStream` API to process chunks as they arrive.
-
-## Performance Optimization
-
-
-
-### 1. Connection Pooling & HTTP/2
-
-In server-side environments (Node.js/Bun), ensure you are reusing connections to avoid the TCP/TLS handshake overhead for every request.
-
-
-
-```typescript
-
-// Bun 1.2+ native fetch automatically pools connections.
-
-// For Node.js, use undici's Agent.
-
-import { Agent } from 'undici';
-
-
-
-const agent = new Agent({
-
-  connections: 100,
-
-  maxRedirections: 3
-
-});
-
-
-
-const res = await fetch('https://api.example.com', { dispatcher: agent });
-
-```
-
-
-
-### 2. Request Collapsing
-
-If 50 users hit the same page that fetches a product, don't make 50 API calls. Use a library or a built-in cache to collapse these into one.
-
-
-
-```typescript
-
-// Next.js cache() does this automatically for the duration of a request.
-
-import { cache } from 'react';
-
-
-
-export const getCachedData = cache(async (id: string) => {
-
-  return await fetch(`https://api.example.com/data/${id}`).then(r => r.json());
-
-});
-
-```
-
-
-
-### 3. Payload Compression
-
-Always send `Accept-Encoding: gzip, br` and ensure your API client handles decompression (most modern ones do by default).
-
-
-
----
-
-
-
-## Real-World Case Study: Integrating Stripe with Next.js 16
-
-
-
-### The Scenario
-
-A SaaS platform needs to handle subscriptions. We must ensure:
-
-1. No raw card data touches our server (PCI compliance).
-
-2. UI stays in sync with Stripe's state.
-
-3. Webhooks are handled reliably even if our server is down.
-
-
-
-### The Implementation Strategy
-
-
-
-#### A. The Secure Checkout Action
-
-Instead of a complex client-side setup, we use a Server Action to generate the checkout session.
-
-
-
-```typescript
-
-// app/actions/stripe.ts
-
-'use server';
-
-
-
-import { stripe } from '@/lib/stripe';
-
-import { auth } from '@/auth';
-
-
-
-export async function createCheckoutSession(priceId: string) {
-
-  const session = await auth();
-
-  if (!session?.user) throw new Error('Unauthorized');
-
-
-
-  const checkoutSession = await stripe.checkout.sessions.create({
-
-    customer: session.user.stripeCustomerId,
-
-    line_items: [{ price: priceId, quantity: 1 }],
-
-    mode: 'subscription',
-
-    success_url: `${process.env.NEXT_PUBLIC_URL}/dashboard?success=true`,
-
-    cancel_url: `${process.env.NEXT_PUBLIC_URL}/pricing?canceled=true`,
-
-    metadata: { userId: session.user.id }
-
-  });
-
-
-
-  return { url: checkoutSession.url };
-
-}
-
-```
-
-
-
-#### B. The Idempotent Webhook Handler
-
-Webhooks can be sent multiple times. We must handle them once.
-
-
-
-```typescript
-
-// app/api/webhooks/stripe/route.ts
-
-import { headers } from 'next/headers';
-
-import { stripe } from '@/lib/stripe';
-
-import { db } from '@/lib/db';
-
-
-
-export async function POST(req: Request) {
-
-  const body = await req.text();
-
-  const signature = headers().get('Stripe-Signature') as string;
-
-
-
-  let event;
-
-  try {
-
-    event = stripe.webhooks.constructEvent(
-
-      body, 
-
-      signature, 
-
-      process.env.STRIPE_WEBHOOK_SECRET!
-
-    );
-
-  } catch (err) {
-
-    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
-
-  }
-
-
-
-  // Idempotency check: Have we processed this event ID before?
-
-  const alreadyProcessed = await db.processedEvents.findUnique({
-
-    where: { id: event.id }
-
-  });
-
-  if (alreadyProcessed) return new Response('OK', { status: 200 });
-
-
-
-  switch (event.type) {
-
-    case 'customer.subscription.deleted':
-
-      await handleSubscriptionDeleted(event.data.object);
-
-      break;
-
-    // ... handle other events
-
-  }
-
-
-
-  // Mark as processed
-
-  await db.processedEvents.create({ data: { id: event.id } });
-
-
-
-  return new Response('OK', { status: 200 });
-
-}
-
-```
-
-
-
----
-
-
-
-## Testing & Verification
-
-
-
-### Mocking with MSW (Mock Service Worker)
-
-Stop mocking `fetch` manually. Use MSW to intercept requests at the network level.
-
-
-
-```typescript
-
-import { http, HttpResponse } from 'msw';
-
-
-
-export const handlers = [
-
-  http.get('https://api.example.com/user', () => {
-
-    return HttpResponse.json({ id: '1', name: 'Test User' });
-
-  }),
-
-];
-
-```
-
-
-
-### Contract Testing
-
-Run a nightly cron job that validates the production API against your Zod schemas using `scripts/validate-api.ts`.
-
-
-
----
-
-
-
-## Deep Dive References
-
-- [Authentication (OIDC/Passkeys)](./references/auth.md)
-
-- [Resilience & RFC 7807](./references/resilience.md)
-
-- [Next.js 16 Integration](./references/nextjs-integration.md)
-
-- [Stripe Integration](./references/stripe.md)
-
-
-
----
-
-
-
-## Troubleshooting FAQ
-
-
-
-### "My API Key is leaking in the network tab!"
-
-**Cause**: You probably used `NEXT_PUBLIC_` or fetched on the client.
-
-**Fix**: Move the fetch logic to a **Server Component** or a **Server Action**.
-
-
-
-### "The API response doesn't match my Interface!"
-
-**Cause**: The external team changed the API without telling you.
-
-**Fix**: Implement the **Typed Contract Pattern** using Zod's `.parse()` to catch this at the entry point.
-
-
-
-### "I'm getting 429 Too Many Requests."
-
-**Cause**: You're hitting the rate limit without a client-side throttle.
-
-**Fix**: Implement a **Queue/Rate-Limiter** on your side or increase the `resetTimeout` in your Circuit Breaker.
-
-
-
----
-
-
-
-*Updated: January 22, 2026 - 15:18*
+### Integration with other Skills
+- **next16-expert**: Combine with `auth-next.md` for secure Server Actions.
+- **db-enforcer**: Use for ensuring schema alignment between API models and DB.
+- **debug-master**: Utilize trace-based debugging for failed API calls.
+
+*Updated: January 22, 2026 - 15:18

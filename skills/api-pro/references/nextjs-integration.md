@@ -130,4 +130,4 @@ async function fetchUser(id: string): Promise<APIUser> {
 - **Use `fetch` over Axios**: Next.js 16 extends the native `fetch` with advanced caching and revalidation logic.
 - **Streaming UI**: Use `Suspense` around data-heavy components to enable partial page loading.
 
-*Updated: January 22, 2026 - 15:18*
+*Updated: January 22, 2026 - 15:18

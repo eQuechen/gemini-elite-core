@@ -17,15 +17,18 @@ description: "Professional Git Forensics and Archival Intelligence for deep hist
 6. [Archival Search: Conductor Tracks](#archival-search-conductor-tracks)
 7. [Case Study: The Ghost of a Feature](#case-study-the-ghost-of-a-feature)
 8. [Git Internal Object Analysis](#git-internal-object-analysis)
-9. [Integrating with AI Analysis](#integrating-with-ai-analysis)
-10. [Comparison of Search Tools](#comparison-of-search-tools)
-11. [Best Practices for Searchability](#best-practices-for-searchability)
-12. [The "Do Not" List (Common Pitfalls)](#the-do-not-list-common-pitfalls)
-13. [Step-by-Step Implementation Patterns](#step-by-step-implementation-patterns)
-14. [Restoring Deleted Branches & History](#restoring-deleted-branches--history)
-15. [Searching for File Renames & Moves](#searching-for-file-renames--moves)
-16. [Tooling & Scripts](#tooling--scripts)
-17. [Reference Documentation](#reference-documentation)
+9. [Forensic Interviewing of Code](#forensic-interviewing-of-code)
+10. [Historical Contextualization](#historical-contextualization)
+11. [Integrating with AI Analysis](#integrating-with-ai-analysis)
+12. [Comparison of Search Tools](#comparison-of-search-tools)
+13. [Best Practices for Searchability](#best-practices-for-searchability)
+14. [The "Do Not" List (Common Pitfalls)](#the-do-not-list-common-pitfalls)
+15. [Step-by-Step Implementation Patterns](#step-by-step-implementation-patterns)
+16. [Restoring Deleted Branches & History](#restoring-deleted-branches--history)
+17. [Searching for File Renames & Moves](#searching-for-file-renames--moves)
+18. [Archival Integrity & Verification](#archival-integrity--verification)
+19. [Tooling & Scripts](#tooling--scripts)
+20. [Reference Documentation](#reference-documentation)
 
 ---
 
@@ -119,14 +122,18 @@ In the Squaads ecosystem, we use "Conductor" to manage mission tracks. When a tr
 ## 🕵️‍♂️ Case Study: The Ghost of a Feature
 **Problem**: The "Team Collaboration Dashboard" was implemented in early 2025 but is missing in the 2026 build. No one remembers when it was removed.
 
-**Investigation**:
+**Investigation Steps**:
 1. **Search for keyword**: `git log --all --grep="Collaboration Dashboard"`
-   - *Result*: Found a commit `e5f1b2c` titled "Cleanup legacy UI".
+   - *Reasoning*: If the removal was intentional, the commit message should mention it.
+   - *Result*: Found a commit `e5f1b2c` titled "Cleanup legacy UI components for 2026 rollout".
 2. **Inspect the cleanup**: `git show e5f1b2c --stat`
-   - *Result*: 45 files deleted, including `src/components/Dashboard.tsx`.
+   - *Reasoning*: See which files were removed in that "cleanup".
+   - *Result*: 45 files deleted, including `src/components/Dashboard.tsx` and `src/hooks/useCollaboration.ts`.
 3. **Trace the origin**: `git log --diff-filter=A -- src/components/Dashboard.tsx`
-   - *Result*: Found the original implementation in commit `a1b2c3d`.
-4. **Conclusion**: The feature was removed as "legacy" but parts of the logic are needed for the new "Squaad Hub". The developer uses `git show a1b2c3d:src/components/Dashboard.tsx` to recover the core logic.
+   - *Reasoning*: Find the commit that *Added* (A) the file initially.
+   - *Result*: Found the original implementation in commit `a1b2c3d` from Feb 2025.
+4. **Conclusion**: The feature was removed as "legacy" but parts of the logic are needed for the new "Squaad Hub".
+5. **Recovery**: Use `git show a1b2c3d:src/components/Dashboard.tsx` to read the code without checking it out.
 
 ---
 
@@ -145,6 +152,30 @@ To see what files are currently tracked (including staged ones):
 ```bash
 git ls-files --stage
 ```
+
+### Finding Lost Blobs
+If you ran `git add` but never committed, then lost the files:
+```bash
+git fsck --lost-found
+# Check .git/lost-found/other/ for the blobs
+```
+
+---
+
+## 💬 Forensic Interviewing of Code
+When you find a piece of archived code, ask it these questions:
+- **"Who authorized you?"**: Check the author and the PR number in the commit message.
+- **"What was your environment?"**: Look at the `package.json` changes in the same commit.
+- **"Why were you killed?"**: Look at the commits surrounding your deletion. Was it a bug fix or a refactor?
+- **"Who were your friends?"**: Use `git show --name-only` to see other files changed in the same commit. Features often span multiple files.
+
+---
+
+## 🌍 Historical Contextualization
+Don't just look at the code; look at the world around it.
+- **Timeline Mapping**: Compare Git timestamps with `conductor` mission logs.
+- **Dependency Correlation**: If a feature broke, check if a global library (like React or Next.js) was upgraded in the same week.
+- **Branch Archeology**: Use `git branch -a --contains <commit_hash>` to see which branches inherited this change.
 
 ---
 
@@ -166,15 +197,17 @@ When using this skill as an AI agent, follow these cognitive patterns:
 | `git grep` | Searching the current index/staged files. | Fast | Optional (`git grep <tree>`) |
 | `git log -S` | Finding when a string appeared/disappeared. | Slow | **Yes** |
 | `git log -G` | Regex patterns across history. | Very Slow | **Yes** |
+| `git blame` | Finding who changed a specific line. | Moderate | No |
 
 ---
 
 ## ✅ Best Practices for Searchability
 To make future archival searches easier, follow these "Search-Oriented Development" rules:
-- **Atomic Commits**: One change per commit.
+- **Atomic Commits**: One change per commit. Avoid "megacommit" which makes `-S` and `-G` noisy.
 - **Descriptive Messages**: Mention ticket IDs and specific function names.
 - **Avoid "The Great Cleanup"**: Don't mix feature additions with massive refactors. It breaks the Pickaxe.
 - **Tag Milestones**: Use `git tag -a v1.0.0` to create searchable anchors in time.
+- **Sign-off Commits**: Use `git commit -s` to add traceability.
 
 ---
 
@@ -188,6 +221,7 @@ To make future archival searches easier, follow these "Search-Oriented Developme
 | **Full Repo Clone for Search** | Wasteful and slow for large repositories. | Use `git log --all --full-history -- [path]` for surgical search. |
 | **Assuming Default Branch** | The history might be buried in a long-lost feature branch. | Always include `--all` when doing a deep forensic search. |
 | **Deleting .git directory** | Destroys all forensic evidence permanently. | Never delete `.git` unless you are detaching history intentionally. |
+| **Squash and Merge blindly**| Loses the granular history of a feature. | Use meaningful squash messages or keep merge commits for complex features. |
 
 ---
 
@@ -215,24 +249,40 @@ Useful for debugging "It worked in v0.24 but broke in v0.25" scenarios.
 git log -L :dependencies:package.json --all
 ```
 
+### Scenario 3: "Finding a secret leaked in the past"
+```bash
+# Search for any line starting with 'STRIPE_SECRET' in any commit
+git log -G "^STRIPE_SECRET" --all --patch
+```
+
 ---
 
 ## 🔄 Restoring Deleted Branches & History
 If you accidentally deleted a branch `feature/ai-integration`:
 1. Find the last commit hash of that branch in `git reflog`.
-2. `git checkout -b feature/ai-integration <hash>`.
+   - Look for `checkout: moving from feature/ai-integration to main`.
+2. The hash immediately *before* that move is your target.
+3. `git checkout -b feature/ai-integration <hash>`.
 
 ---
 
 ## 📁 Searching for File Renames & Moves
-Git doesn't explicitly track renames; it *infers* them. To search through renames:
+Git doesn't explicitly track renames; it *infers* them based on content similarity.
 ```bash
+# Follow a file's history through renames
 git log --follow -- <new_path>
 ```
-To find when a directory was moved:
+To see a summary of all renames in a range:
 ```bash
 git log --all --name-status --summary | grep "rename"
 ```
+
+---
+
+## 🛡 Archival Integrity & Verification
+When searching archives, verify that the data hasn't been tampered with.
+- **Git GPG Signing**: Verify commits with `git log --show-signature`.
+- **Conductor Hashes**: Archived tracks should ideally have a `sha256` in their metadata.
 
 ---
 
@@ -261,9 +311,10 @@ Detailed guides for specific domains:
 ---
 
 ## 📝 Troubleshooting
-- **No results?**: Ensure you are using `--all`. Many changes live in orphaned branches.
-- **Too many results?**: Use `--author` or `--since` to narrow the window.
-- **Binary files?**: Git search works best on text. For binaries, use `git log -- [path]` to see metadata changes.
+- **No results?**: Ensure you are using `--all`. Many changes live in orphaned branches or abandoned experiments.
+- **Too many results?**: Use `--author="Name"` or `--since="2025-01-01"` to narrow the window.
+- **Binary files?**: Git search works best on text. For binaries, use `git log -- [path]` to see metadata changes and commit messages.
+- **Index Corrupted?**: Run `git fsck` to ensure the archive is healthy.
 
 ---
 

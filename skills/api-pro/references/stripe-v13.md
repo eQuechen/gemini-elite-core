@@ -81,4 +81,4 @@ export async function POST(req: Request) {
 - **API Version Drift**: Hard-code the `apiVersion` in the client constructor to avoid breaking changes when updating the dashboard settings.
 - **Memory Leaks**: When using auto-pagination on very large sets (>100k), ensure you are not accumulating objects in an array.
 
-*Updated: January 22, 2026 - 15:20*
+*Updated: January 22, 2026 - 15:18

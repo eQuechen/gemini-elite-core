@@ -227,10 +227,11 @@ Examples:
   # Edit with a specific model
   python generate_image.py "Add a hat to the person" --input portrait.png -m "black-forest-labs/flux.2-pro"
 
-Popular image models:
-  - google/gemini-3-pro-image-preview (default, high quality, generation + editing)
-  - black-forest-labs/flux.2-pro (fast, high quality, generation + editing)
-  - black-forest-labs/flux.2-flex (development version)
+Popular image models (2026):
+  - google/gemini-3-pro-image-preview (default, professional quality)
+  - black-forest-labs/flux.2-pro (photorealistic, high-fidelity text)
+  - google/gemini-3-flash (fast, cost-effective)
+  - black-forest-labs/flux.2-klein (real-time generation)
         """
     )
 

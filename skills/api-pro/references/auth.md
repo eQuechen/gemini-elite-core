@@ -83,4 +83,4 @@ For machine-to-machine (M2M) communication, prefer short-lived JWTs over long-li
 - **Hardcoding Client Secrets**: Always use environment variables and ensure they are NOT prefixed with `NEXT_PUBLIC_` if they are for server-side use.
 - **Ignoring PKCE**: Even for server-side flows, PKCE adds a layer of defense-in-depth.
 
-*Updated: January 22, 2026 - 15:18*
+*Updated: January 22, 2026 - 15:18

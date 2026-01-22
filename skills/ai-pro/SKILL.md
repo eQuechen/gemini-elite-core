@@ -1,282 +1,184 @@
 ---
 name: ai-pro
-description: Professional AI-driven asset generation and image manipulation suite. Optimized for Gemini 3, FLUX.2, and 2026 production workflows. Handles everything from photorealistic generation to intelligent image enhancement.
+description: Professional AI and System Orchestrator. Specialized in GPT-5, autonomous agents, Auth.js v5, Stripe v13, Monorepos (Bun/pnpm), and large codebase intelligence. Optimized for January 2026 standards.
 ---
 
-# AI-Pro: Professional Asset Generation Suite (2026)
+# AI-PRO: Professional AI & System Orchestrator
 
-*Updated: January 22, 2026 - 15:18*
+## Overview
+**AI-PRO** is the definitive skill for managing modern, high-performance software ecosystems in 2026. It bridges the gap between raw AI capabilities (GPT-5, o3-deep-research) and enterprise-grade infrastructure (Auth.js v5, Stripe v13, Bun/pnpm Monorepos).
 
-AI-Pro is the definitive skill for high-fidelity image generation, editing, and enhancement. It leverages the latest multimodal models (Gemini 3 Pro, FLUX.2 Pro, SD4) to deliver production-ready visual assets.
+This skill is designed for the **Senior AI Engineer** who needs to orchestrate autonomous agents while maintaining strict security, performance, and architectural integrity.
 
----
+## Core Pillars of the 2026 Stack
 
-## Table of Contents
-1. [Core Capabilities](#core-capabilities)
-2. [Model Selection Strategy 2026](#model-selection-strategy-2026)
-3. [Quick Start](#quick-start)
-4. [Standard Production Patterns](#standard-production-patterns)
-5. [The "Do Not" List (Anti-Patterns)](#the-do-not-list-anti-patterns)
-6. [Advanced Workflows](#advanced-workflows)
-7. [Ethical AI & SynthID](#ethical-ai--synthid)
-8. [Troubleshooting & FAQ](#troubleshooting--faq)
-9. [Reference Library](#reference-library)
+### 1. The AI Frontier (GPT-5 & Autonomous Agents)
+The paradigm has shifted from "Chat" to "Agents". We utilize the GPT-5 family for complex tool-use and `o3-deep-research` for iterative discovery missions.
+- **Reference**: [`references/ai-agents.md`](./references/ai-agents.md)
 
----
+### 2. Identity & Security (Auth.js v5)
+Security in 2026 is "Edge-First". Auth.js v5 provides 25% faster validation and native Edge support using the standardized `AUTH_` prefix.
+- **Reference**: [`references/auth-v5.md`](./references/auth-v5.md)
 
-## Core Capabilities
+### 3. Financial Infrastructure (Stripe v13+)
+Modern API consumption leverages auto-paginating SDKs and deeply expanded objects to reduce network overhead and boilerplate.
+- **Reference**: [`references/api-v13.md`](./references/api-v13.md)
 
-- **High-Fidelity Generation**: Native 4K generation using FLUX.2 Pro and Gemini 3 Pro.
-- **Intelligent Inpainting**: Precise image editing and object replacement.
-- **Multimodal Feedback**: Using Gemini 3 Vision to refine and critique generated assets.
-- **Professional Upscaling**: 2026-grade enhancement for low-res screenshots and photos.
-- **Character Consistency**: Multi-reference support for maintaining brand identity.
+### 4. Codebase Intelligence (Architect & Archive)
+Managing massive codebases requires "Context Packing" with Repomix and high-performance search via `git grep` and indexed symbol maps.
+- **Reference**: [`references/architect-archive.md`](./references/architect-archive.md)
 
 ---
 
-## Model Selection Strategy 2026
+## Strategic Implementation Guide
 
-Choosing the right model is critical for cost and quality optimization.
+### The "Autonomous Orchestrator" Pattern
+To build a system that can self-heal and evolve, follow the **O.R.C.A.** (Observe, Reason, Check, Act) pattern.
 
-| Use Case | Recommended Model | Rationale |
-| :--- | :--- | :--- |
-| **Marketing Hero Images** | `black-forest-labs/flux.2-pro` | Best photorealism and text rendering. |
-| **Complex Scientific Visuals** | `google/gemini-3-pro-image-preview` | Superior reasoning for intricate instructions. |
-| **Rapid UI Mockups** | `google/gemini-3-flash` | Ultra-fast latency and low cost. |
-| **Artistic/Stylized Assets** | `midjourney/v8` | Leading aesthetic variety. |
-| **Local/Private Workflows** | `stability-ai/sdxl-turbo-v2` | Fast, local-capable, no cloud dependency. |
-
----
-
-## Quick Start
-
-### 1. Environment Setup
-Ensure your `OPENROUTER_API_KEY` is set in your `.env` file.
-
-```bash
-# Check if key is present
-grep "OPENROUTER_API_KEY" .env
-```
-
-### 2. Basic Generation
-Generate a professional landscape in 16:9 aspect ratio.
-
-```bash
-python scripts/generate_image.py "Cinematic wide shot of a futuristic Tokyo at sunset, hyper-realistic, 8k" --output assets/tokyo_2026.png
-```
-
-### 3. Basic Editing
-Change the weather in an existing photo.
-
-```bash
-python scripts/generate_image.py "Add heavy snow and winter atmosphere" --input assets/tokyo_2026.png --output assets/tokyo_winter.png
-```
-
----
-
-## Standard Production Patterns
-
-### Pattern A: The Branding Suite
-Maintaining consistency across multiple assets.
-
-```python
-# Pseudo-code for a batch branding script
-prompts = [
-    "Corporate headshot of a CEO in a tech office, professional lighting",
-    "Company logo displayed on a glass building facade",
-    "Team of diverse engineers working on a hologram"
-]
-
-for i, prompt in enumerate(prompts):
-    generate_image(prompt, model="black-forest-labs/flux.2-pro", output=f"brand_{i}.png")
-```
-
-### Pattern B: The Scientific Illustration
-Creating diagrams that actually make sense.
-
-```bash
-python scripts/generate_image.py "Cross-section of a lithium-sulfur battery showing ion flow, labeled parts, clean scientific style, white background" --model google/gemini-3-pro-image-preview
-```
-
-### Pattern C: Screenshot Enhancement
-Transforming a 1080p screenshot into a 4K presentation asset.
-*See [References: Image Enhancement](./references/image-enhancement.md) for details.*
-
----
-
-## The "Do Not" List (Anti-Patterns)
-
-### ❌ DO NOT use generic prompts
-*Bad*: "A cat."
-*Good*: "A hyper-realistic Siberian cat wearing a miniature astronaut suit, floating in a zero-gravity space station, cinematic lighting, 8k."
-
-### ❌ DO NOT ignore Aspect Ratios
-Generating a square image for a website banner results in poor composition when cropped.
-*Best Practice*: Always specify `--ar 16:9` or `--ar 21:9` for wide assets.
-
-### ❌ DO NOT skip the "Negative Prompt" for SD4
-Stable Diffusion 4 still benefits from explicit exclusion of artifacts.
-*See [References: Advanced Prompting](./references/advanced-prompting-guide.md).*
-
-### ❌ DO NOT hardcode API Keys
-Never commit API keys to the repository. Always use the `.env` loader provided in the scripts.
-
-### ❌ DO NOT use Image Gen for Technical Schematics
-While models are better in 2026, for precise electrical or architectural schematics, use the `scientific-schematics` skill which uses SVG/Mermaid.
-
----
-
-## Advanced Workflows
-
-### 1. Recursive Refinement
-Use a vision model to improve your prompts.
-1. Generate image.
-2. Feed image to `gemini-3-vision`.
-3. Ask: "What is missing from this image to make it look like a 1970s film?"
-4. Update prompt with the feedback.
-
-### 2. Character Consistency via Multi-Reference (FLUX.2)
-FLUX.2 Pro supports multiple reference URLs to lock in a character's face and style.
-
-```bash
-# Example command using multiple references
-python scripts/generate_image.py "The character [REF1] wearing a medieval armor" --input "ref1.png,ref2.png"
-```
-
----
-
-## Ethical AI & SynthID
-
-In 2026, transparency is mandatory for professional workflows.
-- **SynthID**: All images generated via the Google Gemini API are automatically watermarked with SynthID. This watermark is invisible to the human eye but detectable by software.
-- **Usage**: When using these assets in public-facing documentation, it is recommended to include a small "AI-Generated" disclaimer in the metadata or caption.
-
----
-
-## Implementation Patterns
-
-### 1. Next.js 16 Integration (Server Actions)
-Use this pattern to generate assets on-the-fly in a modern Next.js environment.
-
+#### Example: Self-Healing API Integration
 ```typescript
-// app/actions/generate-asset.ts
-'use server'
+import { gpt5 } from '@openai/provider';
+import { generateText } from 'ai-sdk';
+import { auth } from '@/auth';
+import Stripe from 'stripe';
 
-import { auth } from '@/auth'
-import { revalidatePath } from 'next/cache'
+/**
+ * AI-PRO Orchestrator: Automatically fixes API version mismatches
+ */
+async function selfHealingPayment(customerId: string) {
+  const session = await auth(); // Auth.js v5 Edge-First
+  const stripe = new Stripe(process.env.AUTH_STRIPE_SECRET!, {
+    apiVersion: '2025-10-01',
+  });
 
-export async function generateAsset(formData: FormData) {
-  const session = await auth()
-  if (!session) throw new Error('Unauthorized')
-
-  const prompt = formData.get('prompt') as string
-  const model = formData.get('model') as string || 'black-forest-labs/flux.2-pro'
-
-  // Execute the AI-Pro python script or call OpenRouter API directly
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      model,
-      messages: [{ role: 'user', content: prompt }],
-      modalities: ['image']
-    })
-  })
-
-  const data = await response.json()
-  // Process and save to storage (e.g., S3, Vercel Blob)
-  
-  revalidatePath('/gallery')
-  return { success: true, url: data.choices[0].message.images[0].url }
+  try {
+    const customer = await stripe.customers.retrieve(customerId, {
+      expand: ['subscriptions.data.default_payment_method'],
+    });
+    // Business logic...
+  } catch (error) {
+    // If error is related to API versioning or schema change
+    const diagnostic = await generateText({
+      model: gpt5('gpt-5-pro'),
+      prompt: `Analyze this Stripe error: ${error.message}. 
+               Context: We are using SDK v13. 
+               Suggest a fix or retry strategy.`,
+    });
+    
+    console.log(`AI-PRO Diagnostic: ${diagnostic.text}`);
+    // Implement auto-retry or fallback logic here
+  }
 }
 ```
 
-### 2. Python FastAPI Backend
-For high-volume background processing of image assets.
+---
 
-```python
-# api/image_gen.py
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from pydantic import BaseModel
-import subprocess
+## Advanced Search & Context Management
 
-app = FastAPI()
+### Ripgrep Masterclass
+When searching through million-line archives, speed is safety.
 
-class GenRequest(BaseModel):
-    prompt: str
-    model: str = "google/gemini-3-pro-image-preview"
+| Command | Use Case |
+| :--- | :--- |
+| `rg -l "pattern"` | List ONLY filenames containing the pattern. |
+| `rg -C 5 "pattern"` | Show 5 lines of context around the match. |
+| `rg -t typescript "pattern"` | Search ONLY in TypeScript files. |
+| `rg --stats "pattern"` | Show performance stats (count, time). |
 
-@app.post("/generate")
-async def create_image(request: GenRequest, background_tasks: BackgroundTasks):
-    try:
-        # Using the AI-Pro CLI for consistent behavior
-        cmd = [
-            "python", "scripts/generate_image.py",
-            request.prompt,
-            "--model", request.model,
-            "--output", f"outputs/{hash(request.prompt)}.png"
-        ]
-        
-        # Run as a background task to avoid blocking the API
-        background_tasks.add_task(subprocess.run, cmd, check=True)
-        
-        return {"status": "processing", "message": "Image generation started"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+### Repomix Strategy
+Before starting a complex refactor, generate a "Codebase Map":
+```bash
+bun x repomix --include "src/core/**,src/types/**" --output .ai-context/core-map.xml
 ```
 
 ---
 
-## Performance Optimization
+## The "Do Not" List (Anti-Patterns to Avoid)
 
-- **Prompt Caching**: OpenRouter supports prompt caching for long system instructions. If you use the same "Style" prefix for all images, you save 50% on input tokens.
-- **Image Formats**: Use `.webp` for web assets to reduce payload size by up to 80% compared to PNG.
-- **Tiled Upscaling**: For 8K+ requirements, generate at 2K and use the `image-enhancer` reference workflow for the final pass.
-- **Parallel Generation**: Use Python `asyncio` or Node.js `Promise.all` when generating thematic batches.
+### ❌ AI & Agents
+- **Do NOT** allow an agent to commit to `main` without a `strict-auditor` check.
+- **Do NOT** hardcode model names; use a registry or environment variables to allow for easy upgrades (e.g., GPT-5 -> GPT-6).
+- **Do NOT** use agents for deterministic tasks (like regex) where a simple script suffices.
 
----
+### ❌ Authentication
+- **Do NOT** use `process.env.NEXTAUTH_SECRET`; v5 expects `AUTH_SECRET`.
+- **Do NOT** store PII (Personally Identifiable Information) in JWTs; keep tokens lean for Edge performance.
+- **Do NOT** ignore the `AUTH_TRUST_HOST` requirement in non-Vercel environments.
 
-## Security and Privacy
+### ❌ API & SDKs
+- **Do NOT** manually handle Stripe pagination using `starting_after`; it is error-prone. Use `for await...of`.
+- **Do NOT** neglect webhook signature verification; it is the #1 vector for payment fraud.
 
-- **Data Minimization**: When using image editing (`--input`), strip EXIF metadata from the input file before uploading to cloud providers to protect user location data.
-- **Content Filtering**: All 2026 models have built-in safety filters. If a request is blocked, the script will return a "Safety Filter Triggered" error. Do not attempt to bypass these filters.
-- **Storage**: Generated assets should be stored in private buckets with signed URLs if they contain sensitive or proprietary concepts.
-
----
-
-## Troubleshooting & FAQ
-
-### Q: Why is my image blurry?
-**A**: Ensure you are using a Pro model (FLUX.2 Pro or Gemini 3 Pro). Flash models often trade texture detail for speed. Also, check if you need to run the `image-enhancer` on the output.
-
-### Q: The text in my image is gibberish.
-**A**: Use **FLUX.2 Pro** or **Ideogram 3**. Gemini 3 is excellent at logic but occasionally hallucinates complex typography in small areas.
-
-### Q: I'm getting a 401 Unauthorized error.
-**A**: Check your OpenRouter balance and ensure your API key hasn't expired.
+### ❌ Architecture
+- **Do NOT** create "Monster Monorepos" without clear package boundaries. Use `pnpm-workspace.yaml`.
+- **Do NOT** include `node_modules` in your `repomix` packs; it will blow your token budget.
 
 ---
 
-## Reference Library
+## Evolution Roadmap (2026-2027)
 
-Detailed deep-dives into specific AI-Pro domains:
+### Q1 2026: The o3 Stabilization
+- Deep integration of `o3-deep-research` into CI/CD pipelines for autonomous bug hunting.
+- Standardization of the `AUTH_` prefix across all Squadds projects.
 
-- [**Advanced Prompting Guide 2026**](./references/advanced-prompting-guide.md): Technical keywords, lighting, and composition.
-- [**Model Benchmarks 2026**](./references/model-benchmarks-2026.md): Speed, cost, and quality comparisons.
-- [**Image Enhancement Suite**](./references/image-enhancement.md): Upscaling and sharpening workflows.
-- [**Output Formats**](./references/output-format.md): Handling Base64, WebP, and PNG exports.
+### Q2 2026: GPT-5 Multi-Modal Agents
+- Native visual auditing: Agents that "see" the UI to find CSS regressions.
+- Real-time audio debugging: Voice-driven system diagnostics.
 
----
-
-## Integration with Squaads Ecosystem
-
-- **scientific-slides**: Automate the generation of slide backgrounds and hero images.
-- **next16-expert**: Integrate AI-Pro scripts into Next.js Server Actions for dynamic asset generation.
-- **docs-pro**: Automatically enhance screenshots before they are embedded in Markdown documentation.
+### H2 2026: The GPT-6 Horizon
+- Early testing of "Infinite Context" models.
+- Transition from Monorepos to "Micro-Repos" managed by a Centralized AI Architect.
 
 ---
 
-*Updated: January 22, 2026 - 15:18*
+## Quick Reference Commands
+
+### Identity Setup (Auth.js v5)
+```bash
+# Generate AUTH_SECRET
+openssl rand -base64 32
+```
+
+### Dependency Sync (Bun + pnpm)
+```bash
+# Reinstall all workspace deps with Bun's speed
+bun install --frozen-lockfile
+```
+
+### Context Packing
+```bash
+# Pack core logic for AI review
+bun x repomix --style markdown --output review.md
+```
+
+### Large Scale Search
+```bash
+# Find all sensitive keys across the archive
+git grep -E "(SECRET|KEY|PASSWORD)" -- ':!*.lockb'
+```
+
+---
+
+## Troubleshooting
+
+### Issue: "Missing AUTH_SECRET"
+- **Cause**: Auth.js v5 requires this for encryption in production.
+- **Fix**: Add `AUTH_SECRET` to your `.env` or CI secrets.
+
+### Issue: "Stripe SDK Pagination Error"
+- **Cause**: Trying to access `.data` on an async iterator.
+- **Fix**: Use `for await (const item of stripe.customers.list())` directly.
+
+### Issue: "Repomix Token Overflow"
+- **Cause**: Packing too many files or large assets.
+- **Fix**: Use `--ignore` or create a specific `repomix.config.json` for the module.
+
+---
+
+## Metadata
+- **Version**: 2.0.0 (January 2026 Refactor)
+- **Primary Agent**: AI-PRO
+- **Sub-Agents**: `auth-expert`, `api-pro`, `architect-pro`, `archive-searcher`
+- **Compatibility**: Next.js 16.1+, React 19.2+, Stripe 13.5+, Bun 1.2+
+
+*Updated: January 22, 2026 - 15:20*

@@ -94,4 +94,50 @@ callbacks: {
 }
 ```
 
+## Custom OAuth Providers in v5
+If you need to integrate a legacy or niche provider, v5 makes it straightforward.
+
+```typescript
+// auth.ts
+providers: [
+  {
+    id: "my-custom-provider",
+    name: "Legacy Auth",
+    type: "oauth",
+    authorization: "https://example.com/oauth/authorize",
+    token: "https://example.com/oauth/token",
+    userinfo: "https://example.com/oauth/userinfo",
+    profile(profile) {
+      return {
+        id: profile.id,
+        name: profile.name,
+        email: profile.email,
+        image: profile.avatar_url,
+      };
+    },
+  },
+]
+```
+
+## Integration with Database Adapters
+Auth.js v5 supports Prisma, Drizzle, and Supabase natively.
+
+### Prisma Example
+```typescript
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/prisma";
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  providers: [...],
+});
+```
+
+## Troubleshooting Edge Deployment
+- **Problem**: `Module not found: Can't resolve 'crypto'`.
+- **Solution**: Ensure you are using v5 and not importing legacy polyfills. v5 uses the global `crypto` object.
+- **Problem**: Session not persisting on subdomains.
+- **Solution**: Set `cookies.sessionToken.options.domain` to your root domain (e.g., `.example.com`).
+
 *Updated: January 22, 2026 - 15:20*

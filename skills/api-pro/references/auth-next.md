@@ -60,4 +60,4 @@ export const config = {
 - **PKCE**: Default for all OAuth providers.
 - **Session Rotation**: Automatic on sensitive profile changes.
 
-*Updated: January 22, 2026 - 15:20*
+*Updated: January 22, 2026 - 15:18
