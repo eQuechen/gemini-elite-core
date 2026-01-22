@@ -18,7 +18,7 @@ Transform your Gemini CLI into a high-performance autonomous agentic environment
 Clone this repository and run the setup script:
 
 ```bash
-git clone https://github.com/your-username/gemini-elite-core.git
+git clone https://github.com/YuniorGlez/gemini-elite-core.git
 cd gemini-elite-core
 chmod +x setup.sh
 ./setup.sh
