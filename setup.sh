@@ -73,6 +73,9 @@ if [[ "$SELECTED_LANG" == "ES" ]]; then
     MSG_STATUS_PLANNING="Planificación: Interactive Mode (v0.27)"
     MSG_STATUS_SKILLS="Habilidades: Desplegadas (Code Reviewer +)"
     MSG_STATUS_HOOKS="Hooks: System Active"
+    MSG_CONSERVATIVE_PROMPT="¿Quieres ser más conservador o menos conservador?"
+    MSG_CONSERVATIVE_OPT1="1) Menos conservador (Más potente) [Predeterminado]"
+    MSG_CONSERVATIVE_OPT2="2) Más conservador"
     # MSG_STEP_CONFIG_BROWSER_USE="Configurando browser-use (Automatización Web)..."
     # MSG_PROMPT_BROWSER_USE="browser-use permite a Gemini navegar por internet, extraer datos y completar tareas en sitios web. ¿Deseas instalarlo? (Requiere Python 3 y uv) [S/n]: "
     YES_REGEX="^[Ss]?$"
@@ -114,9 +117,25 @@ else
     MSG_STATUS_PLANNING="Planning: Interactive Mode (v0.27)"
     MSG_STATUS_SKILLS="Skills: Deployed (Code Reviewer +)"
     MSG_STATUS_HOOKS="Hooks: System Active"
+    MSG_CONSERVATIVE_PROMPT="Do you want to be more conservative or less conservative?"
+    MSG_CONSERVATIVE_OPT1="1) Less conservative (Most powerful) [Default]"
+    MSG_CONSERVATIVE_OPT2="2) More conservative"
     # MSG_STEP_CONFIG_BROWSER_USE="Configuring browser-use (Web Automation)..."
     # MSG_PROMPT_BROWSER_USE="browser-use allows Gemini to browse the internet, extract data, and complete tasks on websites. Do you want to install it? (Requires Python 3 and uv) [Y/n]: "
     YES_REGEX="^[Yy]?$"
+fi
+
+# Conservative Mode Selection
+echo -e "\n${MAGENTA}${MSG_CONSERVATIVE_PROMPT}${NC}"
+echo -e "${MSG_CONSERVATIVE_OPT1}"
+echo -e "${MSG_CONSERVATIVE_OPT2}"
+echo -n "Selection / Selección [1]: "
+read -r CONSERVATIVE_CHOICE
+
+if [[ "$CONSERVATIVE_CHOICE" == "2" ]]; then
+    CONSERVATIVE_MODE="true"
+else
+    CONSERVATIVE_MODE="false"
 fi
 
 clear
@@ -145,8 +164,17 @@ if [ -z "$GEMINI_API_KEY" ]; then
     read -r USER_KEY
     if [ -n "$USER_KEY" ]; then
         export GEMINI_API_KEY="$USER_KEY"
-        echo -n "$MSG_SAVE_PERM"
-        read -r SAVE_KEY
+        if [[ "$CONSERVATIVE_MODE" == "false" ]]; then
+            if [[ "$SELECTED_LANG" == "ES" ]]; then
+                SAVE_KEY="s"
+            else
+                SAVE_KEY="y"
+            fi
+        else
+            echo -n "$MSG_SAVE_PERM"
+            read -r SAVE_KEY
+        fi
+        
         if [[ "$SAVE_KEY" =~ $YES_REGEX ]]; then
             SHELL_CONFIG="$HOME/.zshrc"
             [ ! -f "$SHELL_CONFIG" ] && SHELL_CONFIG="$HOME/.bashrc"
@@ -177,6 +205,7 @@ fi
 
 # 3. Massive Skill Installation
 step "$MSG_STEP_INST_SKILLS"
+SKILLS_COUNT=0
 cd skills
 for skill_dir in */; do
     [ -d "$skill_dir" ] || continue
@@ -187,11 +216,15 @@ for skill_dir in */; do
     if [ -f "$LOCAL_SKILL" ] && [ -f "$INSTALLED_SKILL" ]; then
         LOCAL_HASH=$(shasum -a 256 "$LOCAL_SKILL" | awk '{ print $1 }')
         INSTALLED_HASH=$(shasum -a 256 "$INSTALLED_SKILL" | awk '{ print $1 }')
-        if [ "$LOCAL_HASH" == "$INSTALLED_HASH" ]; then continue; fi
+        if [ "$LOCAL_HASH" == "$INSTALLED_HASH" ]; then 
+            SKILLS_COUNT=$((SKILLS_COUNT + 1))
+            continue
+        fi
     fi
     info "$MSG_INFO_DEPLOYING $SKILL_NAME..."
     # En v26 nightly, --consent es un flag global
     gemini skills install "$skill_dir" --consent &> /dev/null || true
+    SKILLS_COUNT=$((SKILLS_COUNT + 1))
 done
 cd ..
 success "$MSG_SUCCESS_SKILLS_DEPLOYED"
@@ -212,38 +245,23 @@ if ! check_mcp "chrome-devtools"; then
     gemini mcp add --scope user chrome-devtools npx -y chrome-devtools-mcp @latest &> /dev/null || true
 fi
 
-# Filesystem MCP Selection (Node vs Rust)
+# Filesystem MCP Selection (Automatic)
 if ! check_mcp "filesystem" || gemini mcp list 2>/dev/null | grep -q "modelcontextprotocol/server-filesystem"; then
-    echo -e "\n${MAGENTA}📁 Filesystem MCP Selection${NC}"
-    if [[ "$SELECTED_LANG" == "ES" ]]; then
-        echo -e "1) Estándar (Node.js) - Estable"
-        echo -e "2) Experimental (Rust) - Mucho más rápido, herramientas adicionales"
-        echo -n "Selecciona una opción [1]: "
-    else
-        echo -e "1) Standard (Node.js) - Stable"
-        echo -e "2) Experimental (Rust) - Faster, extra tools"
-        echo -n "Select an option [1]: "
-    fi
-    read -r FS_CHOICE
-
-    if [[ "$FS_CHOICE" == "2" ]]; then
+    if [[ "$CONSERVATIVE_MODE" == "false" ]]; then
         BINARY_NAME="rust-mcp-filesystem"
         # Search in common paths
         BINARY_PATH=$(command -v "$BINARY_NAME" || echo "$HOME/.cargo/bin/$BINARY_NAME" || echo "/opt/homebrew/bin/$BINARY_NAME")
         
         if [ ! -f "$BINARY_PATH" ]; then
-            info "Installing rust-mcp-filesystem..."
+            info "Installing rust-mcp-filesystem (Fast/Experimental)..."
             if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "linux"* ]]; then
                 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/rust-mcp-stack/rust-mcp-filesystem/releases/download/v0.4.0/rust-mcp-filesystem-installer.sh | sh &> /dev/null || true
                 BINARY_PATH=$(command -v "$BINARY_NAME" || echo "$HOME/.cargo/bin/$BINARY_NAME" || echo "/opt/homebrew/bin/$BINARY_NAME")
-            else
-                warn "Auto-install not supported for your OS. Please install manually: https://github.com/rust-mcp-stack/rust-mcp-filesystem"
             fi
         fi
 
         if [ -f "$BINARY_PATH" ] || command -v "$BINARY_NAME" &> /dev/null; then
             [ -z "$BINARY_PATH" ] && BINARY_PATH=$(command -v "$BINARY_NAME")
-            # Use absolute path and correct flag -w for Rust version
             gemini mcp add --scope user filesystem "$BINARY_PATH" -w "." &> /dev/null || true
             success "Rust Filesystem MCP configured."
         else
@@ -251,34 +269,12 @@ if ! check_mcp "filesystem" || gemini mcp list 2>/dev/null | grep -q "modelconte
             gemini mcp add --scope user filesystem npx -y @modelcontextprotocol/server-filesystem . &> /dev/null || true
         fi
     else
-        info "Adding standard filesystem MCP..."
+        info "Adding standard Node.js filesystem MCP..."
         gemini mcp add --scope user filesystem npx -y @modelcontextprotocol/server-filesystem . &> /dev/null || true
     fi
 fi
 
-# Consensual installation of llm-tldr (Experimental)
-if ! check_mcp "llm-tldr"; then
-    echo -e "\n${MAGENTA}🔍 Experimental: llm-tldr MCP${NC}"
-    if [[ "$SELECTED_LANG" == "ES" ]]; then
-        echo -e "llm-tldr ayuda a reducir el consumo de tokens hasta un 95% y acelera el análisis estructural."
-        echo -n "¿Deseas instalarlo? (Requiere Python 3) [S/n]: "
-    else
-        echo -e "llm-tldr helps reduce token consumption by up to 95% and speeds up structural analysis."
-        echo -n "Do you want to install it? (Requires Python 3) [Y/n]: "
-    fi
-    read -r INSTALL_TLDR
-    if [[ "$INSTALL_TLDR" =~ $YES_REGEX ]]; then
-        if command -v python3 &> /dev/null && command -v pip3 &> /dev/null; then
-            info "Installing llm-tldr via pip3..."
-            pip3 install --user llm-tldr --break-system-packages &> /dev/null || true
-            # Correct order: name command args...
-            gemini mcp add --scope user llm-tldr python3 -m tldr.mcp_server &> /dev/null || true
-            success "llm-tldr MCP configured in settings.json."
-        else
-            warn "Python 3 or pip3 not found. Skipping llm-tldr."
-        fi
-    fi
-fi
+# Skip llm-tldr (not used)
 
 # Consensual installation of browser-use (Commented out - causing issues)
 # if ! check_mcp "browser-use"; then
@@ -433,15 +429,23 @@ if command -v bun &> /dev/null; then
 fi
 
 # 6. Global GEMINI.md Update with Consent
-step "$MSG_STEP_ADOPT_PROTOCOLS"
-echo -e "${YELLOW}${MSG_PROTOCOLS_DESC}${NC}"
-echo -e "1. ${CYAN}${MSG_PROTO_1}${NC}"
-echo -e "2. ${CYAN}${MSG_PROTO_2}${NC}"
-echo -e "3. ${CYAN}${MSG_PROTO_3}${NC}"
-echo -e "4. ${CYAN}${MSG_PROTO_4}${NC}"
+if [[ "$CONSERVATIVE_MODE" == "false" ]]; then
+    if [[ "$SELECTED_LANG" == "ES" ]]; then
+        ADOPT_PROTOCOLS="s"
+    else
+        ADOPT_PROTOCOLS="y"
+    fi
+else
+    step "$MSG_STEP_ADOPT_PROTOCOLS"
+    echo -e "${YELLOW}${MSG_PROTOCOLS_DESC}${NC}"
+    echo -e "1. ${CYAN}${MSG_PROTO_1}${NC}"
+    echo -e "2. ${CYAN}${MSG_PROTO_2}${NC}"
+    echo -e "3. ${CYAN}${MSG_PROTO_3}${NC}"
+    echo -e "4. ${CYAN}${MSG_PROTO_4}${NC}"
 
-echo -n -e "$MSG_PROMPT_ADOPT"
-read -r ADOPT_PROTOCOLS
+    echo -n -e "$MSG_PROMPT_ADOPT"
+    read -r ADOPT_PROTOCOLS
+fi
 
 if [[ "$ADOPT_PROTOCOLS" =~ $YES_REGEX ]]; then
     USER_GEMINI="$HOME/.gemini/GEMINI.md"
@@ -521,6 +525,6 @@ echo -e "STATUS:"
 echo -e "- ${MSG_STATUS_CLI}"
 echo -e "- ${MSG_STATUS_AGENTS}"
 echo -e "- ${MSG_STATUS_PLANNING}"
-echo -e "- ${MSG_STATUS_SKILLS}"
+echo -e "- ${MSG_STATUS_SKILLS} (${SKILLS_COUNT} skills)"
 echo -e "- ${MSG_STATUS_HOOKS}"
 echo -e "----------------------------------------------------"
