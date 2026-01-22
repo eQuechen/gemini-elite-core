@@ -20,7 +20,10 @@ Establish a high-standard strategy for creating powerful skills and refactor all
     - [x] **Step 4.6: Refactor `supabase-expert`**: 500+ lines with SSR, Revocable Keys, and Splinter AI.
     - [x] **Step 4.7: Refactor `zustand-expert`**: 400+ lines with Zustand v5, Slices Pattern, and SSR safety.
     - [x] **Step 4.8: Refactor `prisma-expert`**: 500+ lines with Prisma 7, TypedSQL, and Edge-first architecture.
-    - [ ] **Step 4.9: Completion & Commit**: Update plans, report to user, and commit upon approval.
+    - [x] **Step 4.9: Refactor `auth-expert`, `ai-pro`, `api-pro`, `architect-pro`, `archive-searcher`**: Advanced 2026 suites.
+    - [x] **Step 4.10: Refactor `browser-use-expert`**: Integrated official 2026 documentation.
+    - [x] **Step 4.11: Refactor `artifact-janitor`**: 400+ lines with safety protocols and automation.
+    - [ ] **Step 4.12: Completion & Commit**: Update plans, report to user, and commit upon approval.
 
 ## Key Questions
 1. What specific structural elements make the reference repository's skills superior?

@@ -55,25 +55,62 @@
     - [x] Add "Prisma in Edge Functions" configuration reference.
 - **Target**: 400+ lines.
 
+### 7. auth-expert (Refactor: Level 10)
+- **Status**: COMPLETED (v2.0.0). Edge-first, OIDC, and React 19 integration.
+- **Tasks**:
+    - [x] Implement Dual-Config Pattern for Edge compatibility.
+    - [x] Add templates for `auth.ts`, `auth.config.ts`, and `middleware.ts`.
+    - [x] Add references for Enterprise patterns and Billing integration.
+- **Target**: 600+ lines.
+
+### 8. ai-pro (Refactor: Level 10)
+- **Status**: COMPLETED (v1.0.0). Asset generation suite for 2026.
+- **Tasks**:
+    - [x] Integrated GPT-5 Reasoning and o3 models.
+    - [x] Added references for advanced prompting and model benchmarks.
+- **Target**: 500+ lines.
+
+### 9. api-pro (Refactor: Level 10)
+- **Status**: COMPLETED (v1.0.0). Resilience and Contract-first APIs.
+- **Tasks**:
+    - [x] Added Zod contract validation and Circuit Breaker patterns.
+    - [x] Integrated Stripe v13 auto-pagination and SDK features.
+- **Target**: 500+ lines.
+
+### 10. architect-pro (Refactor: Level 10)
+- **Status**: COMPLETED (v1.0.0). Clean Architecture and Tactical DDD.
+- **Tasks**:
+    - [x] Defined 2026 production stack folder structure.
+    - [x] Added references for Hexagonal Architecture and ADRs.
+- **Target**: 600+ lines.
+
 ## Priorities: Medium (Tools & Utilities)
 
-### 7. browser-use-expert
-- **Tasks**: Add complex navigation examples (handling popups, shadow DOM, infinite scroll).
-- [ ] Add `references/selectors-strategy.md`.
+### 11. browser-use-expert
+- **Status**: COMPLETED (v1.2.0). Derived from official documentation.
+- **Tasks**:
+    - [x] Integrated latest 2026 features (TypeScript SDK, Zod, Stealth).
 
-### 8. artifact-janitor
-- **Tasks**: Add automated scripts for cleaning deep node_modules or specific build caches.
-- [ ] Create `scripts/deep-clean.sh`.
+### 12. artifact-janitor
+- **Status**: COMPLETED (v1.1.0). ~400+ lines with safety protocols and deep-clean script.
+- **Tasks**:
+    - [x] Add automated scripts for cleaning deep node_modules or specific build caches.
+    - [x] Create `scripts/deep-clean.sh`.
 
-### 9. docs-pro
+### 13. docs-pro
 - **Tasks**: Add "Style Guide" for documentation (Tone, structure, Markdown standards).
 
+### 14. archive-searcher
+- **Status**: COMPLETED (v2.0.0). Professional Git Forensics.
+- **Tasks**:
+    - [x] Integrated with Conductor track forensics.
+    - [x] Added `scripts/deep-search.sh`.
+
 ## Priorities: Low (Niche or Stable)
-- **Archive-Searcher**: Add examples for grep/ripgrep complex regex.
-- **TLDR-expert**: Add examples for token-efficient file summaries.
+- [ ] **TLDR-expert**: Add examples for token-efficient file summaries.
 
 ---
 ## Tracking
 - **Total Skills to Refactor**: 42
-- **Completed**: 0
-- **Overall Quality Score**: 15% (Estimated)
+- **Completed**: 12
+- **Overall Quality Score**: 28% (Estimated)

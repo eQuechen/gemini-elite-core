@@ -10,14 +10,14 @@ This table tracks the last update for each skill within the project to ensure te
 | **supabase-expert** | January 22, 2026 - 14:59 | 1.2.0 | ✅ Refactored |
 | **zustand-expert** | January 22, 2026 - 15:03 | 1.2.0 | ✅ Refactored |
 | **prisma-expert** | January 22, 2026 - 15:07 | 1.2.0 | ✅ Refactored |
-| auth-expert | - | 1.1.0 | ⏳ Pending Refactor |
-| ai-pro | - | - | ⏳ Pending Refactor |
-| api-pro | - | - | ⏳ Pending Refactor |
-| architect-pro | - | - | ⏳ Pending Refactor |
-| archive-searcher | - | - | ⏳ Pending Refactor |
-| artifact-janitor | - | - | ⏳ Pending Refactor |
+| **auth-expert** | January 22, 2026 - 15:20 | 2.0.0 | ✅ Refactored |
+| **ai-pro** | January 22, 2026 - 15:20 | 1.0.0 | ✅ Refactored |
+| **api-pro** | January 22, 2026 - 15:20 | 1.0.0 | ✅ Refactored |
+| **architect-pro** | January 22, 2026 - 15:20 | 1.0.0 | ✅ Refactored |
+| **archive-searcher** | January 22, 2026 - 15:20 | 2.0.0 | ✅ Refactored |
+| **artifact-janitor** | January 22, 2026 - 16:55 | 1.1.0 | ✅ Refactored |
 | auditor-pro | - | - | ⏳ Pending Refactor |
-| browser-use-expert | - | - | ⏳ Pending Refactor |
+| **browser-use-expert** | January 22, 2026 - 16:35 | 1.2.0 | ✅ Refactored |
 | code-architect | - | - | ⏳ Pending Refactor |
 | commit-sentinel | - | - | ⏳ Pending Refactor |
 | context-distiller | - | - | ⏳ Pending Refactor |
