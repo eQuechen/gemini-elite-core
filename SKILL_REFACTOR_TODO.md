@@ -22,12 +22,12 @@
 - **Target**: 600+ lines total across refs.
 
 ### 3. tailwind4-expert (Refactor: Level 9)
-- **Status**: Brief overview.
+- **Status**: COMPLETED (v1.2.0). ~400+ lines across SKILL.md and 4 references.
 - **Tasks**:
-    - [ ] Research Tailwind 4.0 `@theme` and `@utility` advanced usage.
-    - [ ] Add examples for "Native Variants" and "Custom Container Queries".
-    - [ ] Create a "Migration Guide" from Tailwind 3.x to 4.x as a reference file.
-    - [ ] Add a "Design System" template for `globals.css`.
+    - [x] Research Tailwind 4.0 `@theme` and `@utility` advanced usage.
+    - [x] Add examples for "Native Variants" and "Custom Container Queries".
+    - [x] Create a "Migration Guide" from Tailwind 3.x to 4.x as a reference file.
+    - [x] Add a "Design System" template for `globals.css`.
 - **Target**: 400+ lines.
 
 ### 4. supabase-expert (Refactor: Level 9)
