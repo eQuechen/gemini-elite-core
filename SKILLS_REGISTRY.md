@@ -23,7 +23,7 @@ This table tracks the last update for each skill within the project to ensure te
 | context-distiller | - | - | ⏳ Pending Refactor |
 | db-enforcer | - | - | ⏳ Pending Refactor |
 | debug-master | - | - | ⏳ Pending Refactor |
-| docs-pro | - | - | ⏳ Pending Refactor |
+| **docs-pro** | January 22, 2026 - 17:05 | 1.1.0 | ✅ Refactored |
 | expert-instruction | - | - | ⏳ Pending Refactor |
 | gemini-sdk-expert | - | - | ⏳ Pending Refactor |
 | git-flow | - | - | ⏳ Pending Refactor |

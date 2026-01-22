@@ -1,76 +1,114 @@
 ---
-name: docs-sync
-description: Analyze main branch implementation and configuration to find missing, incorrect, or outdated documentation in docs/. Use when asked to audit doc coverage, sync docs with code, or propose doc updates/structure changes. Only update English docs under docs/** and never touch translated docs under docs/ja, docs/ko, or docs/zh. Provide a report and ask for approval before editing docs.
+name: docs-pro
+id: docs-pro
+version: 1.1.0
+description: "Senior Technical Writer & Docs Architect. Expert in AI-driven documentation synchronization, style guide enforcement, and 2026 Markdown standards."
 ---
 
-# Docs Sync
+# 📚 Skill: docs-pro (v1.1.0)
 
-## Overview
+## Executive Summary
+`docs-pro` is a comprehensive skill for managing the lifecycle of technical documentation. It bridges the gap between raw implementation and user-facing clarity. In 2026, we treat **Documentation as Code (DaC)**, using AI to ensure that every new feature, configuration, and API change is accurately reflected in our docs within minutes of a commit.
 
-Identify doc coverage gaps and inaccuracies by comparing main branch features and configuration options against the current docs structure, then propose targeted improvements.
+---
 
-## Workflow
+## 📋 Table of Contents
+1. [Core Capabilities](#core-capabilities)
+2. [The "Do Not" List (Anti-Patterns)](#the-do-not-list-anti-patterns)
+3. [Quick Start: The Sync Audit](#quick-start-the-sync-audit)
+4. [Standard Production Patterns](#standard-production-patterns)
+5. [Documentation Quality Standards](#documentation-quality-standards)
+6. [AI-Driven Documentation Workflow](#ai-driven-documentation-workflow)
+7. [Reference Library](#reference-library)
 
-1. Confirm scope and base branch
-   - Identify the current branch and default branch (usually `main`).
-   - Prefer analyzing the current branch to keep work aligned with in-flight changes.
-   - If the current branch is not `main`, analyze only the diff vs `main` to scope doc updates.
-   - Avoid switching branches if it would disrupt local changes; use `git show main:<path>` or `git worktree add` when needed.
+---
 
-2. Build a feature inventory from the selected scope
-   - If on `main`: inventory the full surface area and review docs comprehensively.
-   - If not on `main`: inventory only changes vs `main` (feature additions/changes/removals).
-   - Focus on user-facing behavior: public exports, configuration options, environment variables, CLI commands, default values, and documented runtime behaviors.
-   - Capture evidence for each item (file path + symbol/setting).
-   - Use targeted search to find option types and feature flags (for example: `rg "Settings"`, `rg "Config"`, `rg "os.environ"`, `rg "OPENAI_"`).
-   - When the topic involves OpenAI platform features, invoke `$openai-knowledge` to pull current details from the OpenAI Developer Docs MCP server instead of guessing, while treating the SDK source code as the source of truth when discrepancies appear.
+## 🚀 Core Capabilities
+- **Automated Sync Audit**: Scanning codebases for undocumented exports, settings, and flags.
+- **Style Enforcement**: Ensuring all documentation follows the 2026 Squaads AI Style Guide.
+- **Modular Content Architecture**: Managing reusable snippets and modular pages for scalability.
+- **Multimodal Documentation**: Integrating diagrams (Mermaid), code examples, and interactive elements.
 
-3. Doc-first pass: review existing pages
-   - Walk each relevant page under `docs/` (excluding `docs/ja`, `docs/ko`, and `docs/zh`).
-   - Identify missing mentions of important, supported options (opt-in flags, env vars), customization points, or new features from `src/agents/` and `examples/`.
-   - Propose additions where users would reasonably expect to find them on that page.
+---
 
-4. Code-first pass: map features to docs
-   - Review the current docs information architecture under `docs/` and `mkdocs.yml`.
-   - Determine the best page/section for each feature based on existing patterns and the API reference structure under `docs/ref`.
-   - Identify features that lack any doc page or have a page but no corresponding content.
-   - Note when a structural adjustment would improve discoverability.
-   - When improving `docs/ref/*` pages, treat the corresponding docstrings/comments in `src/` as the source of truth. Prefer updating those code comments so regenerated reference docs stay correct, instead of hand-editing the generated pages.
+## 🚫 The "Do Not" List (Anti-Patterns)
 
-5. Detect gaps and inaccuracies
-   - **Missing**: features/configs present in main but absent in docs.
-   - **Incorrect/outdated**: names, defaults, or behaviors that diverge from main.
-   - **Structural issues** (optional): pages overloaded, missing overviews, or mis-grouped topics.
+| Anti-Pattern | Why it fails in 2026 | Modern Alternative |
+| :--- | :--- | :--- |
+| **"Click Here" Links** | Bad for accessibility and AI context. | Use **Descriptive Anchor Text**. |
+| **Outdated Defaults** | Leads to user frustration and support tickets. | Use **Docs Sync Audit** to verify defaults. |
+| **Manual Reference Docs** | Impossible to maintain at scale. | Generate API refs from **Code Docstrings**. |
+| **Wall of Text** | Low information retention. | Use **Bullet Points, Tables, and Diagrams**. |
+| **Mixing Languages** | Makes maintenance and translation hard. | Keep English as the **Source of Truth** in `docs/`. |
 
-6. Produce a Docs Sync Report and ask for approval
-   - Provide a clear report with evidence, suggested doc locations, and proposed edits.
-   - Ask the user whether to proceed with doc updates.
+---
 
-7. If approved, apply changes (English only)
-   - Edit only English docs in `docs/**`.
-   - Do **not** edit `docs/ja`, `docs/ko`, or `docs/zh`.
-   - Keep changes aligned with the existing docs style and navigation.
-   - Update `mkdocs.yml` when adding or renaming pages.
-   - Build docs with `make build-docs` after edits to verify the docs site still builds.
+## ⚡ Quick Start: The Sync Audit
 
-## Output format
+Perform a basic check to see what's missing in your documentation:
 
-Use this template when reporting findings:
+```bash
+# 1. Analyze changes in current branch vs main
+git diff main...HEAD -- src/
 
-Docs Sync Report
+# 2. Search for common undocumented patterns
+rg "export (const|function|class)" src/ --type ts
 
-- Doc-first findings
-  - Page + missing content -> evidence + suggested insertion point
-- Code-first gaps
-  - Feature + evidence -> suggested doc page/section (or missing page)
-- Incorrect or outdated docs
-  - Doc file + issue + correct info + evidence
-- Structural suggestions (optional)
-  - Proposed change + rationale
-- Proposed edits
-  - Doc file -> concise change summary
-- Questions for the user
+# 3. Compare findings with docs/ structure
+ls -R docs/
+```
 
-## References
+---
 
-- `references/doc-coverage-checklist.md`
+## 🛠 Standard Production Patterns
+
+### Pattern A: The Feature Release Doc
+When implementing a new feature, follow this checklist:
+1.  **Overview**: What does it do?
+2.  **Configuration**: List all environment variables and settings.
+3.  **Examples**: Provide "Quick Start" and "Advanced" code blocks.
+4.  **Troubleshooting**: Common errors and their fixes.
+
+### Pattern B: The API Reference Update
+Instead of editing `docs/ref/*.md` directly:
+1.  Update the JSDoc/TSDoc comments in the source code.
+2.  Run the doc generator (e.g., `make build-docs`).
+3.  Verify the output matches the **Markdown Standard**.
+
+---
+
+## 📏 Documentation Quality Standards
+
+We adhere to strict standards to ensure high utility for both humans and AI agents.
+
+- **Clarity**: Active voice, present tense, and direct address.
+- **Accuracy**: Code examples must be tested and valid.
+- **Discoverability**: Every page must be listed in `mkdocs.yml` with a descriptive title.
+
+*See [References: Style Guide](./references/style-guide.md) for more.*
+
+---
+
+## 🤖 AI-Driven Documentation Workflow
+
+1.  **Inventory**: AI scans the codebase to build a feature list.
+2.  **Gap Analysis**: AI compares the inventory to existing `.md` files.
+3.  **Drafting**: AI proposes new content based on implementation logic.
+4.  **Review**: Human-in-the-loop verification of tone and accuracy.
+
+*See [References: AI Collaboration](./references/ai-collaboration.md) for more.*
+
+---
+
+## 📖 Reference Library
+
+Detailed deep-dives into documentation excellence:
+
+- [**2026 Style Guide**](./references/style-guide.md): Voice, tone, and structural rules.
+- [**Markdown Standards**](./references/markdown-standard.md): Frontmatter, code blocks, and AI-friendly syntax.
+- [**AI Collaboration Guide**](./references/ai-collaboration.md): How agents and humans work together on docs.
+- [**Coverage Checklist**](./references/doc-coverage-checklist.md): The master list for doc audits.
+
+---
+
+*Updated: January 22, 2026 - 17:05*
