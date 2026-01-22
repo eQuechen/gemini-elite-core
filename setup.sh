@@ -36,8 +36,8 @@ fi
 
 # Translations
 if [[ "$SELECTED_LANG" == "ES" ]]; then
-    MSG_TITLE="Gemini Elite Core v5.4"
-    MSG_SUBTITLE="La suite de aprovisionamiento inteligente (Generalist Update)"
+    MSG_TITLE="Gemini Elite Core v5.5"
+    MSG_SUBTITLE="La suite de aprovisionamiento inteligente (Skill Mastery Update)"
     MSG_STEP_CHECK_CLI="Comprobando Gemini CLI..."
     MSG_WARN_CLI_NOT_FOUND="Gemini CLI no detectado. Instalando versión @nightly..."
     MSG_SUCCESS_CLI_INSTALLED="Gemini CLI instalado."
@@ -59,10 +59,10 @@ if [[ "$SELECTED_LANG" == "ES" ]]; then
     MSG_SUCCESS_HOOKS_ACTIVE="Protocol Hooks activos."
     MSG_STEP_ADOPT_PROTOCOLS="Adopción de Protocolos Agénticos"
     MSG_PROTOCOLS_DESC="Los protocolos Elite Core imponen flujos de trabajo específicos:"
-    MSG_PROTO_1="Auto-Type-Check: Ejecuta 'tsc --noEmit' tras cambios de código."
-    MSG_PROTO_2="Commit-Sentinel: Valida mensajes de commit según Conventional Commits."
-    MSG_PROTO_3="Skill Activation: Fomenta la activación explícita de habilidades tácticas."
-    MSG_PROTO_4="Bun Priority: Prefiere Bun sobre npm/pnpm para mejor rendimiento."
+    MSG_PROTO_1="Auto-Type-Check: Ejecuta 'tsc --noEmit' tras cambios y antes del build."
+    MSG_PROTO_2="Commit-Sentinel: Propone commits pero NUNCA auto-commitea (Confirmación manual)."
+    MSG_PROTO_3="Skill Mastery (CRÍTICO): DEBO activar TODAS las skills relevantes (\`activate_skill\`) al inicio de cada tarea."
+    MSG_PROTO_4="Bun & DB: Uso exclusivo de Bun y migraciones (001...) con verificación de constraints."
     MSG_PROMPT_ADOPT="\n¿Quieres adoptar estos protocolos Elite Core en tu GEMINI.md global? [S/n]: "
     MSG_SUCCESS_GEMINI_MD="GEMINI.md global actualizado con protocolos Elite Core."
     MSG_INFO_SKIP_GEMINI="Omitiendo actualización de GEMINI.md. Aún puedes usar las habilidades manualmente."
@@ -74,8 +74,8 @@ if [[ "$SELECTED_LANG" == "ES" ]]; then
     MSG_STATUS_HOOKS="Hooks: Monitoreo activo"
     YES_REGEX="^[Ss]?$"
 else
-    MSG_TITLE="Gemini Elite Core v5.4"
-    MSG_SUBTITLE="The Intelligent Provisioning Suite (Generalist Update)"
+    MSG_TITLE="Gemini Elite Core v5.5"
+    MSG_SUBTITLE="The Intelligent Provisioning Suite (Skill Mastery Update)"
     MSG_STEP_CHECK_CLI="Checking Gemini CLI..."
     MSG_WARN_CLI_NOT_FOUND="Gemini CLI not detected. Installing @nightly version..."
     MSG_SUCCESS_CLI_INSTALLED="Gemini CLI installed."
@@ -97,10 +97,10 @@ else
     MSG_SUCCESS_HOOKS_ACTIVE="Protocol Hooks active."
     MSG_STEP_ADOPT_PROTOCOLS="Agentic Protocols Adoption"
     MSG_PROTOCOLS_DESC="Elite Core Protocols enforce specific workflows:"
-    MSG_PROTO_1="Auto-Type-Check: Runs 'tsc --noEmit' after code changes."
-    MSG_PROTO_2="Commit-Sentinel: Validates commit messages for Conventional Commits."
-    MSG_PROTO_3="Skill Activation: Encourages explicit activation of tactical skills."
-    MSG_PROTO_4="Bun Priority: Prefers Bun over npm/pnpm for better performance."
+    MSG_PROTO_1="Auto-Type-Check: Runs 'tsc --noEmit' after changes and before build."
+    MSG_PROTO_2="Commit-Sentinel: Proposes commits but NEVER auto-commits (Manual confirm)."
+    MSG_PROTO_3="Skill Mastery (CRITICAL): I MUST activate ALL relevant skills (\`activate_skill\`) at the start of every task."
+    MSG_PROTO_4="Bun & DB: Exclusive use of Bun and migrations (001...) with constraint verification."
     MSG_PROMPT_ADOPT="\nDo you want to adopt these Elite Core protocols in your global GEMINI.md? [Y/n]: "
     MSG_SUCCESS_GEMINI_MD="Global GEMINI.md updated with Elite Core protocols."
     MSG_INFO_SKIP_GEMINI="Skipping GEMINI.md update. You can still use the skills manually."
@@ -149,76 +149,26 @@ if [ -z "$GEMINI_API_KEY" ]; then
     fi
 fi
 
-# 3. Prepare Gemini Directory and Settings
-step "$MSG_STEP_SYNC_SETTINGS"
-SETTINGS_FILE="$HOME/.gemini/settings.json"
-mkdir -p "$HOME/.gemini"
+# 3. Massive Skill Installation
+step "$MSG_STEP_INST_SKILLS"
+cd skills
+for skill_dir in */; do
+    [ -d "$skill_dir" ] || continue
+    SKILL_NAME="${skill_dir%/}"
+    LOCAL_SKILL="$SKILL_NAME/SKILL.md"
+    INSTALLED_SKILL="$HOME/.gemini/skills/$SKILL_NAME/SKILL.md"
 
-OPTIMIZED_SETTINGS='{
-  "enableAgentSkills": true,
-  "enableLLMCorrection": true,
-  "experimental": {
-    "plan": true,
-    "planningMode": "auto",
-    "planVisualization": true,
-    "requirePlanApproval": false,
-    "enforceReadOnlyPolicy": true,
-    "haltOnPolicyViolation": true
-  },
-  "agents": {
-    "generalist": {
-      "enabled": true,
-      "modelConfig": { "temperature": 0.5, "maxOutputTokens": 4096 },
-      "runConfig": { "maxTurns": 50, "timeout": 600000 }
-    },
-    "codebaseInvestigator": {
-      "enabled": true,
-      "modelConfig": { "temperature": 0.3, "maxOutputTokens": 4096 },
-      "runConfig": { "maxTurns": 100, "timeout": 600000 }
-    },
-    "codeReviewer": {
-      "enabled": true,
-      "modelConfig": { "temperature": 0.5, "maxOutputTokens": 2048 },
-      "runConfig": { "maxTurns": 30, "timeout": 300000 }
-    },
-    "bugFixer": {
-      "enabled": true,
-      "modelConfig": { "temperature": 0.2, "maxOutputTokens": 3000 },
-      "runConfig": { "maxTurns": 50, "timeout": 300000 }
-    },
-    "skillCreator": {
-      "enabled": true,
-      "modelConfig": { "temperature": 0.7, "maxOutputTokens": 4096 },
-      "runConfig": { "maxTurns": 50, "timeout": 600000 }
-    }
-  },
-  "mcpServers": {}
-}'
-
-if [ ! -f "$SETTINGS_FILE" ]; then
-    echo "$OPTIMIZED_SETTINGS" > "$SETTINGS_FILE"
-    success "$MSG_SUCCESS_SETTINGS_CREATED"
-else
-    info "$MSG_INFO_MERGE_AGENTS"
-    if command -v bun &> /dev/null; then
-        export OPTIMIZED_SETTINGS_JSON="$OPTIMIZED_SETTINGS"
-        bun -e "
-            const fs = require('fs');
-            const path = '$SETTINGS_FILE';
-            const optimized = JSON.parse(process.env.OPTIMIZED_SETTINGS_JSON);
-            let current = {};
-            try { current = JSON.parse(fs.readFileSync(path, 'utf8')); } catch(e) {}
-            const merged = { 
-                ...current, 
-                ...optimized, 
-                experimental: { ...(current.experimental || {}), ...optimized.experimental }, 
-                agents: { ...(current.agents || {}), ...optimized.agents } 
-            };
-            fs.writeFileSync(path, JSON.stringify(merged, null, 2));
-        "
-        success "$MSG_SUCCESS_SETTINGS_MERGED"
+    if [ -f "$LOCAL_SKILL" ] && [ -f "$INSTALLED_SKILL" ]; then
+        LOCAL_HASH=$(shasum -a 256 "$LOCAL_SKILL" | awk '{ print $1 }')
+        INSTALLED_HASH=$(shasum -a 256 "$INSTALLED_SKILL" | awk '{ print $1 }')
+        if [ "$LOCAL_HASH" == "$INSTALLED_HASH" ]; then continue; fi
     fi
-fi
+    info "$MSG_INFO_DEPLOYING $SKILL_NAME..."
+    # En v26 nightly, --consent es un flag global
+    gemini skills install "$skill_dir" --force --consent &> /dev/null || true
+done
+cd ..
+success "$MSG_SUCCESS_SKILLS_DEPLOYED"
 
 # 4. Global MCP Registration
 step "$MSG_STEP_CONFIG_MCP"
@@ -237,7 +187,7 @@ if ! check_mcp "chrome-devtools"; then
 fi
 
 # Filesystem MCP Selection (Node vs Rust)
-if ! check_mcp "filesystem"; then
+if ! check_mcp "filesystem" || gemini mcp list 2>/dev/null | grep -q "modelcontextprotocol/server-filesystem"; then
     echo -e "\n${MAGENTA}📁 Filesystem MCP Selection${NC}"
     if [[ "$SELECTED_LANG" == "ES" ]]; then
         echo -e "1) Estándar (Node.js) - Estable"
@@ -252,20 +202,23 @@ if ! check_mcp "filesystem"; then
 
     if [[ "$FS_CHOICE" == "2" ]]; then
         BINARY_NAME="rust-mcp-filesystem"
-        [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]] && BINARY_NAME="rust-mcp-filesystem.exe"
-
-        if ! command -v "$BINARY_NAME" &> /dev/null; then
+        # Search in common paths
+        BINARY_PATH=$(command -v "$BINARY_NAME" || echo "$HOME/.cargo/bin/$BINARY_NAME" || echo "/opt/homebrew/bin/$BINARY_NAME")
+        
+        if [ ! -f "$BINARY_PATH" ]; then
             info "Installing rust-mcp-filesystem..."
             if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "linux"* ]]; then
                 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/rust-mcp-stack/rust-mcp-filesystem/releases/download/v0.4.0/rust-mcp-filesystem-installer.sh | sh &> /dev/null || true
+                BINARY_PATH=$(command -v "$BINARY_NAME" || echo "$HOME/.cargo/bin/$BINARY_NAME" || echo "/opt/homebrew/bin/$BINARY_NAME")
             else
                 warn "Auto-install not supported for your OS. Please install manually: https://github.com/rust-mcp-stack/rust-mcp-filesystem"
             fi
         fi
 
-        if command -v "$BINARY_NAME" &> /dev/null; then
+        if [ -f "$BINARY_PATH" ] || command -v "$BINARY_NAME" &> /dev/null; then
+            [ -z "$BINARY_PATH" ] && BINARY_PATH=$(command -v "$BINARY_NAME")
             # Use absolute path and correct flag -w for Rust version
-            gemini mcp add --scope user filesystem "$(command -v "$BINARY_NAME")" -w "$(pwd)" &> /dev/null || true
+            gemini mcp add --scope user filesystem "$BINARY_PATH" -w "." &> /dev/null || true
             success "Rust Filesystem MCP configured."
         else
             info "Falling back to Node.js filesystem..."
@@ -291,7 +244,7 @@ if ! check_mcp "llm-tldr"; then
     if [[ "$INSTALL_TLDR" =~ $YES_REGEX ]]; then
         if command -v python3 &> /dev/null && command -v pip3 &> /dev/null; then
             info "Installing llm-tldr via pip3..."
-            pip3 install --user llm-tldr &> /dev/null || true
+            pip3 install --user llm-tldr --break-system-packages &> /dev/null || true
             # Correct order: name command args...
             gemini mcp add --scope user llm-tldr python3 -m tldr.mcp_server &> /dev/null || true
             success "llm-tldr MCP configured in settings.json."
@@ -302,52 +255,66 @@ if ! check_mcp "llm-tldr"; then
 fi
 success "$MSG_SUCCESS_MCP_READY"
 
-# 5. Massive Skill Installation
-step "$MSG_STEP_INST_SKILLS"
-cd skills
-for skill_dir in */; do
-    [ -d "$skill_dir" ] || continue
-    SKILL_NAME="${skill_dir%/}"
-    LOCAL_SKILL="$SKILL_NAME/SKILL.md"
-    INSTALLED_SKILL="$HOME/.gemini/skills/$SKILL_NAME/SKILL.md"
-
-    if [ -f "$LOCAL_SKILL" ] && [ -f "$INSTALLED_SKILL" ]; then
-        LOCAL_HASH=$(shasum -a 256 "$LOCAL_SKILL" | awk '{ print $1 }')
-        INSTALLED_HASH=$(shasum -a 256 "$INSTALLED_SKILL" | awk '{ print $1 }')
-        if [ "$LOCAL_HASH" == "$INSTALLED_HASH" ]; then continue; fi
-    fi
-    info "$MSG_INFO_DEPLOYING $SKILL_NAME..."
-    # En v26 nightly, --consent es un flag global
-    gemini skills install "$skill_dir" --force --consent &> /dev/null || true
-done
-cd ..
-success "$MSG_SUCCESS_SKILLS_DEPLOYED"
-
-# 5.5. Protocol Hook Installation
-step "$MSG_STEP_CONFIG_HOOKS"
+# 5. Final Sync of Settings & Hooks
+step "$MSG_STEP_SYNC_SETTINGS"
+SETTINGS_FILE="$HOME/.gemini/settings.json"
 HOOKS_DIR="$HOME/.gemini/hooks"
 mkdir -p "$HOOKS_DIR"
 cp hooks/*.js "$HOOKS_DIR/"
 
-bun -e "
-  const fs = require('fs');
-  const path = require('path');
-  const settingsPath = '$SETTINGS_FILE';
-  const hooksDir = '$HOOKS_DIR';
-  
-  let settings = {};
-  if (fs.existsSync(settingsPath)) {
-    try { settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8')); } catch (e) {}
-  }
-  
-  settings.hooks = {
-    'SessionStart': [{ 'name': 'welcome', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'session-start-welcome.js') }],
-    'AfterTool': [{ 'matcher': '*', 'hooks': [{ 'name': 'type-check', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'after-tool-type-check.js') }] }],
-    'AfterModel': [{ 'name': 'commit-check', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'after-model-commit-check.js') }]
-  };
-  fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
-"
-success "$MSG_SUCCESS_HOOKS_ACTIVE"
+OPTIMIZED_SETTINGS='{
+  "enableAgentSkills": true,
+  "enableLLMCorrection": true,
+  "experimental": { "introspectionAgentSettings": { "enabled": true },
+    "skillCreator": true, "hooks": true, "skills": true, "planning": true, "plan": true,
+    "planningMode": "auto", "planVisualization": true, "requirePlanApproval": false
+  },
+  "agents": {
+    "generalist": { "enabled": true, "modelConfig": { "temperature": 0.5, "maxOutputTokens": 4096 }, "runConfig": { "maxTurns": 50, "timeout": 600000 } },
+    "codebaseInvestigator": { "enabled": true, "modelConfig": { "temperature": 0.3, "maxOutputTokens": 4096 }, "runConfig": { "maxTurns": 100, "timeout": 600000 } },
+    "codeReviewer": { "enabled": true, "modelConfig": { "temperature": 0.5, "maxOutputTokens": 2048 }, "runConfig": { "maxTurns": 30, "timeout": 300000 } },
+    "bugFixer": { "enabled": true, "modelConfig": { "temperature": 0.2, "maxOutputTokens": 3000 }, "runConfig": { "maxTurns": 50, "timeout": 300000 } },
+    "skillCreator": { "enabled": true, "modelConfig": { "temperature": 0.7, "maxOutputTokens": 4096 }, "runConfig": { "maxTurns": 50, "timeout": 600000 } }
+  },
+  "general": { "previewFeatures": true, "sessionRetention": { "enabled": true }, "enablePromptCompletion": false },
+  "context": { "fileFiltering": { "respectGitIgnore": true }, "loadMemoryFromIncludeDirectories": true },
+  "model": { "compressionThreshold": 0.90 },
+  "tools": { "shell": { "showColor": true }, "autoAccept": true },
+  "ui": { "footer": { "hideContextPercentage": false }, "showMemoryUsage": true, "showModelInfoInChat": false, "showLineNumbers": false }
+}'
+
+if command -v bun &> /dev/null; then
+    export OPTIMIZED_SETTINGS_JSON="$OPTIMIZED_SETTINGS"
+    bun -e "
+        const fs = require('fs');
+        const path = require('path');
+        const settingsPath = '$SETTINGS_FILE';
+        const hooksDir = '$HOOKS_DIR';
+        const optimized = JSON.parse(process.env.OPTIMIZED_SETTINGS_JSON);
+        
+        let current = {};
+        if (fs.existsSync(settingsPath)) {
+            try { current = JSON.parse(fs.readFileSync(settingsPath, 'utf8')); } catch(e) {}
+        }
+
+        const hooks = {
+            'SessionStart': [{ 'name': 'welcome', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'session-start-welcome.js') }],
+            'AfterTool': [{ 'matcher': '*', 'hooks': [{ 'name': 'type-check', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'after-tool-type-check.js') }] }],
+            'AfterModel': [{ 'name': 'commit-check', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'after-model-commit-check.js') }]
+        };
+
+        const merged = { 
+            ...current, 
+            ...optimized, 
+            experimental: { ...(current.experimental || {}), ...optimized.experimental }, 
+            agents: { ...(current.agents || {}), ...optimized.agents },
+            mcpServers: current.mcpServers || {},
+            hooks: hooks
+        };
+        fs.writeFileSync(settingsPath, JSON.stringify(merged, null, 2));
+    "
+    success "$MSG_SUCCESS_SETTINGS_MERGED"
+fi
 
 # 6. Global GEMINI.md Update with Consent
 step "$MSG_STEP_ADOPT_PROTOCOLS"
@@ -362,42 +329,55 @@ read -r ADOPT_PROTOCOLS
 
 if [[ "$ADOPT_PROTOCOLS" =~ $YES_REGEX ]]; then
     USER_GEMINI="$HOME/.gemini/GEMINI.md"
-    CURRENT_VERSION="2.1.0"
+    CURRENT_VERSION="2.3.1"
 
-    # Robust way to define NEW_BLOCK to avoid EOF and backtick issues
-    # Using 'read' with a heredoc is safer than $(cat) for literal content
     read -r -d '' NEW_BLOCK << 'EOF' || true
 <ELITE_CORE_CONTEXT>
-<!-- VERSION: 2.2.0 -->
+<!-- VERSION: 2.3.1 -->
 # 🚀 Gemini Elite Core - Quick Start Guide (Generalist Edition)
 
-## 🧠 Activating Skills & Agents
-This core installs a tactical skill library and the new **Generalist Agent**.
-- **Generalist Agent**: Just type your request (e.g., `> Refactor my code`). It will automatically orchestrate experts.
-- `activate_skill commit-sentinel`: Before committing (Git Protocol).
-- `activate_skill next16-expert`: For Next.js 16 development.
-
-
-## ⚙️ Configured MCPs
-You have the agent's eyes and hands ready:
-- **chrome-devtools**: See what happens in the browser.
-- **filesystem**: Read and write in your current workspace.
-- **llm-tldr**: Semantic code analysis (95% token savings).
+## 🧠 Skill Orchestration (MANDATORY & CRITICAL)
+- **PROACTIVE ACTIVATION**: At the very start of ANY task, I MUST identify and activate ALL relevant tactical skills (`activate_skill`).
+- **NO EXCUSES**: If a skill exists (e.g., `next16-expert`, `db-enforcer`, `tailwind4-expert`, `zustand-expert`), I MUST use it. Failure to activate the appropriate experts before acting is a major protocol violation.
+- **GENERALIST FIRST**: The Generalist Agent is the coordinator, but the experts provide the precision. ALWAYS call the specialists.
 
 ## 🛡️ Mandatory Protocols
-1. **Security**: Plan Mode is active with **Read-Only Policies**. Write operations require approval.
-2. **Testing**: Use **Stagehand V3** for E2E. Activate `stagehand-expert`.
-3. **Typing**: Always run `bun x tsc --noEmit` after logical changes.
-4. **Commits**: Follow Conventional Commits. Use the `commit-sentinel` skill.
+
+### 📦 Environment & Execution
+- **Bun Exclusive**: Use EXCLUSIVELY `bun` for commands, package management, and scripts.
+- **Search Hygiene**: ALWAYS exclude `node_modules`, `.next`, and `tsconfig.tsbuildinfo` from grep/search tools.
+- **Directness**: Avoid `sequential-thinking` MCP. Prefer direct, efficient execution.
+
+### 🏗️ Development & Quality
+- **Type Safety**: Always run `bun x tsc --noEmit` after logic changes AND before `bun run build`.
+- **Database Integrity**:
+    - When adding types/enums mapping to DB columns, verify corresponding CHECK constraints.
+    - NEVER execute SQL directly. Generate numbered migrations (e.g., `db/migrations/001_name.sql`).
+- **Migration Naming**: Use 3-digit sequence (001, 002) instead of timestamps.
+
+### 🤖 MIA Model Preferences
+- **Fast/Smart**: `gemini-3-flash-preview`
+- **Lite**: `gemini-flash-lite-latest`
+- **Cerebras**: `zai-glm-4.7`
+
+### 🏁 Task Completion & Git (STRICT)
+- **NO AUTO-COMMIT**: Never perform `git commit` or `git push` automatically.
+- **Closing Protocol (MANDATORY)**:
+    0. Run `bun x tsc --noEmit` to verify type correctness.
+    1. Explain manual verification steps to the user.
+    2. Propose a Conventional Commit message.
+    3. WAIT for explicit confirmation before committing (only if requested).
+
+## ⚙️ Configured MCPs
+- **chrome-devtools**, **filesystem**, **llm-tldr**.
 </ELITE_CORE_CONTEXT>
 EOF
 
     if [ -f "$USER_GEMINI" ]; then
-        # BSD sed (macOS) requires different syntax for -i
         if [[ "$OSTYPE" == "darwin"* ]]; then
             sed -i '' '/<ELITE_CORE_CONTEXT>/,/<\/ELITE_CORE_CONTEXT>/d' "$USER_GEMINI" 2>/dev/null || true
         else
-            sed -i '/<ELITE_CORE_CONTEXT>/,/<\/ELITE_CORE_CONTEXT>/d' "$USER_GEMINI" 2>/dev/null || true
+            sed -i '/<ELITE_CORE_CONTEXT>/,/^<\/ELITE_CORE_CONTEXT>$/d' "$USER_GEMINI" 2>/dev/null || true
         fi
     fi
     echo "$NEW_BLOCK" >> "$USER_GEMINI"
