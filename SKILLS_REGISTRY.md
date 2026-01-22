@@ -21,7 +21,7 @@ This table tracks the last update for each skill within the project to ensure te
 | code-architect | - | - | ⏳ Pending Refactor |
 | **commit-sentinel** | January 22, 2026 - 17:50 | 2.1.0 | ✅ Refactored |
 | context-distiller | - | - | ⏳ Pending Refactor |
-| db-enforcer | - | - | ⏳ Pending Refactor |
+| **db-enforcer** | January 22, 2026 - 18:10 | 2.1.0 | ✅ Refactored |
 | debug-master | - | - | ⏳ Pending Refactor |
 | **docs-pro** | January 22, 2026 - 17:05 | 1.1.0 | ✅ Refactored |
 | expert-instruction | - | - | ⏳ Pending Refactor |

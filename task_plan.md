@@ -27,7 +27,8 @@ Establish a high-standard strategy for creating powerful skills and refactor all
     - [x] **Step 4.13: Refactor `gemini-sdk-expert`**: 500+ lines with structured output and context caching.
     - [x] **Step 4.14: Refactor `mcp-expert`**: 500+ lines with MCP Apps and 2025-11-spec.
     - [x] **Step 4.15: Refactor `commit-sentinel`**: 500+ lines with Git 3.0 and rebasing.
-    - [ ] **Step 4.16: Completion & Commit**: Update plans, report to user, and commit upon approval.
+    - [x] **Step 4.16: Refactor `db-enforcer`**: 500+ lines with PostgreSQL 18 and RLS.
+    - [ ] **Step 4.17: Completion & Commit**: Update plans, report to user, and commit upon approval.
 
 ## Key Questions
 1. What specific structural elements make the reference repository's skills superior?

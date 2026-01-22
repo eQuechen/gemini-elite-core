@@ -117,21 +117,26 @@
 ### 16. mcp-expert
 - **Status**: COMPLETED (v1.4.0). ~500+ lines with MCP Apps, Server Dev, and Security.
 - **Tasks**:
-- [x] Research 2025-11-25 MCP Spec.
-- [x] Add guides for MCP Apps and interactive UI.
+    - [x] Research 2025-11-25 MCP Spec.
+    - [x] Add guides for MCP Apps and interactive UI.
 
-+### 17. commit-sentinel
-+- **Status**: COMPLETED (v2.1.0). ~500+ lines with Git 3.0 readiness, rebasing, and bisecting.
-+- **Tasks**:
-+    - [x] Research Git 3.0 (SHA-256/Rust).
-+    - [x] Add guides for advanced rebasing and forensics.
-+
- ## Priorities: Low (Niche or Stable)
+### 17. commit-sentinel
+- **Status**: COMPLETED (v2.1.0). ~500+ lines with Git 3.0 readiness, rebasing, and bisecting.
+- **Tasks**:
+    - [x] Research Git 3.0 (SHA-256/Rust).
+    - [x] Add guides for advanced rebasing and forensics.
 
+### 18. db-enforcer
+- **Status**: COMPLETED (v2.1.0). ~500+ lines with PostgreSQL 18, Prisma 7, and RLS.
+- **Tasks**:
+    - [x] Research PostgreSQL 18 features (UUIDv7, Virtual Columns).
+    - [x] Add guides for migration safety and TypedSQL.
+
+## Priorities: Low (Niche or Stable)
 - [ ] **TLDR-expert**: Add examples for token-efficient file summaries.
 
 ---
 ## Tracking
 - **Total Skills to Refactor**: 42
-- **Completed**: 13
-- **Overall Quality Score**: 31% (Estimated)
+- **Completed**: 18
+- **Overall Quality Score**: 43% (Estimated)
