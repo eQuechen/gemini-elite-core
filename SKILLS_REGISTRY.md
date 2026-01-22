@@ -16,7 +16,7 @@ This table tracks the last update for each skill within the project to ensure te
 | **architect-pro** | January 22, 2026 - 15:20 | 1.0.0 | ✅ Refactored |
 | **archive-searcher** | January 22, 2026 - 15:20 | 2.0.0 | ✅ Refactored |
 | **artifact-janitor** | January 22, 2026 - 16:55 | 1.1.0 | ✅ Refactored |
-| auditor-pro | - | - | ⏳ Pending Refactor |
+| **auditor-pro** | January 22, 2026 - 19:35 | 1.1.0 | ✅ Refactored |
 | **browser-use-expert** | January 22, 2026 - 16:35 | 1.2.0 | ✅ Refactored |
 | **code-architect** | January 22, 2026 - 19:20 | 1.1.0 | ✅ Refactored |
 | **commit-sentinel** | January 22, 2026 - 17:50 | 2.1.0 | ✅ Refactored |
@@ -38,7 +38,7 @@ This table tracks the last update for each skill within the project to ensure te
 | secure-ai | - | - | ⏳ Pending Refactor |
 | seo-pro | - | - | ⏳ Pending Refactor |
 | stagehand-expert | - | - | ⏳ Pending Refactor |
-| strict-auditor | - | - | ⏳ Pending Refactor |
+| **strict-auditor** | January 22, 2026 - 19:45 | 2.1.0 | ✅ Refactored |
 | tldr-expert | - | - | ⏳ Pending Refactor |
 | track-master | - | - | ⏳ Pending Refactor |
 | ui-ux-pro | - | - | ⏳ Pending Refactor |

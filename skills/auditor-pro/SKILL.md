@@ -1,209 +1,79 @@
 ---
-name: senior-security
-description: Comprehensive security engineering skill for application security, penetration testing, security architecture, and compliance auditing. Includes security assessment tools, threat modeling, crypto implementation, and security automation. Use when designing security architecture, conducting penetration tests, implementing cryptography, or performing security audits.
+name: auditor-pro
+id: auditor-pro
+version: 1.1.0
+description: "Senior Security Engineer & Forensic Analyst. Expert in AI-driven vulnerability scanning, CTEM standards, and agentic security orchestration."
 ---
 
-# Senior Security
+# 🛡️ Skill: Auditor Pro (v1.1.0)
 
-Complete toolkit for senior security with modern tools and best practices.
+## Executive Summary
+The `auditor-pro` is the ultimate authority on offensive security and forensic analysis. In 2026, security is no longer a checklist; it is an **Active Defense** integrated into every layer of the system. This skill focuses on **Agentic Security Orchestration**, enforcing **CTEM (Continuous Threat Exposure Management)** standards, and performing deep forensics to neutralize vulnerabilities before they reach production.
 
-## Quick Start
+---
 
-### Main Capabilities
+## 📋 Table of Contents
+1. [Core Security Philosophies](#core-security-philosophies)
+2. [The "Do Not" List (Anti-Patterns)](#the-do-not-list-anti-patterns)
+3. [Agentic Security Orchestration](#agentic-security-orchestration)
+4. [CTEM: Exposure Management](#ctem-exposure-management)
+5. [Vulnerability Forensics](#vulnerability-forensics)
+6. [Secure Cryptography Standards](#secure-cryptography-standards)
+7. [Reference Library](#reference-library)
 
-This skill provides three core capabilities through automated scripts:
+---
 
-```bash
-# Script 1: Threat Modeler
-python scripts/threat_modeler.py [options]
+## 🏗️ Core Security Philosophies
 
-# Script 2: Security Auditor
-python scripts/security_auditor.py [options]
+1.  **Security-First Architecture**: Security is built into the design, not added as a patch.
+2.  **Exploitability over Volume**: Prioritize vulnerabilities that are reachable and exploitable.
+3.  **Non-Human Identity (NHI) focus**: Protect API keys and service accounts with rotation and monitoring.
+4.  **Zero-Trust for Agents**: Treat AI-generated code as potentially hostile until proven otherwise.
+5.  **Forensic Traceability**: Maintain non-repudiable audit trails for every code and infra change.
 
-# Script 3: Pentest Automator
-python scripts/pentest_automator.py [options]
-```
+---
 
-## Core Capabilities
+## 🚫 The "Do Not" List (Anti-Patterns)
 
-### 1. Threat Modeler
+| Anti-Pattern | Why it fails in 2026 | Modern Alternative |
+| :--- | :--- | :--- |
+| **Scanner-First Security**| Leads to fixating on "Noises." | Use **CTEM Prioritization**. |
+| **Static Secrets** | High risk of leakage/exposure. | Use **OIDC & Dynamic Rotation**. |
+| **Trusting AI Code** | Can contain hidden logical bypasses. | **Independent Security Review**. |
+| **Ignoring Reachability** | Wastes time on unreachable bugs. | **Attack Path Validation**. |
+| **Manual Auditing** | Cannot scale with 2026 velocity. | **Agentic Orchestration**. |
 
-Automated tool for threat modeler tasks.
+---
 
-**Features:**
-- Automated scaffolding
-- Best practices built-in
-- Configurable templates
-- Quality checks
+## 🤖 Agentic Security Orchestration
 
-**Usage:**
-```bash
-python scripts/threat_modeler.py <project-path> [options]
-```
+We leverage specialized AI agents to:
+-   **Scout**: Constant reconnaissance of the codebase.
+-   **Red Team**: Automated penetration testing.
+-   **Remediate**: Implementing surgical security patches.
 
-### 2. Security Auditor
+*See [References: Agentic Orchestration](./references/agentic-security-orchestration.md) for workflows.*
 
-Comprehensive analysis and optimization tool.
+---
 
-**Features:**
-- Deep analysis
-- Performance metrics
-- Recommendations
-- Automated fixes
+## 🧨 CTEM: Exposure Management
 
-**Usage:**
-```bash
-python scripts/security_auditor.py <target-path> [--verbose]
-```
+Moving beyond vulnerability lists:
+-   **Discover**: Identify NHIs and Shadow AI.
+-   **Prioritize**: Rank by business impact and exploitability.
+-   **Validate**: Attack simulations to verify risk.
 
-### 3. Pentest Automator
+---
 
-Advanced tooling for specialized tasks.
+## 📖 Reference Library
 
-**Features:**
-- Expert-level automation
-- Custom configurations
-- Integration ready
-- Production-grade output
+Detailed deep-dives into Security Excellence:
 
-**Usage:**
-```bash
-python scripts/pentest_automator.py [arguments] [options]
-```
+- [**Agentic Security**](./references/agentic-security-orchestration.md): The autonomous defense loop.
+- [**CTEM Standards**](./references/ctem-standards-2026.md): Managing actual threat exposure.
+- [**Vulnerability Forensics**](./references/vulnerability-forensics.md): Trace-driven analysis.
+- [**Cryptography Guide**](./references/cryptography_implementation.md): Secure crypto in 2026.
 
-## Reference Documentation
+---
 
-### Security Architecture Patterns
-
-Comprehensive guide available in `references/security_architecture_patterns.md`:
-
-- Detailed patterns and practices
-- Code examples
-- Best practices
-- Anti-patterns to avoid
-- Real-world scenarios
-
-### Penetration Testing Guide
-
-Complete workflow documentation in `references/penetration_testing_guide.md`:
-
-- Step-by-step processes
-- Optimization strategies
-- Tool integrations
-- Performance tuning
-- Troubleshooting guide
-
-### Cryptography Implementation
-
-Technical reference guide in `references/cryptography_implementation.md`:
-
-- Technology stack details
-- Configuration examples
-- Integration patterns
-- Security considerations
-- Scalability guidelines
-
-## Tech Stack
-
-**Languages:** TypeScript, JavaScript, Python, Go, Swift, Kotlin
-**Frontend:** React, Next.js, React Native, Flutter
-**Backend:** Node.js, Express, GraphQL, REST APIs
-**Database:** PostgreSQL, Prisma, NeonDB, Supabase
-**DevOps:** Docker, Kubernetes, Terraform, GitHub Actions, CircleCI
-**Cloud:** AWS, GCP, Azure
-
-## Development Workflow
-
-### 1. Setup and Configuration
-
-```bash
-# Install dependencies
-npm install
-# or
-pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-```
-
-### 2. Run Quality Checks
-
-```bash
-# Use the analyzer script
-python scripts/security_auditor.py .
-
-# Review recommendations
-# Apply fixes
-```
-
-### 3. Implement Best Practices
-
-Follow the patterns and practices documented in:
-- `references/security_architecture_patterns.md`
-- `references/penetration_testing_guide.md`
-- `references/cryptography_implementation.md`
-
-## Best Practices Summary
-
-### Code Quality
-- Follow established patterns
-- Write comprehensive tests
-- Document decisions
-- Review regularly
-
-### Performance
-- Measure before optimizing
-- Use appropriate caching
-- Optimize critical paths
-- Monitor in production
-
-### Security
-- Validate all inputs
-- Use parameterized queries
-- Implement proper authentication
-- Keep dependencies updated
-
-### Maintainability
-- Write clear code
-- Use consistent naming
-- Add helpful comments
-- Keep it simple
-
-## Common Commands
-
-```bash
-# Development
-npm run dev
-npm run build
-npm run test
-npm run lint
-
-# Analysis
-python scripts/security_auditor.py .
-python scripts/pentest_automator.py --analyze
-
-# Deployment
-docker build -t app:latest .
-docker-compose up -d
-kubectl apply -f k8s/
-```
-
-## Troubleshooting
-
-### Common Issues
-
-Check the comprehensive troubleshooting section in `references/cryptography_implementation.md`.
-
-### Getting Help
-
-- Review reference documentation
-- Check script output messages
-- Consult tech stack documentation
-- Review error logs
-
-## Resources
-
-- Pattern Reference: `references/security_architecture_patterns.md`
-- Workflow Guide: `references/penetration_testing_guide.md`
-- Technical Guide: `references/cryptography_implementation.md`
-- Tool Scripts: `scripts/` directory
+*Updated: January 22, 2026 - 19:35*

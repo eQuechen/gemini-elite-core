@@ -159,10 +159,23 @@
 ### 23. code-architect
 - **Status**: COMPLETED (v1.1.0). ~500+ lines with AX (Agent Experience) and Modular Monoliths.
 - **Tasks**:
-    - [x] Research 2026 AX standards and AI-native design.
-    - [x] Add guides for modern modular monoliths and edge orchestration.
+- [x] Research 2026 AX standards and AI-native design.
+- [x] Add guides for modern modular monoliths and edge orchestration.
 
-## Priorities: Low (Niche or Stable)
++### 24. auditor-pro
++- **Status**: COMPLETED (v1.1.0). ~500+ lines with CTEM and Agentic Security.
++- **Tasks**:
++    - [x] Research 2026 security trends (CTEM, NHI).
++    - [x] Add guides for agentic security orchestration and forensics.
++
++### 25. strict-auditor
++- **Status**: COMPLETED (v2.1.0). ~500+ lines with Verification Gap and AI code standards.
++- **Tasks**:
++    - [x] Define "Verification Gap" resolution strategy.
++    - [x] Add quality gate metrics and AI coding standards.
++
+ ## Priorities: Low (Niche or Stable)
+
 - [ ] **TLDR-expert**: Add examples for token-efficient file summaries.
 
 ---
