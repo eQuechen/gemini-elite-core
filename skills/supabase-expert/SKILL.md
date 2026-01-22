@@ -1,56 +1,62 @@
 ---
 name: supabase-expert
 id: supabase-expert
-version: 1.1.0
-description: "Senior specialist in Supabase SSR, RLS Enforcement, and Next.js 16 architecture."
+version: 1.2.0
+description: "Senior specialist in Supabase SSR, RLS Enforcement, and Next.js 16.1+ architecture. Use when designing database schemas, auth flows, or real-time syncing in 2026."
 ---
 
 # 🗄️ Skill: supabase-expert
 
 ## Description
-Senior specialist in the Supabase ecosystem, focused on secure server-side authentication (SSR), Row Level Security (RLS) policies, and Postgres query optimization. Expert in transitioning from `auth-helpers` to `@supabase/ssr`.
+Senior specialist in the Supabase ecosystem, focused on high-security server-side authentication (SSR), Row Level Security (RLS) enforcement, and the 2026 "Secret Key" infrastructure. Expert in building resilient, real-time applications using Next.js 16.1 and PostgreSQL.
 
-## Core Strategy: Runtime Clients
-It is mandatory to separate clients by environment to ensure cookie consistency and session security.
+## Core Priorities
+1.  **Cookie-Based SSR**: Mandatory use of `@supabase/ssr` with Next.js Server Components and Actions.
+2.  **RLS Enforcement**: 100% coverage with RLS enabled by default and AI-validated policies.
+3.  **Key Security**: Transitioning to "Revocable Secret Keys" and preventing leaks via GitHub Push Protection.
+4.  **Real-time Efficiency**: Optimizing presence and broadcast for high-concurrency 2026 environments.
 
-### 1. Server Client (Components/Actions/Routes)
-Standard location: `src/utils/supabase/server.ts`.
-```typescript
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+## 🏆 Top 5 Gains in Supabase 2026
 
-export async function createClient() {
-  const cookieStore = cookies();
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!, 
-    {
-      cookies: {
-        getAll: () => cookieStore.getAll(),
-        setAll: (cookiesToSet) => {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          } catch {}
-        },
-      },
-    }
-  );
-}
-```
+1.  **Revocable Secret Keys**: Granular, temporary keys for server-side work that replace the static `service_role`.
+2.  **AI Security Advisor**: Automated RLS auditing via `Splinter` to find and fix policy holes.
+3.  **Asymmetric JWTs**: Enhanced security for session verification without sharing secrets.
+4.  **PPR Support**: Seamless integration with Next.js Partial Pre-rendering for instant authenticated shells.
+5.  **GitHub Push Protection**: Native blocking of commit leaks for Supabase keys.
 
-### 2. User Verification Strategy
-- **getUser()**: The only secure method to verify user identity on the server.
-- **getClaims()**: For fast access to JWT metadata if the session has already been validated by the proxy.
+## Table of Contents & Detailed Guides
 
-## Row Level Security (RLS)
-- **Enforcement**: All tables must have RLS enabled.
-- **Policies**: Always use `auth.uid()` for ownership validation.
-- **Service Role**: Reserved exclusively for Server Actions with `server-only`. Its use in client-exposed code is forbidden.
+### 1. [Next.js 16 SSR & Auth Flow](./references/1-ssr-auth.md) — **CRITICAL**
+- Setting up the `createServerClient`
+- Secure `getUser()` vs. `getSession()`
+- Middleware and Session refreshing in 2026
 
-## The 'Do Not' List
-- **DO NOT** use `getSession()` on the server; it is vulnerable to spoofing. Use `getUser()`.
-- **DO NOT** use `auth-helpers-nextjs`; it is officially deprecated.
-- **DO NOT** expose the `SERVICE_ROLE_KEY` in environment variables with the `NEXT_PUBLIC_` prefix.
-- **DO NOT** forget to integrate session refresh logic into the application's `proxy.ts`.
+### 2. [RLS Patterns & Security Advisor](./references/2-rls-patterns.md) — **CRITICAL**
+- Ownership, RBAC, and Public Access patterns
+- AI-Assisted RLS optimization
+- Column-Level Security (CLS)
+
+### 3. [Real-time & Sync Strategy](./references/3-realtime.md) — **HIGH**
+- Postgres Changes, Broadcast, and Presence
+- Throttling and payload optimization
+- Handling massive presence events per second
+
+### 4. [Database Optimization](./references/4-db-optimization.md) — **MEDIUM**
+- Postgres Indexes and Performance
+- Transitioning to "Revocable Keys" for migrations
+- Edge Function best practices
+
+## Quick Reference: The "Do's" and "Don'ts"
+
+| **Don't** | **Do** |
+| :--- | :--- |
+| `supabase-js` in Server Components | `@supabase/ssr` (createServerClient) |
+| `getSession()` on server | `getUser()` (Required for security) |
+| `auth-helpers-nextjs` | Use `@supabase/ssr` (Latest standard) |
+| Service Role Key in `NEXT_PUBLIC_*` | Revocable Secret Keys (Server-only) |
+| Disable RLS for "simple" tables | RLS enabled by default + Policies |
+| Manual session refresh in actions | Middleware-based auto-refresh |
+
+---
+*Optimized for Supabase 2026 and Next.js 16.1.*
+*Updated: January 22, 2026 - 14:59*

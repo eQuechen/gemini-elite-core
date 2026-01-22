@@ -31,12 +31,12 @@
 - **Target**: 400+ lines.
 
 ### 4. supabase-expert (Refactor: Level 9)
-- **Status**: Brief overview of clients.
+- **Status**: COMPLETED (v1.2.0). ~500+ lines across SKILL.md and 4 references.
 - **Tasks**:
-    - [ ] Add `references/rls-patterns.md` with 10+ common RLS policy templates.
-    - [ ] Add comprehensive "Auth Flow" diagram/steps for SSR.
-    - [ ] Add examples for "Realtime Subscriptions" in Next.js 16.
-    - [ ] Add "Common Pitfalls" (e.g., mixing server/client clients).
+    - [x] Add `references/rls-patterns.md` with 10+ common RLS policy templates.
+    - [x] Add comprehensive "Auth Flow" diagram/steps for SSR.
+    - [x] Add examples for "Realtime Subscriptions" in Next.js 16.
+    - [x] Add "Common Pitfalls" (e.g., mixing server/client clients).
 - **Target**: 500+ lines.
 
 ### 5. zustand-expert (Refactor: Level 8)
