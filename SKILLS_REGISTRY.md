@@ -25,7 +25,7 @@ This table tracks the last update for each skill within the project to ensure te
 | debug-master | - | - | ⏳ Pending Refactor |
 | **docs-pro** | January 22, 2026 - 17:05 | 1.1.0 | ✅ Refactored |
 | expert-instruction | - | - | ⏳ Pending Refactor |
-| gemini-sdk-expert | - | - | ⏳ Pending Refactor |
+| **gemini-sdk-expert** | January 22, 2026 - 17:20 | 1.2.0 | ✅ Refactored |
 | git-flow | - | - | ⏳ Pending Refactor |
 | git-pro | - | - | ⏳ Pending Refactor |
 | hydration-guardian | - | - | ⏳ Pending Refactor |

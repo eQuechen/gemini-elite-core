@@ -105,10 +105,17 @@
 ### 14. archive-searcher
 - **Status**: COMPLETED (v2.0.0). Professional Git Forensics.
 - **Tasks**:
-    - [x] Integrated with Conductor track forensics.
-    - [x] Added `scripts/deep-search.sh`.
+- [x] Integrated with Conductor track forensics.
+- [x] Added `scripts/deep-search.sh`.
 
-## Priorities: Low (Niche or Stable)
++### 15. gemini-sdk-expert
++- **Status**: COMPLETED (v1.2.0). ~500+ lines with structured output, function calling, and context caching.
++- **Tasks**:
++    - [x] Integrate 2026 multimodal reasoning (Video/Audio).
++    - [x] Add Context Caching implementation guide.
++
+ ## Priorities: Low (Niche or Stable)
+
 - [ ] **TLDR-expert**: Add examples for token-efficient file summaries.
 
 ---
