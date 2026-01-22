@@ -489,20 +489,16 @@ if [[ "$ADOPT_PROTOCOLS" =~ $YES_REGEX ]]; then
     3. WAIT for explicit confirmation before committing (only if requested).
 
 ## ⚙️ Configured MCPs
-- **chrome-devtools**, **filesystem**, **llm-tldr**, **browser-use**.
+- **chrome-devtools**, **filesystem**, **llm-tldr**.
 
 ## 🌐 Web Automation & Browser Protocol (CRITICAL)
-When asked to interact with a website or browse the internet, I MUST follow this priority:
+When asked to interact with a website or browse the internet, I MUST follow this protocol:
 
-1.  **CLI-First Strategy (`browser-use`)**:
+1.  **Visual Debugging & Browsing (`chrome-devtools`)**:
     - **Default Choice**: Use for documentation search, error research, content extraction, and multi-step tasks.
-    - **Criteria**: Speed and token efficiency. If the task doesn't require visual manual inspection of CSS/Console, use `browser-use`.
+    - **Criteria**: Reliability and visual context. This is the primary and only configured tool for web interaction.
 
-2.  **Visual Debugging (`chrome-devtools`)**:
-    - **Use Case**: Use ONLY for local UI/UX debugging, inspecting complex CSS layouts, or verifying visual regressions.
-    - **User Choice**: If the task is ambiguous (e.g., "Check if the web works"), I MUST ask: *"Should I use CLI mode (Fast) or Visual mode (Chrome DevTools)?"*
-
-3.  **Rule of Thumb**: Prefer `browser-use` for *doing* things (actions/info), and `chrome-devtools` for *seeing* things (debugging/UI).
+2.  **Rule of Thumb**: ALWAYS use `chrome-devtools` for web-related tasks (actions, info, and debugging).
 </ELITE_CORE_CONTEXT>
 EOF
 
