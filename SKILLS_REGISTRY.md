@@ -33,10 +33,10 @@ This table tracks the last update for each skill within the project to ensure te
 | **mcp-expert** | January 22, 2026 - 17:35 | 1.4.0 | ✅ Refactored |
 | **mobile-pro** | January 22, 2026 - 20:20 | 1.1.0 | ✅ Refactored |
 | pdf-pro | - | - | ⏳ Pending Refactor |
-| product-pro | - | - | ⏳ Pending Refactor |
+| **product-pro** | January 22, 2026 - 20:30 | 1.1.0 | ✅ Refactored |
 | prompt-pro | - | - | ⏳ Pending Refactor |
 | secure-ai | - | - | ⏳ Pending Refactor |
-| seo-pro | - | - | ⏳ Pending Refactor |
+| **seo-pro** | January 22, 2026 - 20:35 | 1.1.0 | ✅ Refactored |
 | stagehand-expert | - | - | ⏳ Pending Refactor |
 | **strict-auditor** | January 22, 2026 - 19:45 | 2.1.0 | ✅ Refactored |
 | tldr-expert | - | - | ⏳ Pending Refactor |

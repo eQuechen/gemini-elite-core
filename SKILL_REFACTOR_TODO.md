@@ -183,21 +183,32 @@
 ### 27. ui-ux-specialist
 - **Status**: COMPLETED (v1.1.0). ~500+ lines with WCAG 2.2 and inclusive patterns.
 - **Tasks**:
-- [x] Research WCAG 2.2 Level AA success criteria.
-- [x] Add guides for semantic HTML and inclusive design.
+    - [x] Research WCAG 2.2 Level AA success criteria.
+    - [x] Add guides for semantic HTML and inclusive design.
 
-+### 28. mobile-pro
-+- **Status**: COMPLETED (v1.1.0). ~500+ lines with Expo SDK 54, Fabric, and Worklets.
-+- **Tasks**:
-+    - [x] Research Expo SDK 54 and iOS 26 Liquid Glass support.
-+    - [x] Add guides for Reanimated 4 and React Native New Architecture.
-+
- ## Priorities: Low (Niche or Stable)
+### 28. mobile-pro
+- **Status**: COMPLETED (v1.1.0). ~500+ lines with Expo SDK 54, Fabric, and Worklets.
+- **Tasks**:
+    - [x] Research Expo SDK 54 and iOS 26 Liquid Glass support.
+    - [x] Add guides for Reanimated 4 and React Native New Architecture.
 
+### 29. product-pro
+- **Status**: COMPLETED (v1.1.0). ~500+ lines with Probabilistic Strategy and Agentic Prototyping.
+- **Tasks**:
+    - [x] Research 2026 AI product trends.
+    - [x] Add guides for rapid prototyping and context engineering for PMs.
+
+### 30. seo-pro
+- **Status**: COMPLETED (v1.1.0). ~500+ lines with SGE optimization and E-E-A-T.
+- **Tasks**:
+    - [x] Research Google SGE and AI Overviews.
+    - [x] Add guides for authoritative content and entity SEO.
+
+## Priorities: Low (Niche or Stable)
 - [ ] **TLDR-expert**: Add examples for token-efficient file summaries.
 
 ---
 ## Tracking
 - **Total Skills to Refactor**: 42
-- **Completed**: 27
-- **Overall Quality Score**: 64% (Estimated)
+- **Completed**: 30
+- **Overall Quality Score**: 71% (Estimated)
