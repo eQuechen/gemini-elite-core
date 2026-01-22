@@ -1,494 +1,221 @@
 ---
-name: architecture-patterns
-description: Implement proven backend architecture patterns including Clean Architecture, Hexagonal Architecture, and Domain-Driven Design. Use when architecting complex backend systems or refactoring existing applications for better maintainability.
+name: architect-pro
+description: Advanced Software Architecture Masterclass. Implements Clean Architecture, Hexagonal (Ports & Adapters), and DDD for 2026 ecosystems (Next.js 16.2, React 19.3, Node.js 24). Optimized for AI-driven development.
 ---
 
-# Architecture Patterns
+# Architect Pro: Advanced Software Architecture (2026 Edition)
 
-Master proven backend architecture patterns including Clean Architecture, Hexagonal Architecture, and Domain-Driven Design to build maintainable, testable, and scalable systems.
+Master the art of building maintainable, scalable, and testable systems using proven architectural patterns. This skill is optimized for the **Next.js 16.2 / React 19.3 / Node.js 24** ecosystem, focusing on decoupling business logic from infrastructure and enabling **Autonomous AI Agents** to work effectively within your codebase.
 
-## When to Use This Skill
+## 📌 Table of Contents
+1. [Core Philosophy](#core-philosophy)
+2. [Quick Start: The 2026 Stack](#quick-start-the-2026-stack)
+3. [Standard Pattern: Clean Architecture + Server Actions](#standard-pattern-clean-architecture--server-actions)
+4. [Advanced Pattern: Event-Driven DDD](#advanced-pattern-event-driven-ddd)
+5. [The 2026 Tech Standards](#the-2026-tech-standards)
+6. [The Do Not List (Anti-Patterns)](#the-do-not-list-anti-patterns)
+7. [Deep-Dive References](#deep-dive-references)
+8. [Repository Analysis & Context Packing](#repository-analysis--context-packing)
 
-- Designing new backend systems from scratch
-- Refactoring monolithic applications for better maintainability
-- Establishing architecture standards for your team
-- Migrating from tightly coupled to loosely coupled architectures
-- Implementing domain-driven design principles
-- Creating testable and mockable codebases
-- Planning microservices decomposition
+---
 
-## Core Concepts
+## 🏛️ Core Philosophy
+In 2026, software is increasingly built and refactored by **AI Coding Agents** (GPT-5, o3-deep-research). For an agent to be effective, the codebase must have **predictable boundaries**, **explicit contracts**, and **high-density context**.
 
-### 1. Clean Architecture (Uncle Bob)
+- **Decoupling**: Business logic (Domain) must not depend on the database, UI, or frameworks.
+- **Testability**: You should be able to test your core logic without spinning up a database or mocking complex framework internals.
+- **Independence**: The system should be agnostic of its delivery mechanisms (Web, CLI, Mobile, AI Agents).
+- **Predictability**: Files and folders should follow a strict convention so that both humans and AI can locate logic instantly.
 
-**Layers (dependency flows inward):**
+---
 
-- **Entities**: Core business models
-- **Use Cases**: Application business rules
-- **Interface Adapters**: Controllers, presenters, gateways
-- **Frameworks & Drivers**: UI, database, external services
+## ⚡ Quick Start: The 2026 Stack
+The most common production stack in 2026 uses **Next.js 16.2** with **Server Functions**, **TypeScript 5.x**, and **Bun/pnpm** monorepos.
 
-**Key Principles:**
-
-- Dependencies point inward
-- Inner layers know nothing about outer layers
-- Business logic independent of frameworks
-- Testable without UI, database, or external services
-
-### 2. Hexagonal Architecture (Ports and Adapters)
-
-**Components:**
-
-- **Domain Core**: Business logic
-- **Ports**: Interfaces defining interactions
-- **Adapters**: Implementations of ports (database, REST, message queue)
-
-**Benefits:**
-
-- Swap implementations easily (mock for testing)
-- Technology-agnostic core
-- Clear separation of concerns
-
-### 3. Domain-Driven Design (DDD)
-
-**Strategic Patterns:**
-
-- **Bounded Contexts**: Separate models for different domains
-- **Context Mapping**: How contexts relate
-- **Ubiquitous Language**: Shared terminology
-
-**Tactical Patterns:**
-
-- **Entities**: Objects with identity
-- **Value Objects**: Immutable objects defined by attributes
-- **Aggregates**: Consistency boundaries
-- **Repositories**: Data access abstraction
-- **Domain Events**: Things that happened
-
-## Clean Architecture Pattern
-
-### Directory Structure
-
-```
-app/
-├── domain/           # Entities & business rules
-│   ├── entities/
-│   │   ├── user.py
-│   │   └── order.py
-│   ├── value_objects/
-│   │   ├── email.py
-│   │   └── money.py
-│   └── interfaces/   # Abstract interfaces
-│       ├── user_repository.py
-│       └── payment_gateway.py
-├── use_cases/        # Application business rules
-│   ├── create_user.py
-│   ├── process_order.py
-│   └── send_notification.py
-├── adapters/         # Interface implementations
-│   ├── repositories/
-│   │   ├── postgres_user_repository.py
-│   │   └── redis_cache_repository.py
-│   ├── controllers/
-│   │   └── user_controller.py
-│   └── gateways/
-│       ├── stripe_payment_gateway.py
-│       └── sendgrid_email_gateway.py
-└── infrastructure/   # Framework & external concerns
-    ├── database.py
-    ├── config.py
-    └── logging.py
+### Recommended Folder Structure
+```bash
+src/
+├── domain/           # Entities, Value Objects, Domain Logic (Pure TS)
+├── application/      # Use Cases, Interfaces (Ports) - Orchestration
+├── infrastructure/   # Adapters (Prisma, Stripe v13, Mailer, Auth.js v5)
+├── app/              # Next.js Presentation Layer (Actions, Pages, Components)
+└── shared/           # Cross-cutting concerns (Types, Utils, Constants)
 ```
 
-### Implementation Example
+### The "Hello World" of Architecture
+1. **Define the Entity**: `src/domain/Project.ts`
+2. **Define the Port**: `src/application/ports/IRepo.ts`
+3. **Define the Use Case**: `src/application/use-cases/CreateProject.ts`
+4. **Invoke via Action**: `src/app/actions/create-project.ts`
 
-```python
-# domain/entities/user.py
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Optional
+---
 
-@dataclass
-class User:
-    """Core user entity - no framework dependencies."""
-    id: str
-    email: str
-    name: str
-    created_at: datetime
-    is_active: bool = True
+## 🛠️ Standard Pattern: Clean Architecture + Server Actions
 
-    def deactivate(self):
-        """Business rule: deactivating user."""
-        self.is_active = False
+### 1. The Domain Entity (The Heart of the System)
+```typescript
+// src/domain/entities/User.ts
+import { UserEmail } from '../value-objects/UserEmail';
 
-    def can_place_order(self) -> bool:
-        """Business rule: active users can order."""
-        return self.is_active
+export class User {
+  constructor(
+    public readonly id: string,
+    public readonly email: UserEmail,
+    private _isActive: boolean = true
+  ) {}
 
-# domain/interfaces/user_repository.py
-from abc import ABC, abstractmethod
-from typing import Optional, List
-from domain.entities.user import User
+  public deactivate() {
+    this._isActive = false;
+  }
 
-class IUserRepository(ABC):
-    """Port: defines contract, no implementation."""
-
-    @abstractmethod
-    async def find_by_id(self, user_id: str) -> Optional[User]:
-        pass
-
-    @abstractmethod
-    async def find_by_email(self, email: str) -> Optional[User]:
-        pass
-
-    @abstractmethod
-    async def save(self, user: User) -> User:
-        pass
-
-    @abstractmethod
-    async def delete(self, user_id: str) -> bool:
-        pass
-
-# use_cases/create_user.py
-from domain.entities.user import User
-from domain.interfaces.user_repository import IUserRepository
-from dataclasses import dataclass
-from datetime import datetime
-import uuid
-
-@dataclass
-class CreateUserRequest:
-    email: str
-    name: str
-
-@dataclass
-class CreateUserResponse:
-    user: User
-    success: bool
-    error: Optional[str] = None
-
-class CreateUserUseCase:
-    """Use case: orchestrates business logic."""
-
-    def __init__(self, user_repository: IUserRepository):
-        self.user_repository = user_repository
-
-    async def execute(self, request: CreateUserRequest) -> CreateUserResponse:
-        # Business validation
-        existing = await self.user_repository.find_by_email(request.email)
-        if existing:
-            return CreateUserResponse(
-                user=None,
-                success=False,
-                error="Email already exists"
-            )
-
-        # Create entity
-        user = User(
-            id=str(uuid.uuid4()),
-            email=request.email,
-            name=request.name,
-            created_at=datetime.now(),
-            is_active=True
-        )
-
-        # Persist
-        saved_user = await self.user_repository.save(user)
-
-        return CreateUserResponse(
-            user=saved_user,
-            success=True
-        )
-
-# adapters/repositories/postgres_user_repository.py
-from domain.interfaces.user_repository import IUserRepository
-from domain.entities.user import User
-from typing import Optional
-import asyncpg
-
-class PostgresUserRepository(IUserRepository):
-    """Adapter: PostgreSQL implementation."""
-
-    def __init__(self, pool: asyncpg.Pool):
-        self.pool = pool
-
-    async def find_by_id(self, user_id: str) -> Optional[User]:
-        async with self.pool.acquire() as conn:
-            row = await conn.fetchrow(
-                "SELECT * FROM users WHERE id = $1", user_id
-            )
-            return self._to_entity(row) if row else None
-
-    async def find_by_email(self, email: str) -> Optional[User]:
-        async with self.pool.acquire() as conn:
-            row = await conn.fetchrow(
-                "SELECT * FROM users WHERE email = $1", email
-            )
-            return self._to_entity(row) if row else None
-
-    async def save(self, user: User) -> User:
-        async with self.pool.acquire() as conn:
-            await conn.execute(
-                """
-                INSERT INTO users (id, email, name, created_at, is_active)
-                VALUES ($1, $2, $3, $4, $5)
-                ON CONFLICT (id) DO UPDATE
-                SET email = $2, name = $3, is_active = $5
-                """,
-                user.id, user.email, user.name, user.created_at, user.is_active
-            )
-            return user
-
-    async def delete(self, user_id: str) -> bool:
-        async with self.pool.acquire() as conn:
-            result = await conn.execute(
-                "DELETE FROM users WHERE id = $1", user_id
-            )
-            return result == "DELETE 1"
-
-    def _to_entity(self, row) -> User:
-        """Map database row to entity."""
-        return User(
-            id=row["id"],
-            email=row["email"],
-            name=row["name"],
-            created_at=row["created_at"],
-            is_active=row["is_active"]
-        )
-
-# adapters/controllers/user_controller.py
-from fastapi import APIRouter, Depends, HTTPException
-from use_cases.create_user import CreateUserUseCase, CreateUserRequest
-from pydantic import BaseModel
-
-router = APIRouter()
-
-class CreateUserDTO(BaseModel):
-    email: str
-    name: str
-
-@router.post("/users")
-async def create_user(
-    dto: CreateUserDTO,
-    use_case: CreateUserUseCase = Depends(get_create_user_use_case)
-):
-    """Controller: handles HTTP concerns only."""
-    request = CreateUserRequest(email=dto.email, name=dto.name)
-    response = await use_case.execute(request)
-
-    if not response.success:
-        raise HTTPException(status_code=400, detail=response.error)
-
-    return {"user": response.user}
+  get isActive() { return this._isActive; }
+}
 ```
 
-## Hexagonal Architecture Pattern
+### 2. The Use Case (Application Layer)
+```typescript
+// src/application/use-cases/DeactivateUser.ts
+import { IUserRepository } from '../ports/IUserRepository';
 
-```python
-# Core domain (hexagon center)
-class OrderService:
-    """Domain service - no infrastructure dependencies."""
+export class DeactivateUserUseCase {
+  constructor(private userRepo: IUserRepository) {}
 
-    def __init__(
-        self,
-        order_repository: OrderRepositoryPort,
-        payment_gateway: PaymentGatewayPort,
-        notification_service: NotificationPort
-    ):
-        self.orders = order_repository
-        self.payments = payment_gateway
-        self.notifications = notification_service
-
-    async def place_order(self, order: Order) -> OrderResult:
-        # Business logic
-        if not order.is_valid():
-            return OrderResult(success=False, error="Invalid order")
-
-        # Use ports (interfaces)
-        payment = await self.payments.charge(
-            amount=order.total,
-            customer=order.customer_id
-        )
-
-        if not payment.success:
-            return OrderResult(success=False, error="Payment failed")
-
-        order.mark_as_paid()
-        saved_order = await self.orders.save(order)
-
-        await self.notifications.send(
-            to=order.customer_email,
-            subject="Order confirmed",
-            body=f"Order {order.id} confirmed"
-        )
-
-        return OrderResult(success=True, order=saved_order)
-
-# Ports (interfaces)
-class OrderRepositoryPort(ABC):
-    @abstractmethod
-    async def save(self, order: Order) -> Order:
-        pass
-
-class PaymentGatewayPort(ABC):
-    @abstractmethod
-    async def charge(self, amount: Money, customer: str) -> PaymentResult:
-        pass
-
-class NotificationPort(ABC):
-    @abstractmethod
-    async def send(self, to: str, subject: str, body: str):
-        pass
-
-# Adapters (implementations)
-class StripePaymentAdapter(PaymentGatewayPort):
-    """Primary adapter: connects to Stripe API."""
-
-    def __init__(self, api_key: str):
-        self.stripe = stripe
-        self.stripe.api_key = api_key
-
-    async def charge(self, amount: Money, customer: str) -> PaymentResult:
-        try:
-            charge = self.stripe.Charge.create(
-                amount=amount.cents,
-                currency=amount.currency,
-                customer=customer
-            )
-            return PaymentResult(success=True, transaction_id=charge.id)
-        except stripe.error.CardError as e:
-            return PaymentResult(success=False, error=str(e))
-
-class MockPaymentAdapter(PaymentGatewayPort):
-    """Test adapter: no external dependencies."""
-
-    async def charge(self, amount: Money, customer: str) -> PaymentResult:
-        return PaymentResult(success=True, transaction_id="mock-123")
+  async execute(userId: string): Promise<{ success: boolean }> {
+    const user = await this.userRepo.findById(userId);
+    if (!user) throw new Error("User not found");
+    
+    user.deactivate();
+    await this.userRepo.save(user);
+    
+    return { success: true };
+  }
+}
 ```
 
-## Domain-Driven Design Pattern
+### 3. The Server Action (Infrastructure/Adapter Layer)
+```typescript
+// src/app/actions/user-actions.ts
+'use server'
 
-```python
-# Value Objects (immutable)
-from dataclasses import dataclass
-from typing import Optional
+import { DeactivateUserUseCase } from '@/application/use-cases/DeactivateUser';
+import { PrismaUserRepository } from '@/infrastructure/repositories/PrismaUserRepository';
+import { auth } from '@/auth'; // Auth.js v5
 
-@dataclass(frozen=True)
-class Email:
-    """Value object: validated email."""
-    value: str
+export async function deactivateUserAction(userId: string) {
+  const session = await auth();
+  if (!session?.user?.isAdmin) throw new Error("Unauthorized");
 
-    def __post_init__(self):
-        if "@" not in self.value:
-            raise ValueError("Invalid email")
-
-@dataclass(frozen=True)
-class Money:
-    """Value object: amount with currency."""
-    amount: int  # cents
-    currency: str
-
-    def add(self, other: "Money") -> "Money":
-        if self.currency != other.currency:
-            raise ValueError("Currency mismatch")
-        return Money(self.amount + other.amount, self.currency)
-
-# Entities (with identity)
-class Order:
-    """Entity: has identity, mutable state."""
-
-    def __init__(self, id: str, customer: Customer):
-        self.id = id
-        self.customer = customer
-        self.items: List[OrderItem] = []
-        self.status = OrderStatus.PENDING
-        self._events: List[DomainEvent] = []
-
-    def add_item(self, product: Product, quantity: int):
-        """Business logic in entity."""
-        item = OrderItem(product, quantity)
-        self.items.append(item)
-        self._events.append(ItemAddedEvent(self.id, item))
-
-    def total(self) -> Money:
-        """Calculated property."""
-        return sum(item.subtotal() for item in self.items)
-
-    def submit(self):
-        """State transition with business rules."""
-        if not self.items:
-            raise ValueError("Cannot submit empty order")
-        if self.status != OrderStatus.PENDING:
-            raise ValueError("Order already submitted")
-
-        self.status = OrderStatus.SUBMITTED
-        self._events.append(OrderSubmittedEvent(self.id))
-
-# Aggregates (consistency boundary)
-class Customer:
-    """Aggregate root: controls access to entities."""
-
-    def __init__(self, id: str, email: Email):
-        self.id = id
-        self.email = email
-        self._addresses: List[Address] = []
-        self._orders: List[str] = []  # Order IDs, not full objects
-
-    def add_address(self, address: Address):
-        """Aggregate enforces invariants."""
-        if len(self._addresses) >= 5:
-            raise ValueError("Maximum 5 addresses allowed")
-        self._addresses.append(address)
-
-    @property
-    def primary_address(self) -> Optional[Address]:
-        return next((a for a in self._addresses if a.is_primary), None)
-
-# Domain Events
-@dataclass
-class OrderSubmittedEvent:
-    order_id: str
-    occurred_at: datetime = field(default_factory=datetime.now)
-
-# Repository (aggregate persistence)
-class OrderRepository:
-    """Repository: persist/retrieve aggregates."""
-
-    async def find_by_id(self, order_id: str) -> Optional[Order]:
-        """Reconstitute aggregate from storage."""
-        pass
-
-    async def save(self, order: Order):
-        """Persist aggregate and publish events."""
-        await self._persist(order)
-        await self._publish_events(order._events)
-        order._events.clear()
+  // Dependency Injection for 2026
+  const repo = new PrismaUserRepository();
+  const useCase = new DeactivateUserUseCase(repo);
+  
+  try {
+    return await useCase.execute(userId);
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
 ```
 
-## Resources
+---
 
-- **references/clean-architecture-guide.md**: Detailed layer breakdown
-- **references/hexagonal-architecture-guide.md**: Ports and adapters patterns
-- **references/ddd-tactical-patterns.md**: Entities, value objects, aggregates
-- **assets/clean-architecture-template/**: Complete project structure
-- **assets/ddd-examples/**: Domain modeling examples
+## 🚀 Advanced Pattern: Event-Driven DDD
+For complex systems, use **Domain Events** to decouple side-effects like notifications, analytics, and third-party integrations (Stripe, AI).
 
-## Best Practices
+### Triggering the Event
+In the Aggregate Root:
+```typescript
+export class Order {
+  private events: any[] = [];
+  
+  complete() {
+    this.status = 'completed';
+    this.events.push(new OrderCompletedEvent(this.id, this.total));
+  }
+  
+  pullEvents() {
+    const e = [...this.events];
+    this.events = [];
+    return e;
+  }
+}
+```
 
-1. **Dependency Rule**: Dependencies always point inward
-2. **Interface Segregation**: Small, focused interfaces
-3. **Business Logic in Domain**: Keep frameworks out of core
-4. **Test Independence**: Core testable without infrastructure
-5. **Bounded Contexts**: Clear domain boundaries
-6. **Ubiquitous Language**: Consistent terminology
-7. **Thin Controllers**: Delegate to use cases
-8. **Rich Domain Models**: Behavior with data
+---
 
-## Common Pitfalls
+## 🏗️ The 2026 Tech Standards
 
-- **Anemic Domain**: Entities with only data, no behavior
-- **Framework Coupling**: Business logic depends on frameworks
-- **Fat Controllers**: Business logic in controllers
-- **Repository Leakage**: Exposing ORM objects
-- **Missing Abstractions**: Concrete dependencies in core
-- **Over-Engineering**: Clean architecture for simple CRUD
+### 🔐 Authentication (Auth.js v5)
+- **Edge Support**: Native support for Vercel Edge Runtime.
+- **AUTH_ Prefix**: Always use `AUTH_SECRET`, `AUTH_GITHUB_ID` etc.
+- **Performance**: 25% faster initialization than v4.
+- [Detailed Auth Guide](./references/auth-flows.md)
+
+### 🤖 AI Integration (GPT-5 & o3)
+- **Autonomous Agents**: Implementing self-correcting loops for task automation.
+- **o3-deep-research**: Using specialized models for large-scale codebase analysis.
+- [Detailed AI Guide](./references/ai-integration.md)
+
+### 💳 API Design (Stripe v13+)
+- **Auto-Pagination**: Native async iterators for list operations.
+- **Expanded Objects**: Deep retrieval of related resources in a single call.
+- [Detailed API Guide](./references/api-standards.md)
+
+---
+
+## 🚫 The Do Not List (Anti-Patterns)
+
+### 1. **Framework Leakage**
+**BAD**: Importing `@prisma/client` inside your `domain/` directory.
+**GOOD**: Define an `interface` in `application/ports` and implement it in `infrastructure/`.
+
+### 2. **Anemic Domain Model**
+**BAD**: Entities that are just bags of data (only public fields, no methods).
+**GOOD**: Put validation and state transition logic inside your Entities.
+
+### 3. **Fat Controllers / Fat Actions**
+**BAD**: Writing complex database queries or external API calls directly inside a Server Action.
+**GOOD**: Actions should only handle form parsing, auth checks, and delegate to a Use Case.
+
+### 4. **Circular Dependencies**
+**BAD**: `infrastructure/` importing `app/` (Presentation).
+**GOOD**: Dependency flow must ALWAYS be: `Presentation -> Application -> Domain`.
+
+---
+
+## 📚 Deep-Dive References
+Explore our specialized documentation for deeper technical insights:
+- [**Auth Flows & Security**](./references/auth-flows.md): Auth.js v5, Edge-first auth, and 2026 security standards.
+- [**AI Integration & Agents**](./references/ai-integration.md): GPT-5 patterns, o3-deep-research, and autonomous agent loops.
+- [**API Standards & Stripe**](./references/api-standards.md): Stripe SDK v13+, auto-pagination, and robust API design.
+- [**Monorepo & Indexing**](./references/monorepo-strategies.md): Bun/pnpm monorepos, Repomix context packing, and large codebase search.
+
+---
+
+## 🔍 Repository Analysis & Context Packing
+In 2026, we use **Repomix** to provide AI agents with high-density, noise-free context.
+
+### The "Repomix" Strategy
+1. **Compress**: Remove comments and empty lines to save tokens.
+2. **Filter**: Only include files relevant to the current architectural layer.
+3. **Index**: Use `git grep` and `archive-searcher` patterns for lightning-fast symbol discovery in monorepos.
+
+```bash
+# Example: Pack domain logic for an AI Auditor
+npx repomix --include "src/domain/**/*.ts" --output domain-context.md --compress
+```
+
+---
+
+## 💎 Best Practices Checklist
+- [ ] Is my Domain Layer free of external dependencies?
+- [ ] Are my Use Cases doing only orchestration?
+- [ ] Do I have interfaces (Ports) for all external services (DB, Auth, Mail, Stripe)?
+- [ ] Am I using Value Objects for things like Email, Money, and Address?
+- [ ] Is my code testable without a real database?
+- [ ] Have I used the `AUTH_` prefix for all authentication environment variables?
+- [ ] Is my monorepo optimized with Bun or pnpm?
+
+---
+
+*Updated: January 22, 2026 - 15:20*

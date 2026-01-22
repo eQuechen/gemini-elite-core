@@ -48,11 +48,11 @@
 - **Target**: 400+ lines.
 
 ### 6. prisma-expert (Refactor: Level 8)
-- **Status**: Covers basic Prisma 7 config.
+- **Status**: COMPLETED (v1.2.0). ~500+ lines across SKILL.md and 4 references.
 - **Tasks**:
-    - [ ] Add `references/query-optimization.md` for indexes and raw queries.
-    - [ ] Add examples for "TypedSQL" (Prisma 7 feature).
-    - [ ] Add "Prisma in Edge Functions" configuration reference.
+    - [x] Add `references/query-optimization.md` for indexes and raw queries.
+    - [x] Add examples for "TypedSQL" (Prisma 7 feature).
+    - [x] Add "Prisma in Edge Functions" configuration reference.
 - **Target**: 400+ lines.
 
 ## Priorities: Medium (Tools & Utilities)
