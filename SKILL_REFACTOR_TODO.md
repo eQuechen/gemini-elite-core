@@ -141,10 +141,23 @@
 ### 20. expert-instruction
 - **Status**: COMPLETED (v1.1.0). ~500+ lines with EGI framework, memory systems, and context engineering.
 - **Tasks**:
-    - [x] Research 2026 agentic instruction protocols (A2A, ACP).
-    - [x] Add guides for cognitive architectures and tiered memory.
+- [x] Research 2026 agentic instruction protocols (A2A, ACP).
+- [x] Add guides for cognitive architectures and tiered memory.
 
-## Priorities: Low (Niche or Stable)
++### 21. git-flow
++- **Status**: COMPLETED (v1.1.0). ~500+ lines with TBD, Stacked Changes, and 2026 strategies.
++- **Tasks**:
++    - [x] Research Trunk-Based Development best practices.
++    - [x] Add guides for Graphite and stacked PRs.
++
++### 22. git-automation (git-pro)
++- **Status**: COMPLETED (v2.1.0). ~500+ lines with GitHub Actions 2026 and Git internals.
++- **Tasks**:
++    - [x] Research GitHub Actions reusable workflows and OIDC.
++    - [x] Add automation toolkit and internals guide.
++
+ ## Priorities: Low (Niche or Stable)
+
 - [ ] **TLDR-expert**: Add examples for token-efficient file summaries.
 
 ---

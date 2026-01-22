@@ -1,132 +1,77 @@
 ---
-name: github-issues
-description: 'Create, update, and manage GitHub issues using MCP tools. Use this skill when users want to create bug reports, feature requests, or task issues, update existing issues, add labels/assignees/milestones, or manage issue workflows. Triggers on requests like "create an issue", "file a bug", "request a feature", "update issue X", or any GitHub issue management task.'
+name: git-automation
+id: git-automation
+version: 2.1.0
+description: "Senior DevOps & Automation Specialist. Expert in GitHub Actions, Issue Orchestration, and Advanced Git Internals."
 ---
 
-# GitHub Issues
+# 🤖 Skill: Git Automation (v2.1.0)
 
-Manage GitHub issues using the `@modelcontextprotocol/server-github` MCP server.
+## Executive Summary
+The `git-automation` expert is responsible for the "Autopilot" layer of the repository. In 2026, manual repository maintenance is a legacy practice. This skill focuses on building robust **GitHub Actions** pipelines, automating **Issue & Project Management**, and leveraging **Git Internals** for deep diagnostics and custom tooling. The goal is a repository that manages itself, allowing engineers to focus on logic rather than plumbing.
 
-## Available MCP Tools
+---
 
-| Tool | Purpose |
-|------|---------|
-| `mcp__github__create_issue` | Create new issues |
-| `mcp__github__update_issue` | Update existing issues |
-| `mcp__github__get_issue` | Fetch issue details |
-| `mcp__github__search_issues` | Search issues |
-| `mcp__github__add_issue_comment` | Add comments |
-| `mcp__github__list_issues` | List repository issues |
+## 📋 Table of Contents
+1. [Core Capabilities](#core-capabilities)
+2. [The "Do Not" List (Anti-Patterns)](#the-do-not-list-anti-patterns)
+3. [Elite GitHub Actions 2026](#elite-github-actions-2026)
+4. [Autonomous Issue Management](#autonomous-issue-management)
+5. [Git Internals & Object Forensics](#git-internals--object-forensics)
+6. [Automation Toolkit](#automation-toolkit)
+7. [Reference Library](#reference-library)
 
-## Workflow
+---
 
-1. **Determine action**: Create, update, or query?
-2. **Gather context**: Get repo info, existing labels, milestones if needed
-3. **Structure content**: Use appropriate template from [references/templates.md](references/templates.md)
-4. **Execute**: Call the appropriate MCP tool
-5. **Confirm**: Report the issue URL to user
+## 🚀 Core Capabilities
+- **Workflow Orchestration**: designing complex CI/CD pipelines with GitHub Actions.
+- **Agentic Issue Tracking**: Using MCP to manage lifecycle of bugs and features.
+- **Object Forensics**: Understanding Git internals for complex data recovery.
+- **Security Automation**: Implementing secret scanning and OIDC auth in pipelines.
+- **Repository Hygiene**: Automated pruning, versioning, and cleanup scripts.
 
-## Creating Issues
+---
 
-### Required Parameters
+## 🚫 The "Do Not" List (Anti-Patterns)
 
-```
-owner: repository owner (org or user)
-repo: repository name  
-title: clear, actionable title
-body: structured markdown content
-```
+| Anti-Pattern | Why it fails in 2026 | Modern Alternative |
+| :--- | :--- | :--- |
+| **Manual Issue Creation** | Slow and prone to missing context. | Use **MCP Issue Templates**. |
+| **Monolithic Workflows** | Hard to maintain and debug. | Use **Reusable Workflows**. |
+| **Hardcoded GH Tokens** | Security risk. | Use **OIDC Connect**. |
+| **Ignored Garbage** | Bloats repository size over time. | Run **Automated Pruning Scripts**. |
+| **Black-Box Internals** | Leads to "Voodoo Debugging." | Study **Git Object Map**. |
 
-### Optional Parameters
+---
 
-```
-labels: ["bug", "enhancement", "documentation", ...]
-assignees: ["username1", "username2"]
-milestone: milestone number (integer)
-```
+## 🏗️ Elite GitHub Actions 2026
 
-### Title Guidelines
+-   **Modular Design**: Every task is a reusable job.
+-   **Environment Gates**: Protected deployments for production.
+-   **AI Reviewers**: Integrated LLM audits on every pull request.
 
-- Start with type prefix when useful: `[Bug]`, `[Feature]`, `[Docs]`
-- Be specific and actionable
-- Keep under 72 characters
-- Examples:
-  - `[Bug] Login fails with SSO enabled`
-  - `[Feature] Add dark mode support`
-  - `Add unit tests for auth module`
+*See [References: GitHub Actions](./references/github-actions-2026.md) for templates.*
 
-### Body Structure
+---
 
-Always use the templates in [references/templates.md](references/templates.md). Choose based on issue type:
+## 🎫 Autonomous Issue Management
 
-| User Request | Template |
-|--------------|----------|
-| Bug, error, broken, not working | Bug Report |
-| Feature, enhancement, add, new | Feature Request |
-| Task, chore, refactor, update | Task |
+We use MCP to turn requirements into structured artifacts.
+-   **Bug Templates**: Mandatory reproduction steps.
+-   **Feature Specs**: Linking to `conductor` missions.
+-   **Auto-labeling**: Sorting issues by priority and domain.
 
-## Updating Issues
+---
 
-Use `mcp__github__update_issue` with:
+## 📖 Reference Library
 
-```
-owner, repo, issue_number (required)
-title, body, state, labels, assignees, milestone (optional - only changed fields)
-```
+Detailed deep-dives into Git Automation:
 
-State values: `open`, `closed`
+- [**GitHub Actions 2026**](./references/github-actions-2026.md): Orchestration standards.
+- [**Advanced Git Internals**](./references/advanced-git-internals.md): Under the hood of Git 3.0.
+- [**Automation Toolkit**](./references/automation-scripts-toolkit.md): High-utility script collection.
+- [**Issue Templates**](./references/issue-management-templates.md): Standards for bug and feature tracking.
 
-## Examples
+---
 
-### Example 1: Bug Report
-
-**User**: "Create a bug issue - the login page crashes when using SSO"
-
-**Action**: Call `mcp__github__create_issue` with:
-```json
-{
-  "owner": "github",
-  "repo": "awesome-copilot",
-  "title": "[Bug] Login page crashes when using SSO",
-  "body": "## Description\nThe login page crashes when users attempt to authenticate using SSO.\n\n## Steps to Reproduce\n1. Navigate to login page\n2. Click 'Sign in with SSO'\n3. Page crashes\n\n## Expected Behavior\nSSO authentication should complete and redirect to dashboard.\n\n## Actual Behavior\nPage becomes unresponsive and displays error.\n\n## Environment\n- Browser: [To be filled]\n- OS: [To be filled]\n\n## Additional Context\nReported by user.",
-  "labels": ["bug"]
-}
-```
-
-### Example 2: Feature Request
-
-**User**: "Create a feature request for dark mode with high priority"
-
-**Action**: Call `mcp__github__create_issue` with:
-```json
-{
-  "owner": "github",
-  "repo": "awesome-copilot",
-  "title": "[Feature] Add dark mode support",
-  "body": "## Summary\nAdd dark mode theme option for improved user experience and accessibility.\n\n## Motivation\n- Reduces eye strain in low-light environments\n- Increasingly expected by users\n- Improves accessibility\n\n## Proposed Solution\nImplement theme toggle with system preference detection.\n\n## Acceptance Criteria\n- [ ] Toggle switch in settings\n- [ ] Persists user preference\n- [ ] Respects system preference by default\n- [ ] All UI components support both themes\n\n## Alternatives Considered\nNone specified.\n\n## Additional Context\nHigh priority request.",
-  "labels": ["enhancement", "high-priority"]
-}
-```
-
-## Common Labels
-
-Use these standard labels when applicable:
-
-| Label | Use For |
-|-------|---------|
-| `bug` | Something isn't working |
-| `enhancement` | New feature or improvement |
-| `documentation` | Documentation updates |
-| `good first issue` | Good for newcomers |
-| `help wanted` | Extra attention needed |
-| `question` | Further information requested |
-| `wontfix` | Will not be addressed |
-| `duplicate` | Already exists |
-| `high-priority` | Urgent issues |
-
-## Tips
-
-- Always confirm the repository context before creating issues
-- Ask for missing critical information rather than guessing
-- Link related issues when known: `Related to #123`
-- For updates, fetch current issue first to preserve unchanged fields
+*Updated: January 22, 2026 - 19:10*
