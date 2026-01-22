@@ -4,7 +4,44 @@
 
 Optimizing server-side rendering and data fetching eliminates server-side waterfalls and reduces response times.
 
-## 3.1 Cross-Request LRU Caching
+## 3.1 Partial Pre-rendering (PPR)
+
+**Impact: CRITICAL (sub-100ms LCP for dynamic pages)**
+
+PPR allows a single route to have both static and dynamic parts. The static "shell" is served immediately from the edge, while dynamic "holes" (wrapped in Suspense) are streamed in as they finish.
+
+**Pattern: Static Layout + Dynamic Content**
+
+```tsx
+// next.config.ts
+export default {
+  experimental: {
+    ppr: 'incremental'
+  }
+}
+
+// app/dashboard/page.tsx
+import { Suspense } from 'react'
+import { StaticShell, DynamicStats } from './components'
+
+export const experimental_ppr = true // Enable for this route
+
+export default function Page() {
+  return (
+    <main>
+      <StaticShell /> {/* Served instantly as static HTML */}
+      
+      <Suspense fallback={<StatsSkeleton />}>
+        <DynamicStats /> {/* Streamed in once data is ready */}
+      </Suspense>
+    </main>
+  )
+}
+```
+
+**Rule of Thumb**: Anything NOT wrapped in `<Suspense>` at the page level becomes part of the static pre-rendered shell.
+
+## 3.2 Cross-Request LRU Caching
 
 **Impact: HIGH (caches across requests)**
 

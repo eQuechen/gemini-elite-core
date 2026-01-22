@@ -4,7 +4,37 @@
 
 Waterfalls are the #1 performance killer. Each sequential await adds full network latency. Eliminating them yields the largest gains.
 
-## 1.1 Defer Await Until Needed
+## 1.1 The "Gold Standard" Comparison: Waterfall vs. Parallel
+
+**Impact: CRITICAL (60% reduction in response time)**
+
+### Before: Sequential Waterfall (Antipattern)
+Each `await` blocks the next. Total time = sum of all latencies.
+
+```tsx
+// ❌ WRONG: Requests happen one after another
+const user = await fetchUser(); // 200ms
+const posts = await fetchPosts(user.id); // 200ms (waits for user)
+const config = await fetchConfig(); // 150ms (waits for posts)
+// Total time: 550ms
+```
+
+### After: Parallel Execution (Standard)
+Independent requests start simultaneously. Total time = max(independent latencies) + dependent latencies.
+
+```tsx
+// ✅ CORRECT: fetchUser and fetchConfig start together
+const userPromise = fetchUser(); // starts 0ms
+const configPromise = fetchConfig(); // starts 0ms
+
+const user = await userPromise; // wait until 200ms
+const posts = await fetchPosts(user.id); // starts 200ms
+const config = await configPromise; // already finished or finishes by 200ms
+
+// Total time: 400ms (Saved 150ms)
+```
+
+## 1.2 Defer Await Until Needed
 
 **Impact: HIGH (avoids blocking unused code paths)**
 
@@ -263,4 +293,30 @@ Both components share the same promise, so only one fetch occurs. Layout renders
 - Small, fast queries where suspense overhead isn't worth it
 - When you want to avoid layout shift (loading → content jump)
 
-**Trade-off:** Faster initial paint vs potential layout shift. Choose based on your UX priorities.
+## 1.6 Lifecycle Management with `cacheSignal` (React 19.2+)
+
+**Impact: HIGH (prevents wasted server resources)**
+
+When using `cache()` in RSC, long-running async operations should be cancelable if the request is aborted (e.g., user navigates away). `cacheSignal` provides a native `AbortSignal`.
+
+**Correct Implementation:**
+
+```typescript
+import { cache, cacheSignal } from 'react'
+
+export const getDeepAnalysis = cache(async (id: string) => {
+  const signal = cacheSignal()
+  
+  // Pass signal to internal fetch or DB call
+  const response = await fetch(`https://api.internal/analysis/${id}`, {
+    signal,
+    next: { revalidate: 3600 }
+  })
+  
+  if (signal.aborted) return null
+  
+  return response.json()
+})
+```
+
+By passing `cacheSignal()` to downstream fetches, you ensure that if the top-level request is cancelled, all underlying data fetching stops immediately, saving CPU and bandwidth.

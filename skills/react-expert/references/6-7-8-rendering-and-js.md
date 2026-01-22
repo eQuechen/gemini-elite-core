@@ -22,13 +22,37 @@ Reduce SVG coordinate precision to decrease file size.
 
 Use synchronous inline scripts to inject client-side state (like themes) before React hydrates.
 
-## 6.6 Use Activity Component for Show/Hide
+## 6.6 Use `<Activity>` Component (React 19.2+)
 
-Use React's `<Activity>` to preserve state/DOM for components that frequently toggle visibility.
+**Impact: HIGH (performance for toggled UI)**
+
+The `<Activity>` component (formerly `Offscreen`) allows you to hide a component tree while keeping it mounted and preserving its state. This is much faster than unmounting and remounting for frequently toggled UI like Tabs or Modals.
+
+**Implementation:**
+
+```tsx
+import { Activity } from 'react';
+
+function Dashboard({ activeTab }) {
+  return (
+    <>
+      <Activity mode={activeTab === 'home' ? 'visible' : 'hidden'}>
+        <HomeTab />
+      </Activity>
+      
+      <Activity mode={activeTab === 'settings' ? 'visible' : 'hidden'}>
+        <SettingsTab />
+      </Activity>
+    </>
+  );
+}
+```
+
+When `mode="hidden"`, React skips the rendering and commit phase for that tree but keeps the DOM nodes and state in memory.
 
 ## 6.7 Use Explicit Conditional Rendering
 
-Use ternary operators (`? :`) instead of `&&` for numbers/strings to avoid rendering `0` or `NaN`.
+Use ternary operators (`? :`) instead of `&&` for numbers/strings to avoid rendering `0` or `NaN` (which the React Compiler might not automatically fix if types are ambiguous).
 
 ---
 
@@ -38,7 +62,7 @@ Use ternary operators (`? :`) instead of `&&` for numbers/strings to avoid rende
 
 ## 7.1 Batch DOM CSS Changes
 
-Group multiple CSS changes together via classes or `cssText`.
+Group multiple CSS changes together via classes or `cssText` to avoid multiple reflows.
 
 ## 7.2 Build Index Maps for Repeated Lookups
 
@@ -48,50 +72,22 @@ Use a `Map` instead of multiple `.find()` calls on the same array.
 
 Cache object property lookups in hot paths.
 
-## 7.4 Cache Repeated Function Calls
+## 7.4 Combine Multiple Array Iterations
 
-Use a module-level Map to cache function results during render.
+Combine multiple `.filter()` or `.map()` calls into one loop (or use `reduce`).
 
-## 7.5 Cache Storage API Calls
+## 7.5 Use `toSorted()` Instead of `sort()` for Immutability
 
-`localStorage` and `document.cookie` are expensive. Cache reads in memory.
-
-## 7.6 Combine Multiple Array Iterations
-
-Combine multiple `.filter()` or `.map()` calls into one loop.
-
-## 7.7 Early Length Check for Array Comparisons
-
-Check lengths first before doing expensive deep comparisons.
-
-## 7.8 Early Return from Functions
-
-Return immediately when the result is determined.
-
-## 7.9 Hoist RegExp Creation
-
-Don't create RegExp inside render loops.
-
-## 7.10 Use Loop for Min/Max Instead of Sort
-
-Finding min/max is O(n), sorting is O(n log n).
-
-## 7.11 Use Set/Map for O(1) Lookups
-
-Convert arrays to Set for repeated membership checks.
-
-## 7.12 Use toSorted() Instead of sort() for Immutability
-
-`.sort()` mutates the array; `.toSorted()` creates a new one.
+`.sort()` mutates the array; `.toSorted()` (ES2023) creates a new one, which is essential for React state safety and Compiler compatibility.
 
 ---
 
 # 8. Advanced Patterns
 
-## 8.1 Store Event Handlers in Refs
+## 8.1 Stable Callbacks with `useEffectEvent`
 
-Use `useEffectEvent` or refs for stable subscriptions.
+Use `useEffectEvent` for event handlers that need reactive values but shouldn't trigger effects.
 
-## 8.2 useLatest for Stable Callback Refs
+## 8.2 `useLatest` for Stable Callback Refs
 
-Access latest values in callbacks without adding them to dependency arrays.
+Access latest values in callbacks without adding them to dependency arrays, keeping the function reference stable.

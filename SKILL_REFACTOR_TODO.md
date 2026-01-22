@@ -13,12 +13,12 @@
 - **Target**: 500+ lines total.
 
 ### 2. react-expert (Refactor: Level 10)
-- **Status**: Table of contents only. No inline examples in main SKILL.md.
+- **Status**: COMPLETED (v1.2.0). ~1000 lines across SKILL.md and 6 references.
 - **Tasks**:
-    - [ ] Expand `SKILL.md` to include "Top 5 Performance Gains in React 19".
-    - [ ] Add comprehensive examples for `useActionState`, `useOptimistic`, and `use`.
-    - [ ] Refactor `references/1-waterfalls.md` to include real-world comparison: "Before (Waterfall) vs After (Parallel)".
-    - [ ] Add section on "Compiler (React Forget)" expectations and manual optimizations.
+    - [x] Expand `SKILL.md` to include "Top 5 Performance Gains in React 19".
+    - [x] Add comprehensive examples for `useActionState`, `useOptimistic`, and `use`.
+    - [x] Refactor `references/1-waterfalls.md` to include real-world comparison: "Before (Waterfall) vs After (Parallel)".
+    - [x] Add section on "Compiler (React Forget)" expectations and manual optimizations.
 - **Target**: 600+ lines total across refs.
 
 ### 3. tailwind4-expert (Refactor: Level 9)
