@@ -125,10 +125,10 @@ Para cada skill, seguiré este flujo de trabajo para garantizar que no solo impo
     - [x] Análisis de similitud (mezclar con `track-master`).
     - [x] Gestión de tickets y sprints automáticos.
     - [x] Creación de estructura.
-- [ ] **19. `code-review-pro`**
-    - [ ] Análisis de similitud y búsqueda en fuente.
-    - [ ] Auditoría de performance y deuda técnica.
-    - [ ] Creación de estructura.
+- [x] **19. `code-review-pro`**
+    - [x] Análisis de similitud y búsqueda en fuente.
+    - [x] Auditoría de performance y deuda técnica.
+    - [x] Creación de estructura.
 - [ ] **20. `design-system-pro`**
     - [ ] Análisis de similitud y búsqueda en fuente.
     - [ ] Gestión de Tokens de Diseño y documentación.

@@ -15,6 +15,7 @@ This table tracks the last update for each skill within the project to ensure te
 | **browser-use-expert** | January 22, 2026 - 16:35 | 1.2.0 | ✅ Refactored |
 | **c4-architect** | January 23, 2026 - 19:35 | 1.0.0 | ✅ Created |
 | **code-architect** | January 22, 2026 - 19:20 | 1.1.0 | ✅ Refactored |
+| **code-review-pro** | January 23, 2026 - 21:40 | 1.0.0 | ✅ Created |
 | **commit-sentinel** | January 22, 2026 - 17:50 | 2.1.0 | ✅ Refactored |
 | **conductor-pro** | January 23, 2026 - 00:30 | 1.0.0 | ✅ Created |
 | **context-distiller** | January 22, 2026 - 21:40 | 1.1.0 | ✅ Refactored |
@@ -77,4 +78,4 @@ This table tracks the last update for each skill within the project to ensure te
 | **voice-ux-pro** | January 23, 2026 - 00:05 | 1.1.0 | ✅ Created |
 | **zustand-expert** | January 22, 2026 - 15:03 | 1.2.0 | ✅ Refactored |
 
-*Total Skills tracked: 71*
+*Total Skills tracked: 72*
