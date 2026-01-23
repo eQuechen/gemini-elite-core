@@ -93,10 +93,10 @@ Para cada skill, seguiré este flujo de trabajo para garantizar que no solo impo
     - [x] Análisis de similitud y búsqueda en fuente.
     - [x] Generación automática de diagramas C4.
     - [x] Creación de estructura.
-- [ ] **11. `openapi-pro`**
-    - [ ] Análisis de similitud y búsqueda en fuente.
-    - [ ] Generación de clientes Type-safe (Zod/Fetch).
-    - [ ] Creación de estructura.
+- [x] **11. `openapi-pro`**
+    - [x] Análisis de similitud y búsqueda en fuente.
+    - [x] Generación de clientes Type-safe (Zod/Fetch).
+    - [x] Creación de estructura.
 - [ ] **12. `mermaid-diagram-pro`**
     - [ ] Análisis de similitud y búsqueda en fuente.
     - [ ] Soporte para diagramas de secuencia complejos.

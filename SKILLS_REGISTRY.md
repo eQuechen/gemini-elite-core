@@ -39,6 +39,7 @@ This table tracks the last update for each skill within the project to ensure te
 | **monorepo-master** | January 23, 2026 - 18:30 | 1.0.0 | ✅ Created |
 | **nestjs-pro** | January 23, 2026 - 17:15 | 1.0.0 | ✅ Created |
 | **next16-expert** | January 22, 2026 - 14:36 | 1.2.0 | ✅ Refactored |
+| **openapi-pro** | January 23, 2026 - 19:55 | 1.0.0 | ✅ Created |
 | **pdf-pro** | January 22, 2026 - 22:35 | 1.1.0 | ✅ Refactored |
 | **php-modern** | January 22, 2026 - 23:10 | 1.1.0 | ✅ Created |
 | **postgres-tuning** | January 22, 2026 - 23:55 | 1.1.0 | ✅ Created |
@@ -69,4 +70,4 @@ This table tracks the last update for each skill within the project to ensure te
 | **voice-ux-pro** | January 23, 2026 - 00:05 | 1.1.0 | ✅ Created |
 | **zustand-expert** | January 22, 2026 - 15:03 | 1.2.0 | ✅ Refactored |
 
-*Total Skills tracked: 63*
+*Total Skills tracked: 64*
