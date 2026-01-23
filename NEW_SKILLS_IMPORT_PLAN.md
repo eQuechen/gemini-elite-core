@@ -73,10 +73,10 @@ Para cada skill, seguiré este flujo de trabajo para garantizar que no solo impo
     - [x] Análisis de similitud y búsqueda en fuente.
     - [x] Implementación de flujos de pago 2026 (Tax, Billing).
     - [x] Creación de estructura.
-- [ ] **6. `shadcn-ui-expert`**
-    - [ ] Análisis de similitud (mezclar con `ui-ux-pro`).
-    - [ ] Adaptación a Tailwind 4 y Radix 2026.
-    - [ ] Creación de estructura.
+- [x] **6. `shadcn-ui-expert`**
+    - [x] Análisis de similitud (mezclar con `ui-ux-pro`).
+    - [x] Adaptación a Tailwind 4 y Radix 2026.
+    - [x] Creación de estructura.
 - [ ] **7. `monorepo-master`**
     - [ ] Análisis de similitud y búsqueda en fuente.
     - [ ] Optimización para Turborepo + Bun.
