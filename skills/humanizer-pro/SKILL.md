@@ -1,3 +1,8 @@
+---
+name: humanizer-pro
+description: Senior Content Humanization Architect for 2026. Specialized in natural language refinement, authentic voice injection, and AI-detection avoidance. Expert in transforming robotic, predictable AI drafts into high-engagement, human-centric content that satisfies E-E-A-T standards and builds deep trust through empathy, storytelling, and cultural nuance.
+---
+
 # ✍️ Skill: humanizer-pro (v1.0.0)
 
 ## Executive Summary

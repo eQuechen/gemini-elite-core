@@ -1,3 +1,8 @@
+---
+name: tanstack-query-expert
+description: Senior Server State Architect for TanStack Query v5 (2026). Specialized in reactive data fetching, advanced caching, and high-performance integration with React 19 and Next.js 16. Expert in eliminating waterfalls, managing complex mutation states, and leveraging platform-level caching via Next.js `"use cache"` and Partial Prerendering (PPR).
+---
+
 # 📡 Skill: tanstack-query-expert (v1.0.0)
 
 ## Executive Summary

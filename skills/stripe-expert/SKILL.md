@@ -1,3 +1,8 @@
+---
+name: stripe-expert
+description: Senior Payment Solutions Architect for Stripe (2026). Specialized in secure checkout flows, complex billing models (usage-based/hybrid), global tax compliance via Stripe Tax, and high-performance Next.js 16 integration. Expert in building PCI-compliant, idempotent, and resilient payment systems using Checkout Sessions, Payment Elements, and Server Actions.
+---
+
 # 💳 Skill: stripe-expert (v1.0.0)
 
 ## Executive Summary

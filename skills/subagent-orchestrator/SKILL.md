@@ -1,3 +1,8 @@
+---
+name: subagent-orchestrator
+description: Senior Multi-Agent Systems (MAS) Architect for 2026. Specialized in Model Context Protocol (MCP) orchestration, Agent-to-Agent (A2A) communication, and recursive delegation frameworks. Expert in managing complex task handoffs, shared memory state, and parallel subagent execution for high-autonomy engineering missions.
+---
+
 # 🤖 Skill: subagent-orchestrator (v1.0.0)
 
 ## Executive Summary

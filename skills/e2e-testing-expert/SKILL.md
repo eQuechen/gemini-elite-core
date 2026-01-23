@@ -1,3 +1,8 @@
+---
+name: e2e-testing-expert
+description: Senior End-to-End (E2E) Test Architect for 2026. Specialized in Playwright orchestration, visual regression testing, and high-performance CI/CD sharding. Expert in building resilient, auto-waiting test suites using the Page Object Model (POM), automated accessibility auditing (Axe-core), and deep-trace forensic debugging.
+---
+
 # 🧪 Skill: e2e-testing-expert (v1.0.0)
 
 ## Executive Summary

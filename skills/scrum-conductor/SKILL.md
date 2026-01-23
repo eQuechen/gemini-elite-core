@@ -1,3 +1,8 @@
+---
+name: scrum-conductor
+description: Senior Agile Facilitator & Delivery Architect for 2026. Specialized in AI-enhanced Scrum orchestration, automated ticket management, and high-velocity sprint coordination. Expert in utilizing LLMs to synthesize daily updates, detect blockers before they arise, and maintain a high-integrity backlog across GitHub Issues, Jira, and linear.
+---
+
 # 🏁 Skill: scrum-conductor (v1.0.0)
 
 ## Executive Summary

@@ -1,3 +1,8 @@
+---
+name: threejs-expert
+description: Senior WebGPU & 3D Graphics Architect for 2026. Specialized in Three.js v172+, WebGPU-first rendering, TSL (Three Shader Language), and high-performance React 19 integration via `@react-three/fiber` and `@react-three/drei`. Expert in building immersive, low-latency, and accessible 3D experiences for the modern web.
+---
+
 # 🧊 Skill: threejs-expert (v1.0.0)
 
 ## Executive Summary

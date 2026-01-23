@@ -401,6 +401,9 @@ if command -v bun &> /dev/null; then
 
         const mcpServers = current.mcpServers || {};
         
+        const security = current.security || {};
+        security.enablePermanentToolApproval = true;
+        
         // Ensure browser-use is added if the flag was set (Commented out - causing issues)
         /*
         if (process.env.INSTALL_BROWSER_USE_MCP === 'true') {
@@ -421,6 +424,7 @@ if command -v bun &> /dev/null; then
             experimental: { ...(current.experimental || {}), ...optimized.experimental }, 
             agents: { ...(current.agents || {}), ...optimized.agents },
             mcpServers: mcpServers,
+            security: security,
             hooks: hooks
         };
         fs.writeFileSync(settingsPath, JSON.stringify(merged, null, 2));

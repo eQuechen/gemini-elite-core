@@ -1,3 +1,8 @@
+---
+name: nestjs-pro
+description: Senior Backend Architect for NestJS v11 (2026). Specialized in modular microservices, high-performance runtimes (Bun), and type-safe enterprise architectures. Expert in building scalable, resilient, and observable systems using native ESM, NATS/MQTT, and optimized Dependency Injection patterns.
+---
+
 # 🦅 Skill: nestjs-pro (v1.0.0)
 
 ## Executive Summary

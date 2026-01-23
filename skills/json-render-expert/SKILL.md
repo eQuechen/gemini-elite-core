@@ -1,3 +1,8 @@
+---
+name: json-render-expert
+description: `json-render` (by Vercel Labs) is the 2026 standard for **Guardrailed AI User Interfaces**. Unlike raw LLM generations that often hallucinate or break, `json-render` forces AI models to work within a strictly defined **Catalog** of components validated by **Zod**. It specializes in **JSONL Patch Streaming**, allowing React components to render incrementally as bits of data arrive, ensuring sub-300ms perceived latency.
+---
+
 # 🚀 json-render-expert (v1.1.0)
 
 ## Executive Summary

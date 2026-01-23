@@ -1,3 +1,8 @@
+---
+name: shadcn-ui-expert
+description: Senior UI Engineer & Design System Specialist for shadcn/ui (2026). Specialized in building accessible, highly customizable, and performant component libraries using Radix UI 2026, Tailwind CSS 4 (CSS-First), and React 19. Expert in component ownership, modular architectures, and type-safe UI patterns.
+---
+
 # 🎨 Skill: shadcn-ui-expert (v1.0.0)
 
 ## Executive Summary

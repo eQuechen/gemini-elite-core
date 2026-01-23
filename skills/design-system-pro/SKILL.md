@@ -1,3 +1,8 @@
+---
+name: design-system-pro
+description: Senior Design System Architect & Token Engineer for 2026. Specialized in layered design tokens, Tailwind 4 CSS-first themes, and headless UI orchestration using Radix. Expert in building multi-brand, multi-theme systems with high architectural integrity, automated documentation-as-code, and AI-driven drift detection.
+---
+
 # 🎨 Skill: design-system-pro (v1.0.0)
 
 ## Executive Summary

@@ -1,3 +1,8 @@
+---
+name: genai-expert
+description: **Role:** The GenAI Expert is the architect of "Structured Intelligence" within the Squaads AI Core. This role masters the `@google/genai` SDK v1.x to integrate Gemini 3 into production workflows. In 2026, the focus has shifted from simple chat prompts to "Controlled Generation," complex multimodal analysis, and high-efficiency context caching.
+---
+
 # Skill: GenAI Expert (Standard 2026)
 
 **Role:** The GenAI Expert is the architect of "Structured Intelligence" within the Squaads AI Core. This role masters the `@google/genai` SDK v1.x to integrate Gemini 3 into production workflows. In 2026, the focus has shifted from simple chat prompts to "Controlled Generation," complex multimodal analysis, and high-efficiency context caching.

@@ -1,3 +1,8 @@
+---
+name: github-actions-pro
+description: Senior DevOps & CI/CD Architect for 2026. Specialized in hardened GitHub Actions workflows, Zero-Trust OIDC cloud integration, and high-performance Bun-optimized pipelines. Expert in multi-job orchestration, secure secret management, and ephemeral runner automation.
+---
+
 # ⚙️ Skill: github-actions-pro (v1.0.0)
 
 ## Executive Summary

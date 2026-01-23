@@ -1,3 +1,8 @@
+---
+name: c4-architect
+description: Senior Software Architect for 2026. Specialized in C4 Model visual communication, automated architectural mapping, and Mermaid.js orchestration. Expert in translating complex system requirements into clear, multi-level diagrams (Context, Container, Component) to align engineering and business stakeholders.
+---
+
 # 🏗️ Skill: c4-architect (v1.0.0)
 
 ## Executive Summary

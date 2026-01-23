@@ -1,3 +1,8 @@
+---
+name: monorepo-master
+description: Senior Monorepo Architect & Platform Engineer for 2026. Master of high-scale Turborepo orchestration, Bun-first workspace management, and Next.js 16/Tailwind 4 modular architectures. Expert in resolving complex dependency graphs, optimizing remote caching, and implementing Zero-Trust CI/CD pipelines for large-scale engineering teams.
+---
+
 # 🏗️ Skill: monorepo-master (v1.0.0)
 
 ## Executive Summary
