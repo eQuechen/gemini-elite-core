@@ -61,10 +61,10 @@ Para cada skill, seguiré este flujo de trabajo para garantizar que no solo impo
     - [x] Análisis de similitud y búsqueda exhaustiva en fuente.
     - [x] Actualización a Convex v2+ (RLS y Auth dinámico).
     - [x] Creación de estructura y merge de contenidos.
-- [ ] **3. `tanstack-query-expert`**
-    - [ ] Análisis de similitud (¿mezclar con `react-expert`?).
-    - [ ] Optimización de caché y Server Actions integration.
-    - [ ] Creación de estructura.
+- [x] **3. `tanstack-query-expert`**
+    - [x] Análisis de similitud (¿mezclar con `react-expert`?).
+    - [x] Optimización de caché y Server Actions integration.
+    - [x] Creación de estructura.
 - [ ] **4. `nestjs-pro`**
     - [ ] Análisis de similitud y búsqueda en fuente.
     - [ ] Adaptación a microservicios con Bun.
