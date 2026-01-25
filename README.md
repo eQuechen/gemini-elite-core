@@ -17,6 +17,8 @@ Transform your Gemini CLI into a high-performance autonomous agentic environment
 
 Clone this repository and run the setup script:
 
+**Steps For Unix Users**
+
 ```bash
 git clone https://github.com/YuniorGlez/gemini-elite-core.git
 cd gemini-elite-core
@@ -24,20 +26,34 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
+**Steps For Windows Users**
+
+```bash
+git clone https://github.com/YuniorGlez/gemini-elite-core.git
+cd gemini-elite-core
+.\setup.cmd
+```
+
 ## 📖 How to Use
 
-Once installed, the setup script configures your `~/.gemini/settings.json` and installs all tactical skills. 
+Once installed, the setup script configures your `~/.gemini/settings.json` and installs all tactical skills.
 
 ### 1. Initialize your session
+
 When starting a new project, simply tell Gemini:
+
 > "Analyze the codebase and prepare for development."
 
 ### 2. Activate Specialized Skills
+
 Need deep knowledge of Next.js 16?
+
 > "activate_skill next16-expert"
 
 ### 3. Use Automated Protocols
+
 Gemini Elite Core includes hooks that:
+
 - **Auto-Type-Check**: Runs `tsc --noEmit` after logic changes.
 - **Commit Sentinel**: Ensures your commits follow Conventional Commits standards.
 
@@ -51,10 +67,13 @@ Gemini Elite Core includes hooks that:
 - `v26/`: Research and optimization guides for Gemini CLI v0.26.0.
 
 ## 🛡️ Security & Privacy
+
 Gemini Elite Core is designed to be safe. It uses the new Security Consent Prompts of v0.26.0 for skill installations and avoids any hardcoded secrets.
 
 ## 🤝 Contributing
+
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
-*Optimized for the future of agentic development. Built for Gemini CLI v0.26.0.*
+
+_Optimized for the future of agentic development. Built for Gemini CLI v0.26.0._
