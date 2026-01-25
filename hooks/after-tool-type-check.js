@@ -24,12 +24,32 @@ async function main() {
     encoding: 'utf8',
   });
 
+  let systemMessage = '';
+
   if (result.status !== 0) {
-    // If errors found, format them for the agent
-    const output = {
-      systemMessage: `⚠️ [Gemini Elite Protocol] Type errors detected after the last change:\n\n${result.stdout || result.stderr}\n\nPlease fix these errors before proceeding.`, 
-    };
-    console.log(JSON.stringify(output));
+    systemMessage += `⚠️ [Gemini Elite Protocol] Type errors detected after the last change:\n\n${result.stdout || result.stderr}\n\nPlease fix these errors before proceeding.\n`;
+  }
+
+  // Modularity Guardrail: Check line counts of modified files
+  const gitStatus = spawnSync('git', ['status', '--porcelain'], { cwd, encoding: 'utf8' });
+  const modifiedFiles = gitStatus.stdout
+    .split('\n')
+    .map(line => line.slice(3).trim())
+    .filter(file => file.endsWith('.ts') || file.endsWith('.tsx') || file.endsWith('.md') || file.endsWith('.skill'));
+
+  for (const file of modifiedFiles) {
+    const filePath = join(cwd, file);
+    if (existsSync(filePath)) {
+      const content = readFileSync(filePath, 'utf8');
+      const lineCount = content.split('\n').length;
+      if (lineCount > 500) {
+        systemMessage += `\n📏 [Modularity Guardrail] File "${file}" has ${lineCount} lines. This exceeds the 500-line Elite Standard. Please consider refactoring or splitting it to maintain optimal agent performance.\n`;
+      }
+    }
+  }
+
+  if (systemMessage) {
+    console.log(JSON.stringify({ systemMessage }));
   }
 }
 

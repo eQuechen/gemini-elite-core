@@ -22,14 +22,17 @@ The core knowledge base. Each skill (e.g., `react-expert`, `supabase-expert`) is
 - **Standard:** 400+ lines of depth, example-first, and includes a "Do Not List".
 - **Recency:** Explicitly optimized for January 2026 standards.
 
-### B. Event Hooks (`/hooks`)
-The "Nervous System" of the CLI.
+### B. Event Hooks (`/hooks`) & Scripts (`/scripts`)
+The "Nervous System" and "Action Layer" of the CLI.
 - `session-start-welcome.js`: Bootstraps the agent's persona.
-- `after-tool-type-check.js`: Automatically runs `bun x tsc --noEmit` after logic modifications.
+- `after-tool-type-check.js`: Automatically runs `bun x tsc --noEmit` AND enforces the **500-line Modularity Guardrail**.
 - `after-model-commit-check.js`: Validates Conventional Commits.
+- `scripts/committer.sh`: The mandatory tool for **Atomic & Scoped Commits** (No `git add .`).
 
-### C. The Conductor (`conductor-pro`)
-The meta-skill that prevents choice paralysis. It breaks down complex requests into atomic sub-tasks and delegates them to the appropriate tactical experts.
+### C. The Conductor (`conductor-pro`) & The Agent Soul
+The meta-skill and the core identity.
+- **The Agent Soul**: A global identity protocol inyected into the user's `GEMINI.md` that defines the "Elite Persona," work ethics (No `any`), and v0.27 performance standards.
+- `conductor-pro`: The meta-skill that prevents choice paralysis.
 
 ### D. The Landing Page (`/website`)
 A high-performance React 19 + Tailwind 4 site that serves as the project's public face and installation portal.
