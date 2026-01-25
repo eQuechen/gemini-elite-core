@@ -2,6 +2,7 @@
 
 # browser-use Installation Script for Gemini Elite Core
 # Optimized for high-reliability web automation in 2026.
+# Fix: Forces Python 3.12 via uv to ensure compatibility with browser-use.
 
 set -e
 
@@ -28,15 +29,20 @@ if ! command -v uv &> /dev/null; then
     export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.astral-uv/bin:$PATH"
 fi
 
+# El corazón del arreglo: Forzar Python 3.12
+info "Ensuring Python 3.12 is available via uv..."
+uv python install 3.12
+
 if command -v uv &> /dev/null; then
-    info "Installing browser-use via uv tool (isolated)..."
-    # uv tool install is the preferred way for CLIs in 2026
-    uv tool install browser-use --force || uv pip install browser-use --system --break-system-packages
+    info "Installing browser-use via uv tool (Python 3.12 isolated)..."
+    # Forzamos a que el tool use Python 3.12 específicamente
+    uv tool install browser-use --python 3.12 --force
     
     info "Installing Playwright browsers..."
-    uv run playwright install chromium
+    uv run --python 3.12 playwright install chromium
 else
-    info "Installing browser-use via pip3..."
+    # Fallback si uv falla (aunque uv python install debería haber funcionado)
+    warn "uv exists but had issues. Trying system fallback (unreliable for <3.11)..."
     pip3 install browser-use playwright --break-system-packages
     python3 -m playwright install chromium
 fi
@@ -46,7 +52,6 @@ export PATH="$HOME/.local/bin:$HOME/Library/Python/$(python3 -c 'import sys; pri
 
 if command -v browser-use &> /dev/null; then
     success "browser-use CLI installed successfully!"
-    browser-use --version
 else
     warn "browser-use installed but CLI not found in PATH."
     echo -e "${YELLOW}Hint: Add this to your .zshrc:${NC}"

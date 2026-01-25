@@ -1,5 +1,6 @@
 # browser-use Installation Script for Gemini Elite Core (Windows)
 # Optimized for high-reliability web automation in 2026.
+# Fix: Ensures Python 3.12 is used via uv to avoid version conflicts.
 
 $ErrorActionPreference = "Stop"
 
@@ -21,23 +22,30 @@ if (!(Get-Command uv -ErrorAction SilentlyContinue)) {
     $env:Path += ";$env:USERPROFILE\.cargo\bin"
 }
 
+# Asegurar versión mínima de Python para browser-use
+Write-Info "Ensuring Python 3.12 via uv..."
+& uv python install 3.12
+
 if (Get-Command uv -ErrorAction SilentlyContinue) {
-    Write-Info "Installing browser-use via uv tool (isolated)..."
-    uv tool install browser-use --force
+    Write-Info "Installing browser-use via uv tool (Python 3.12 isolated)..."
+    # Usar el operador de ejecución & para mayor seguridad con uv
+    & uv tool install browser-use --python 3.12 --force
     
     Write-Info "Installing Playwright browsers..."
-    uv run playwright install chromium
+    & uv run --python 3.12 playwright install chromium
 } else {
-    Write-Info "Installing browser-use via pip..."
-    pip install browser-use playwright
-    python -m playwright install chromium
+    Write-Info "Installing browser-use via pip fallback..."
+    & pip install browser-use playwright
+    & python -m playwright install chromium
 }
 
+# Verificar instalación
 if (Get-Command browser-use -ErrorAction SilentlyContinue) {
     Write-Success "browser-use CLI installed successfully!"
 } else {
+    $localBin = "$env:USERPROFILE\.local\bin"
     Write-Warn "browser-use installed but CLI not found in PATH."
-    Write-Host "Hint: Restart your terminal or add '$env:USERPROFILE\.local\bin' to your PATH." -ForegroundColor Yellow
+    Write-Host "Hint: Restart your terminal or add '$localBin' to your PATH." -ForegroundColor Yellow
 }
 
 Write-Success "Installation process finished."
