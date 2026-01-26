@@ -365,11 +365,16 @@ if /I "%ADOPT_PROTOCOLS%"=="%YES_VAL%" (
     echo ## 🌐 Web Automation ^& Browser Protocol ^(CRITICAL^)
     echo When asked to interact with a website or browse the internet, I MUST follow this protocol:
     echo.
-    echo 1.  **Visual Debugging ^& Browsing ^(`chrome-devtools`^)**:
-    echo     - **Default Choice**: Use for documentation search, error research, content extraction, and multi-step tasks.
-    echo     - **Criteria**: Reliability and visual context. This is the primary and only configured tool for web interaction.
+    echo 1.  **Research ^& Data Extraction ^(`browser-use`^)**:
+    echo     - **Default Choice**: Use EXCLUSIVELY for searching the web, downloading documentation, and extracting information from external sites.
+    echo     - **Reasoning**: It is faster, persistent, and specialized for autonomous research.
     echo.
-    echo 2.  **Rule of Thumb**: ALWAYS use `chrome-devtools` for web-related tasks ^(actions, info, and debugging^).
+    echo 2.  **Visual Debugging ^& Local Dev ^(`chrome-devtools`^)**:
+    echo     - **Usage**: Use ONLY for reviewing the application I am currently programming ^(localhost^) or when the user explicitly requests a visual check with Chrome.
+    echo.
+    echo 3.  **Anti-Obsolescence Protocol ^(MANDATORY^)**:
+    echo     - **Step 1 ^(Local Skills^)**: I am aware that my training data is from 2024, while the user works with 2026 tech. I MUST always run `activate_skill` for the relevant technology FIRST.
+    echo     - **Step 2 ^(Internet Bridge^)**: If the local skill does not provide a clear solution for a modern library ^(e.g., React 19, Next 16^), I am OBLIGATED to search the internet via `browser-use` to verify the latest API changes and fix errors based on real-time 2026 documentation.
     echo ^</ELITE_CORE_CONTEXT^>
     ) > "%USER_GEMINI%"
 
