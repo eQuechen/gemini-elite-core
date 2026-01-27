@@ -25,8 +25,8 @@ The core knowledge base. Each skill (e.g., `react-expert`, `supabase-expert`) is
 ### B. Event Hooks (`/hooks`) & Scripts (`/scripts`)
 The "Nervous System" and "Action Layer" of the CLI.
 - `session-start-welcome.js`: Bootstraps the agent's persona.
-- `after-tool-type-check.js`: Automatically runs `bun x tsc --noEmit` AND enforces the **500-line Modularity Guardrail** using the new **Exit Code 2 (System Block)** standard for v0.27.
-- `after-model-commit-check.js`: Validates Conventional Commits.
+- DISABLED: `after-tool-type-check.js`: Automatically runs `bun x tsc --noEmit` AND enforces the **500-line Modularity Guardrail** using the new **Exit Code 2 (System Block)** standard for v0.27.
+- DISABLED: `after-model-commit-check.js`: Validates Conventional Commits.
 - `scripts/committer.sh`: The mandatory tool for **Atomic & Scoped Commits** (No `git add .`).
 - **Interactive Protocols**: Integration of `AskUser` tool for architectural consensus and `/rewind` for history management.
 

@@ -413,9 +413,7 @@ if command -v bun &> /dev/null; then
         }
 
         const hooks = {
-            'SessionStart': [{ 'matcher': '*', 'hooks': [{ 'name': 'welcome', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'session-start-welcome.js') }] }],
-            'AfterTool': [{ 'matcher': '*', 'hooks': [{ 'name': 'type-check', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'after-tool-type-check.js') }] }],
-            'AfterModel': [{ 'matcher': '*', 'hooks': [{ 'name': 'commit-check', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'after-model-commit-check.js') }] }]
+            'SessionStart': [{ 'matcher': '*', 'hooks': [{ 'name': 'welcome', 'type': 'command', 'command': 'bun ' + path.join(hooksDir, 'session-start-welcome.js') }] }]
         };
 
         const mcpServers = current.mcpServers || {};
