@@ -241,7 +241,7 @@ echo     codebaseInvestigator: { enabled: true, runConfig: { maxTurns: 100, time
 echo     codeReviewer: { enabled: true, runConfig: { maxTurns: 30, timeout: 300000 } }, >> "%TEMP_SCRIPT%"
 echo     bugFixer: { enabled: true, runConfig: { maxTurns: 50, timeout: 300000 } } >> "%TEMP_SCRIPT%"
 echo   }, >> "%TEMP_SCRIPT%"
-echo   model: { name: 'gemini-3-flash-preview' }, >> "%TEMP_SCRIPT%"
+echo   model: { name: 'gemini-3-flash-preview', 'compressionThreshold': 0.10 }, >> "%TEMP_SCRIPT%"
 echo   tools: { autoAccept: true } >> "%TEMP_SCRIPT%"
 echo }; >> "%TEMP_SCRIPT%"
 echo try { >> "%TEMP_SCRIPT%"

@@ -395,7 +395,7 @@ OPTIMIZED_SETTINGS='{
   },
   "general": { "previewFeatures": true, "sessionRetention": { "enabled": true }, "enablePromptCompletion": false },
   "context": { "fileFiltering": { "respectGitIgnore": true }, "loadMemoryFromIncludeDirectories": true },
-  "model": { "compressionThreshold": 0.90, "name": "gemini-3-flash-preview" },
+  "model": { "compressionThreshold": 0.10, "name": "gemini-3-flash-preview" },
   "tools": { "shell": { "showColor": true }, "autoAccept": true },
   "ui": { "footer": { "hideContextPercentage": false }, "showMemoryUsage": true, "showModelInfoInChat": false, "showLineNumbers": false }
 }'
