@@ -30,10 +30,12 @@ The "Nervous System" and "Action Layer" of the CLI.
 - `scripts/committer.sh`: The mandatory tool for **Atomic & Scoped Commits** (No `git add .`).
 - **Interactive Protocols**: Integration of `AskUser` tool for architectural consensus and `/rewind` for history management.
 
-### C. The Conductor (`conductor-pro`) & The Agent Soul
-The meta-skill and the core identity.
-- **The Agent Soul**: A global identity protocol inyected into the user's `GEMINI.md` that defines the "Elite Persona," work ethics (No `any`), and v0.27 performance standards.
-- `conductor-pro`: The meta-skill that prevents choice paralysis.
+### C. The Conductor & Plan Engine (v0.27.0-nightly.20260127)
+The intelligence and strategy layer.
+- **Persistent Plan Storage**: Plans are now saved as JSON in `~/.gemini/plans/`, enabling auditability and session recovery.
+- **Event-Driven Subagents**: Subagents have been migrated to a high-performance event-driven scheduler, reducing latency by up to 5x.
+- **First-Run Protocol**: New `/agents init` command for project-level subagent onboarding.
+- **Context Refresh**: Automatic system prompt refresh when toggling Approval Mode (`Shift+Tab`).
 
 ### D. The Landing Page (`/website`)
 A high-performance React 19 + Tailwind 4 site that serves as the project's public face and installation portal.

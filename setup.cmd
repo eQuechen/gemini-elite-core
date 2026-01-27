@@ -1,7 +1,7 @@
 @echo off
 SETLOCAL EnableDelayedExpansion
 
-:: Gemini Elite Core Setup Script - v6.4 "Cross-Platform Integrity"
+:: Gemini Elite Core Setup Script - v6.5 "Cross-Platform Integrity"
 :: Windows CMD Version - Fix: Update logic + Elite Soul Protocol
 
 :: Visual constants (ANSI Escape Sequences)
@@ -63,6 +63,8 @@ if "%SELECTED_LANG%"=="ES" (
     set "MSG_PROTOCOLS_DESC=Los protocolos Elite Core imponen flujos de trabajo especificos:"
     set "MSG_PROMPT_ADOPT=¿Quieres adoptar estos protocolos Elite Core en tu GEMINI.md global? [S/n]: "
     set "MSG_SUCCESS_GEMINI_MD=GEMINI.md global actualizado."
+    set "MSG_STATUS_CLI=CLI: Nightly (v0.27.0-nightly.20260127)"
+    set "MSG_STATUS_AGENTS=Agentes: Generalist + Especialistas (Event-Driven Scheduler)"
     set "MSG_FINISH=Aprovisionamiento de Gemini Elite Core completado!"
     set "MSG_CONSERVATIVE_PROMPT=¿Quieres ser mas conservador?"
     set "MSG_PROMPT_BROWSER_USE=browser-use permite a Gemini navegar por internet, extraer datos y completar tareas en sitios web. ¿Deseas instalarlo? (Requiere Python 3 y uv) [S/n]: "
@@ -218,14 +220,20 @@ echo const settingsPath = process.argv[2]; >> "%TEMP_SCRIPT%"
 echo const hooksDir = process.argv[3]; >> "%TEMP_SCRIPT%"
 echo const optimized = { >> "%TEMP_SCRIPT%"
 echo   enableAgentSkills: true, >> "%TEMP_SCRIPT%"
-echo   core: { disableLLMCorrection: true }, >> "%TEMP_SCRIPT%"
+echo   core: { disableLLMCorrection: true, optimizeShellOutput: true }, >> "%TEMP_SCRIPT%"
 echo   experimental: { >> "%TEMP_SCRIPT%"
 echo     introspectionAgentSettings: { enabled: true }, >> "%TEMP_SCRIPT%"
 echo     skillCreator: true, >> "%TEMP_SCRIPT%"
 echo     hooks: true, >> "%TEMP_SCRIPT%"
 echo     hooksSystem: true, >> "%TEMP_SCRIPT%"
 echo     planning: true, >> "%TEMP_SCRIPT%"
+echo     plan: true, >> "%TEMP_SCRIPT%"
 echo     eventDrivenScheduler: true >> "%TEMP_SCRIPT%"
+echo   }, >> "%TEMP_SCRIPT%"
+echo   plan: { >> "%TEMP_SCRIPT%"
+echo     approvalMode: "interactive", >> "%TEMP_SCRIPT%"
+echo     persistentStorage: true, >> "%TEMP_SCRIPT%"
+echo     requirePlanApproval: true >> "%TEMP_SCRIPT%"
 echo   }, >> "%TEMP_SCRIPT%"
 echo   agents: { >> "%TEMP_SCRIPT%"
 echo     generalist: { enabled: true, runConfig: { maxTurns: 50, timeout: 600000 } }, >> "%TEMP_SCRIPT%"
@@ -296,7 +304,7 @@ if /I "%ADOPT_PROTOCOLS%"=="%YES_VAL%" (
     :: Write line by line using absolute system paths
     (
     echo ^<ELITE_CORE_CONTEXT^>
-    echo ^<!-- VERSION: 2.4.0 --^>
+    echo ^<!-- VERSION: 2.5.0 --^>
     echo # 🚀 Gemini Elite Core - Quick Start Guide ^(Generalist Edition^)
     echo.
     echo ## 🪐 The Agent Soul: ADN ^& Work Ethics ^(MANDATORY^)
@@ -308,10 +316,10 @@ if /I "%ADOPT_PROTOCOLS%"=="%YES_VAL%" (
     echo - **Zero Tolerance for `any`**: Typing must be strict and descriptive. If a type doesn't exist, create it. Do not "vibe-code" without types.
     echo - **Atomicity and Security**: NEVER use `git add .`. It is a protocol violation. Use EXCLUSIVELY `~/.gemini/scripts/committer.sh` for surgical and safe staging.
     echo - **Technical Conciseness**: Speak with code and facts. Avoid unnecessary preambles ^("Okay, I will..."^). Be direct and professional.
-    echo - **Performance v0.27**: Always prioritize the new capabilities of Gemini CLI v0.27+ ^(Event-Driven Scheduler, Plan Mode, Hooks^).
+    echo - **Performance v0.27 ^(Nightly 20260127^)**: Always prioritize the new capabilities: **Event-Driven Scheduler** ^(Low latency^), **Persistent Plan Storage** ^(Session recovery^), and **Shell Output Optimization**.
     echo.
     echo ### 3. Action Protocols
-    echo - **Plan Mode First**: Before executing complex tasks, use Plan Mode ^(`Shift+Tab`^) to validate the strategy with the user.
+    echo - **MANDATORY: Plan-First Execution**: YOU MUST ALWAYS START EVERY TASK BY INITIALIZING PLAN MODE ^(`Shift+Tab` or `/plan`^). Do not perform any file modifications or complex tool calls until a plan has been explicitly shared and approved by the user. This is a non-negotiable step for all engineering tasks. Note: Plans are now persistent in `~/.gemini/plans/`.
     echo - **Skill Mastery**: Before touching any framework ^(Next.js, React, Supabase^), you MUST activate the corresponding skill ^(`activate_skill`^). Acting without expert context is negligence.
     echo - **Mandatory Modularity**: If a file approaches 500 lines, stop and propose a refactor. Large files are the enemy of intelligence.
     echo - **Continuous Validation**: Every logic change must be followed by a type check ^(`TSC`^) and, if possible, unit tests.
@@ -324,6 +332,7 @@ if /I "%ADOPT_PROTOCOLS%"=="%YES_VAL%" (
     echo ## 🧠 Agentic Delegation ^& Orchestration ^(MANDATORY^)
     echo - **GENERALIST FIRST**: You are a Generalist Orchestrator. For complex tasks, you MUST delegate to specialized agents using `delegate_to_agent`.
     echo - **SKILL CONDUCTOR**: Always activate `conductor-pro` ^(`activate_skill`^) when a task requires coordination between multiple specialized skills or deep workflow planning.
+    echo - **SUBAGENT SETUP**: If this is a new project, use `/agents init` to trigger the first-run experience and configure local subagents.
     echo - **SPECIALISTS**: 
     echo     - `@codebaseInvestigator`: Use for architectural mapping and deep code analysis.
     echo     - `@codeReviewer`: Use for refactoring, style checks, and PR reviews.

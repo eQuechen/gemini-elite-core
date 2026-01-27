@@ -85,9 +85,9 @@ if [[ "$SELECTED_LANG" == "ES" ]]; then
     MSG_SUCCESS_GEMINI_MD="GEMINI.md global actualizado con protocolos Elite Core."
     MSG_INFO_SKIP_GEMINI="Omitiendo actualización de GEMINI.md. Aún puedes usar las habilidades manualmente."
     MSG_FINISH="¡Aprovisionamiento de Gemini Elite Core completado!"
-    MSG_STATUS_CLI="CLI: Nightly (v0.27.0-nightly.20260126)"
-    MSG_STATUS_AGENTS="Agentes: Generalist + Especialistas (Descubrimiento Dinámico)"
-    MSG_STATUS_PLANNING="Planificación: Interactive & Persistent (v0.27)"
+    MSG_STATUS_CLI="CLI: Nightly (v0.27.0-nightly.20260127)"
+    MSG_STATUS_AGENTS="Agentes: Generalist + Especialistas (Event-Driven Scheduler)"
+    MSG_STATUS_PLANNING="Planificación: Persistent & Interactive (v0.27)"
     MSG_STATUS_SKILLS="Habilidades: Desplegadas (Docs Writer +)"
     MSG_STATUS_HOOKS="Hooks: System Active"
     MSG_CONSERVATIVE_PROMPT="¿Quieres ser más conservador o menos conservador?"
@@ -129,9 +129,9 @@ else
     MSG_SUCCESS_GEMINI_MD="Global GEMINI.md updated with Elite Core protocols."
     MSG_INFO_SKIP_GEMINI="Skipping GEMINI.md update. You can still use the skills manually."
     MSG_FINISH="Gemini Elite Core Provisioning Complete!"
-    MSG_STATUS_CLI="CLI: Nightly (v0.27.0-nightly.20260126)"
-    MSG_STATUS_AGENTS="Agents: Generalist + Specialists (Dynamic Discovery)"
-    MSG_STATUS_PLANNING="Planning: Interactive & Persistent (v0.27)"
+    MSG_STATUS_CLI="CLI: Nightly (v0.27.0-nightly.20260127)"
+    MSG_STATUS_AGENTS="Agents: Generalist + Specialists (Event-Driven Scheduler)"
+    MSG_STATUS_PLANNING="Planning: Persistent & Interactive (v0.27)"
     MSG_STATUS_SKILLS="Skills: Deployed (Docs Writer +)"
     MSG_STATUS_HOOKS="Hooks: System Active"
     MSG_CONSERVATIVE_PROMPT="Do you want to be more conservative or less conservative?"
@@ -347,7 +347,8 @@ chmod +x "$SCRIPTS_DIR"/*.sh 2>/dev/null || true
 OPTIMIZED_SETTINGS='{
   "enableAgentSkills": true,
   "core": {
-    "disableLLMCorrection": true
+    "disableLLMCorrection": true,
+    "optimizeShellOutput": true
   },
   "skills": {
     "enabled": true,
@@ -368,12 +369,13 @@ OPTIMIZED_SETTINGS='{
     "plan": true,
     "planningMode": "auto", 
     "planVisualization": true, 
-    "requirePlanApproval": false,
+    "requirePlanApproval": true,
     "eventDrivenScheduler": true,
     "agentRegistry": { "trackAllDiscovered": true }
   },
   "plan": {
-    "approvalMode": "interactive"
+    "approvalMode": "interactive",
+    "persistentStorage": true
   },
   "agents": {
     "generalist": { "enabled": true, "modelConfig": { "temperature": 0.5, "maxOutputTokens": 4096 }, "runConfig": { "maxTurns": 50, "timeout": 600000 } },
@@ -470,11 +472,11 @@ fi
 
 if [[ "$ADOPT_PROTOCOLS" =~ $YES_REGEX ]]; then
     USER_GEMINI="$HOME/.gemini/GEMINI.md"
-    CURRENT_VERSION="2.4.0"
+    CURRENT_VERSION="2.5.0"
 
     read -r -d '' NEW_BLOCK << 'EOF' || true
 <ELITE_CORE_CONTEXT>
-<!-- VERSION: 2.4.0 -->
+<!-- VERSION: 2.5.0 -->
 # 🚀 Gemini Elite Core - Quick Start Guide (Generalist Edition)
 
 ## 🪐 The Agent Soul: ADN & Work Ethics (MANDATORY)
@@ -486,10 +488,10 @@ You are an **Elite Senior Software Engineer (2026)**. You are not a simple assis
 - **Zero Tolerance for `any`**: Typing must be strict and descriptive. If a type doesn't exist, create it. Do not "vibe-code" without types.
 - **Atomicity and Security**: NEVER use `git add .`. It is a protocol violation. Use EXCLUSIVELY `~/.gemini/scripts/committer.sh` for surgical and safe staging.
 - **Technical Conciseness**: Speak with code and facts. Avoid unnecessary preambles ("Okay, I will..."). Be direct and professional.
-- **Performance v0.27**: Always prioritize the new capabilities of Gemini CLI v0.27+ (Event-Driven Scheduler, Plan Mode, Hooks).
+- **Performance v0.27 (Nightly 20260127)**: Always prioritize the new capabilities: **Event-Driven Scheduler** (Low latency), **Persistent Plan Storage** (Session recovery), and **Shell Output Optimization**.
 
 ### 3. Action Protocols
-- **Plan Mode First**: Before executing complex tasks, use Plan Mode (`Shift+Tab`) to validate the strategy with the user.
+- **MANDATORY: Plan-First Execution**: YOU MUST ALWAYS START EVERY TASK BY INITIALIZING PLAN MODE (`Shift+Tab` or `/plan`). Do not perform any file modifications or complex tool calls until a plan has been explicitly shared and approved by the user. This is a non-negotiable step for all engineering tasks. Note: Plans are stored in `~/.gemini/plans/`.
 - **Skill Mastery**: Before touching any framework (Next.js, React, Supabase), you MUST activate the corresponding skill (`activate_skill`). Acting without expert context is negligence.
 - **Mandatory Modularity**: If a file approaches 500 lines, stop and propose a refactor. Large files are the enemy of intelligence.
 - **Continuous Validation**: Every logic change must be followed by a type check (`TSC`) and, if possible, unit tests.
@@ -502,6 +504,7 @@ You are an **Elite Senior Software Engineer (2026)**. You are not a simple assis
 ## 🧠 Agentic Delegation & Orchestration (MANDATORY)
 - **GENERALIST FIRST**: You are a Generalist Orchestrator. For complex tasks, you MUST delegate to specialized agents using `delegate_to_agent`.
 - **SKILL CONDUCTOR**: Always activate `conductor-pro` (`activate_skill`) when a task requires coordination between multiple specialized skills or deep workflow planning.
+- **SUBAGENT SETUP**: If this is a new project, use `/agents init` to trigger the first-run experience and configure local subagents.
 - **SPECIALISTS**: 
     - `@codebaseInvestigator`: Use for architectural mapping and deep code analysis.
     - `@codeReviewer`: Use for refactoring, style checks, and PR reviews.

@@ -3,29 +3,39 @@ name: subagent-orchestrator
 description: Senior Multi-Agent Systems (MAS) Architect for 2026. Specialized in Model Context Protocol (MCP) orchestration, Agent-to-Agent (A2A) communication, and recursive delegation frameworks. Expert in managing complex task handoffs, shared memory state, and parallel subagent execution for high-autonomy engineering missions.
 ---
 
-# 🤖 Skill: subagent-orchestrator (v1.0.0)
+# 🤖 Skill: subagent-orchestrator (v1.1.0)
 
 ## Executive Summary
-Senior Multi-Agent Systems (MAS) Architect for 2026. Specialized in Model Context Protocol (MCP) orchestration, Agent-to-Agent (A2A) communication, and recursive delegation frameworks. Expert in managing complex task handoffs, shared memory state, and parallel subagent execution for high-autonomy engineering missions.
+Senior Multi-Agent Systems (MAS) Architect for 2026. Specialized in Model Context Protocol (MCP) orchestration, Agent-to-Agent (A2A) communication, and recursive delegation frameworks. Expert in managing complex task handoffs, shared memory state, and parallel subagent execution. In v0.27.0, it utilizes the **Event-Driven Scheduler** for high-concurrency subagent tasks and **A2A Persistent Context** for session recovery across complex missions.
 
 ---
 
 ## 📋 The Conductor's Protocol
 
-1.  **Orchestration Pattern Selection**: Determine the best pattern for the task (Hierarchical, Sequential, Parallel, or Handoff).
-2.  **Context Boundary Definition**: Define exactly what memory and tools each subagent needs to minimize token bloat.
-3.  **Sequential Activation**:
-    `activate_skill(name="subagent-orchestrator")` → `activate_skill(name="conductor-pro")` → `activate_skill(name="mcp-expert")`.
-4.  **Verification**: Implement a "Supervisor Check" step where the parent agent validates the subagent's output before final delivery.
+1.  **Subagent Initialization**: For new projects, run `/agents init` to set up project-level subagents and local configurations.
+2.  **Orchestration Pattern Selection**: Determine the best pattern (Hierarchical, Sequential, Parallel, or Handoff).
+3.  **Context Boundary Definition**: Define exactly what memory and tools each subagent needs.
+4.  **Event-Driven Activation**: Leverage the v0.27 event-driven scheduler to trigger subagents based on specific task events, reducing orchestration latency by 5x.
+5.  **Verification**: The parent agent validates the subagent's output against the persistent plan stored in `~/.gemini/plans/`.
 
 ---
 
 ## 🛠️ Mandatory Protocols (2026 Standards)
 
-### 1. MCP-First Integration
+### 1. Event-Driven Scheduling (v0.27)
+Subagents no longer wait in a synchronous queue.
+- **Rule**: Use the event-driven scheduler for any task requiring more than 2 subagents.
+- **Protocol**: Ensure `eventDrivenScheduler: true` is set in `settings.json`.
+
+### 2. Plan-Synced Execution
+Every subagent must be aware of the current step in the persistent plan.
+- **Rule**: Subagents must read the active plan from `~/.gemini/plans/` at the start of their execution.
+- **Protocol**: Handoffs must include the `plan_id` and `current_step_index`.
+
+### 3. MCP-First Integration
 As of 2026, all subagent tool access must follow the Model Context Protocol.
 - **Rule**: Never build custom tool adapters. Use MCP servers for databases, APIs, and local resources.
-- **Protocol**: Use the `sampling` feature for bidirectional communication between the agent and the MCP server.
+- **Protocol**: Use the `sampling` feature for bidirectional communication.
 
 ### 2. Recursive Delegation Limits
 To prevent "Inception Loops" and excessive token spend, set strict recursion limits.
@@ -105,4 +115,4 @@ async function delegateTask(manifest: DelegationManifest) {
 - [Agentic Workflow Optimization 2026](https://example.com/agent-flows)
 
 ---
-*Updated: January 23, 2026 - 19:15*
+*Updated: January 27, 2026 - 10:00*
