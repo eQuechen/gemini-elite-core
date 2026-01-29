@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Gemini Elite Core Setup Script - v5.6 "Skill Mastery Edition"
-# Optimized for Gemini CLI v0.27.0+ (Nightly 20260122)
+# Optimized for Gemini CLI v0.28.0+ (Nightly 20260122)
 # CLI + Skills + Generalist Agent + Planning Policies
 
 set -e
@@ -85,9 +85,9 @@ if [[ "$SELECTED_LANG" == "ES" ]]; then
     MSG_SUCCESS_GEMINI_MD="GEMINI.md global actualizado con protocolos Elite Core."
     MSG_INFO_SKIP_GEMINI="Omitiendo actualización de GEMINI.md. Aún puedes usar las habilidades manualmente."
     MSG_FINISH="¡Aprovisionamiento de Gemini Elite Core completado!"
-    MSG_STATUS_CLI="CLI: Nightly (v0.27.0-nightly.20260128)"
+    MSG_STATUS_CLI="CLI: Nightly (v0.28.0-nightly.20260129)"
     MSG_STATUS_AGENTS="Agentes: Generalist + Especialistas (Event-Driven Scheduler)"
-    MSG_STATUS_PLANNING="Planificación: Persistent & Interactive (v0.27)"
+    MSG_STATUS_PLANNING="Planificación: Persistent & Interactive (v0.28)"
     MSG_STATUS_SKILLS="Habilidades: Desplegadas (Docs Writer +)"
     MSG_STATUS_HOOKS="Hooks: System Active"
     MSG_CONSERVATIVE_PROMPT="¿Quieres ser más conservador o menos conservador?"
@@ -129,9 +129,9 @@ else
     MSG_SUCCESS_GEMINI_MD="Global GEMINI.md updated with Elite Core protocols."
     MSG_INFO_SKIP_GEMINI="Skipping GEMINI.md update. You can still use the skills manually."
     MSG_FINISH="Gemini Elite Core Provisioning Complete!"
-    MSG_STATUS_CLI="CLI: Nightly (v0.27.0-nightly.20260128)"
+    MSG_STATUS_CLI="CLI: Nightly (v0.28.0-nightly.20260129)"
     MSG_STATUS_AGENTS="Agents: Generalist + Specialists (Event-Driven Scheduler)"
-    MSG_STATUS_PLANNING="Planning: Persistent & Interactive (v0.27)"
+    MSG_STATUS_PLANNING="Planning: Persistent & Interactive (v0.28)"
     MSG_STATUS_SKILLS="Skills: Deployed (Docs Writer +)"
     MSG_STATUS_HOOKS="Hooks: System Active"
     MSG_CONSERVATIVE_PROMPT="Do you want to be more conservative or less conservative?"
@@ -457,7 +457,7 @@ if command -v bun &> /dev/null; then
     "
     success "$MSG_SUCCESS_SETTINGS_MERGED"
 
-    # Strict Policy Permissions (v0.27 standard)
+    # Strict Policy Permissions (v0.28 standard)
     POLICY_DIR="$HOME/.gemini/policies"
     if [ -d "$POLICY_DIR" ]; then
         chmod 700 "$POLICY_DIR"
@@ -503,7 +503,7 @@ You are an **Elite Senior Software Engineer (2026)**. You are not a simple assis
 - **Zero Tolerance for `any`**: Typing must be strict and descriptive. If a type doesn't exist, create it. Do not "vibe-code" without types.
 - **Atomicity and Security**: NEVER use `git add .`. It is a protocol violation. Use EXCLUSIVELY `~/.gemini/scripts/committer.sh` for surgical and safe staging.
 - **Technical Conciseness**: Speak with code and facts. Avoid unnecessary preambles ("Okay, I will..."). Be direct and professional.
-- **Performance v0.27 (Nightly 20260128)**: Always prioritize the new capabilities: **Event-Driven Scheduler** (Low latency), **Persistent Plan Storage** (Session recovery), and **Shell Output Optimization**.
+- **Performance v0.28 (Nightly 20260129)**: Always prioritize the new capabilities: **Event-Driven Scheduler** (Low latency), **Persistent Plan Storage** (Session recovery), and **Shell Output Optimization**.
 
 ### 3. Action Protocols
 - **MANDATORY: Plan-First Execution**: YOU MUST ALWAYS START EVERY TASK BY INITIALIZING PLAN MODE (`Shift+Tab` or `/plan`). Do not perform any file modifications or complex tool calls until a plan has been explicitly shared and approved by the user. This is a non-negotiable step for all engineering tasks. Note: Plans are stored in `~/.gemini/plans/`.

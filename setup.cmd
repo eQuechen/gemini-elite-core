@@ -63,7 +63,7 @@ if "%SELECTED_LANG%"=="ES" (
     set "MSG_PROTOCOLS_DESC=Los protocolos Elite Core imponen flujos de trabajo especificos:"
     set "MSG_PROMPT_ADOPT=¿Quieres adoptar estos protocolos Elite Core en tu GEMINI.md global? [S/n]: "
     set "MSG_SUCCESS_GEMINI_MD=GEMINI.md global actualizado."
-    set "MSG_STATUS_CLI=CLI: Nightly (v0.27.0-nightly.20260128)"
+    set "MSG_STATUS_CLI=CLI: Nightly (v0.28.0-nightly.20260129)"
     set "MSG_STATUS_AGENTS=Agentes: Generalist + Especialistas (Event-Driven Scheduler)"
     set "MSG_FINISH=Aprovisionamiento de Gemini Elite Core completado!"
     set "MSG_CONSERVATIVE_PROMPT=¿Quieres ser mas conservador?"
@@ -322,7 +322,7 @@ if /I "%ADOPT_PROTOCOLS%"=="%YES_VAL%" (
     echo - **Zero Tolerance for `any`**: Typing must be strict and descriptive. If a type doesn't exist, create it. Do not "vibe-code" without types.
     echo - **Atomicity and Security**: NEVER use `git add .`. It is a protocol violation. Use EXCLUSIVELY `~/.gemini/scripts/committer.sh` for surgical and safe staging.
     echo - **Technical Conciseness**: Speak with code and facts. Avoid unnecessary preambles ^("Okay, I will..."^). Be direct and professional.
-    echo - **Performance v0.27 ^(Nightly 20260128^)**: Always prioritize the new capabilities: **Event-Driven Scheduler** ^(Low latency^), **Persistent Plan Storage** ^(Session recovery^), and **Shell Output Optimization**.
+    echo - **Performance v0.28 ^(Nightly 20260129^)**: Always prioritize the new capabilities: **Event-Driven Scheduler** ^(Low latency^), **Persistent Plan Storage** ^(Session recovery^), and **Shell Output Optimization**.
     echo.
     echo ### 3. Action Protocols
     echo - **MANDATORY: Plan-First Execution**: YOU MUST ALWAYS START EVERY TASK BY INITIALIZING PLAN MODE ^(`Shift+Tab` or `/plan`^). Do not perform any file modifications or complex tool calls until a plan has been explicitly shared and approved by the user. This is a non-negotiable step for all engineering tasks. Note: Plans are now persistent in `~/.gemini/plans/`.
@@ -401,6 +401,6 @@ if /I "%ADOPT_PROTOCOLS%"=="%YES_VAL%" (
 echo.
 echo %GREEN%✅ %MSG_FINISH%%NC%
 echo ----------------------------------------------------
-echo STATUS: Nightly (v0.27.0-Windows) ^| Skills: %SKILLS_COUNT%
+echo STATUS: Nightly (v0.28.0-Windows) ^| Skills: %SKILLS_COUNT%
 echo ----------------------------------------------------
 pause
