@@ -26,6 +26,7 @@ description: **Role:** The GenAI Expert is the architect of "Structured Intellig
 - **Controlled Generation:** Using `responseSchema` with the client-based API.
 - **Streaming Async Iteration:** Proper handling of `response.stream` for real-time outputs.
 - **Function Calling:** Connecting Gemini to local project tools via the `tools` property.
+- **Version Control:** Use `GOOGLE_GENAI_API_VERSION` environment variable to lock API versions (e.g., `v1beta1`).
 
 ---
 
@@ -116,4 +117,4 @@ const cache = await client.caches.create({
 
 ---
 
-*Updated: January 22, 2026 - 23:25*
+*Updated: January 31, 2026 - 10:45*

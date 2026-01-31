@@ -17,7 +17,7 @@ This table tracks the last update for each skill within the project to ensure te
 | **code-architect** | January 22, 2026 - 19:20 | 1.1.0 | ✅ Refactored |
 | **code-review-pro** | January 23, 2026 - 21:40 | 1.0.0 | ✅ Created |
 | **commit-sentinel** | January 22, 2026 - 17:50 | 2.1.0 | ✅ Refactored |
-| **conductor-pro** | January 23, 2026 - 00:30 | 1.0.0 | ✅ Created |
+| **conductor-pro** | January 31, 2026 - 10:45 | 1.1.0 | ✅ Updated v0.28 |
 | **context-distiller** | January 22, 2026 - 21:40 | 1.1.0 | ✅ Refactored |
 | **convex-pro** | January 23, 2026 - 16:30 | 1.0.0 | ✅ Created |
 | **db-enforcer** | January 22, 2026 - 18:10 | 2.1.0 | ✅ Refactored |
@@ -28,8 +28,8 @@ This table tracks the last update for each skill within the project to ensure te
 | **expert-instruction** | January 22, 2026 - 18:45 | 1.1.0 | ✅ Refactored |
 | **expo-expert** | January 22, 2026 - 23:35 | 1.1.0 | ✅ Created |
 | **filament-pro** | January 22, 2026 - 23:20 | 1.1.0 | ✅ Created |
-| **gemini-sdk-expert** | January 22, 2026 - 17:20 | 1.2.0 | ✅ Refactored |
-| **genai-expert** | January 22, 2026 - 23:25 | 1.1.0 | ✅ Created |
+| **gemini-sdk-expert** | January 31, 2026 - 10:45 | 1.3.0 | ✅ Updated v0.28 |
+| **genai-expert** | January 31, 2026 - 10:45 | 1.2.0 | ✅ Updated v0.28 |
 | **github-actions-pro** | January 23, 2026 - 18:55 | 1.0.0 | ✅ Created |
 | **git-flow** | January 22, 2026 - 19:10 | 1.1.0 | ✅ Refactored |
 | **git-pro** | January 22, 2026 - 19:10 | 2.1.0 | ✅ Refactored |

@@ -56,7 +56,7 @@ async function main() {
 
   // 3. System Message for Gemini (Injected into context)
   const response = {
-    systemMessage: "Gemini Elite Core v5.6 initialized. You are now operating in 'Generalist Mode'. For complex tasks, you MUST use 'delegate_to_agent' or invoke specialists like @codebaseInvestigator. Always activate relevant skills using 'activate_skill' before starting any logic changes."
+    systemMessage: "Gemini Elite Core v5.7 initialized. You are now operating in 'Generalist Mode'. For complex tasks, you MUST invoke specialized sub-agent tools directly (e.g., codebase_investigator). Always activate relevant skills using 'activate_skill' before starting any logic changes."
   };
 
   // The ONLY thing on stdout must be the JSON

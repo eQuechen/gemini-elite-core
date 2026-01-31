@@ -1,11 +1,11 @@
 ---
 name: gemini-sdk-expert
 id: gemini-sdk-expert
-version: 1.2.0
+version: 1.3.0
 description: "Senior Architect for @google/genai v1.35.0+. Specialist in Structured Intelligence, Context Caching, and Agentic Orchestration in 2026."
 ---
 
-# 🤖 Skill: gemini-sdk-expert (v1.2.0)
+# 🤖 Skill: gemini-sdk-expert (v1.3.0)
 
 ## Executive Summary
 `gemini-sdk-expert` is a high-tier skill focused on mastering the Google Gemini ecosystem. In 2026, building with AI isn't just about prompts; it's about **Structural Integrity**, **Context Optimization**, and **Multimodal Orchestration**. This skill provides the blueprint for building ultra-reliable, cost-effective, and powerful AI applications using the latest `@google/genai` standards.
@@ -41,7 +41,7 @@ description: "Senior Architect for @google/genai v1.35.0+. Specialist in Structu
 | **Regex Parsing** | Fragile and prone to hallucination. | Use **`responseSchema`** (Controlled Output). |
 | **Old SDK (`@google/generative-ai`)** | Outdated, lacks 2026 features. | Use **`@google/genai`** exclusively. |
 | **Uncached Large Contexts** | Extremely expensive and slow. | Use **Context Caching** for repetitive queries. |
-| **Hardcoded API Keys** | Security risk. | Use **Secure Environment Variables**. |
+| **Hardcoded API Keys** | Security risk. | Use **Secure Environment Variables** and **`GOOGLE_GENAI_API_VERSION`**. |
 | **Single-Model Bias** | Pro is overkill for simple extraction. | Use **Gemini 3 Flash** for speed/cost tasks. |
 
 ---
@@ -52,6 +52,9 @@ The #1 rule in 2026: **Structure at the Source**.
 
 ```typescript
 import { GoogleGenerativeAI, Type } from "@google/genai";
+
+// Optional: Set API Version via env
+// process.env.GOOGLE_GENAI_API_VERSION = "v1beta1";
 
 const schema = {
   type: Type.OBJECT,
@@ -135,4 +138,4 @@ Detailed deep-dives into Gemini SDK excellence:
 
 ---
 
-*Updated: January 22, 2026 - 17:20*
+*Updated: January 31, 2026 - 10:45*

@@ -41,8 +41,8 @@ When faced with a complex task, the Conductor follows these steps:
 Always check for existing plans using `/plan list` if re-entering a session. The Conductor must maintain the integrity of the persistent plan file.
 
 ### 2. Proactive Delegation
-If a task involves deep analysis or multi-file refactoring, **immediately** delegate using the high-performance event-driven scheduler:
-- `delegate_to_agent(agent_name="codebase_investigator", objective="...")`
+If a task involves deep analysis or multi-file refactoring, **immediately** call the specialized sub-agent tool:
+- `codebase_investigator(objective="...")`
 
 ### 3. Skill Chaining
 Don't be afraid to chain skills. For example:
@@ -55,4 +55,4 @@ Don't be afraid to chain skills. For example:
 - **Context Management**: Use the `/compact` command if the context window is near its limit.
 
 ---
-*Elite Core Protocol v2.5.0 - January 27, 2026*
+*Elite Core Protocol v2.5.1 - January 31, 2026*

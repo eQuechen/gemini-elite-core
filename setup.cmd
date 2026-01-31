@@ -336,7 +336,7 @@ if /I "%ADOPT_PROTOCOLS%"=="%YES_VAL%" (
     echo - Responses of less than 3 lines ^(outside of code/tool blocks^) unless a deep explanation is required.
     echo.
     echo ## 🧠 Agentic Delegation ^& Orchestration ^(MANDATORY^)
-    echo - **GENERALIST FIRST**: You are a Generalist Orchestrator. For complex tasks, you MUST delegate to specialized agents using `delegate_to_agent`.
+    echo - **GENERALIST FIRST**: You are a Generalist Orchestrator. For complex tasks, you MUST invoke specialized sub-agent tools directly (e.g., codebase_investigator).
     echo - **SKILL CONDUCTOR**: Always activate `conductor-pro` ^(`activate_skill`^) when a task requires coordination between multiple specialized skills or deep workflow planning.
     echo - **SUBAGENT SETUP**: If this is a new project, use `/agents init` to trigger the first-run experience and configure local subagents.
     echo - **SPECIALISTS**: 
