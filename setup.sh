@@ -230,6 +230,16 @@ else
     success "$MSG_SUCCESS_CLI_DETECTED"
 fi
 
+# Determine runner early
+if command -v bun &> /dev/null; then
+    RUNNER="bun"
+elif command -v node &> /dev/null; then
+    RUNNER="node"
+else
+    echo "ERROR: neither bun nor node found, cannot edit Gemini settings.json"
+    exit 1
+fi
+
 # 2. API KEY Configuration
 if [ -z "$GEMINI_API_KEY" ]; then
     echo -e "\n${MAGENTA}🔑 ${MSG_SEC_CONFIG}${NC}"
@@ -448,18 +458,17 @@ OPTIMIZED_SETTINGS='{
   "performance": {
     "enableCache": true
   },
-  "general": { "previewFeatures": true, "sessionRetention": { "enabled": true }, "enablePromptCompletion": false },
+  "general": { 
+  "previewFeatures": true,
+  "sessionRetention": { "enabled": true },
+  "enablePromptCompletion": false,
+  "enableAutoUpdateNotification": false
+},
   "context": { "fileFiltering": { "respectGitIgnore": true }, "loadMemoryFromIncludeDirectories": true },
   "model": { "compressionThreshold": 0.10, "name": "gemini-3-flash-preview" },
   "tools": { "shell": { "showColor": true }, "autoAccept": true },
   "ui": { "footer": { "hideContextPercentage": false }, "showMemoryUsage": true, "showModelInfoInChat": false, "showLineNumbers": false }
 }'
-
-if command -v bun &> /dev/null; then
-    RUNNER="bun"
-elif command -v node &> /dev/null; then
-    RUNNER="node"
-fi
 
 if [ -n "$RUNNER" ]; then
     export OPTIMIZED_SETTINGS_JSON="$OPTIMIZED_SETTINGS"
@@ -501,6 +510,7 @@ if [ -n "$RUNNER" ]; then
         const merged = { 
             ...current, 
             ...optimized, 
+            general: { ...(current.general || {}), ...(optimized.general || {}) },
             experimental: { ...(current.experimental || {}), ...optimized.experimental }, 
             agents: { ...(current.agents || {}), ...optimized.agents },
             mcpServers: mcpServers,
