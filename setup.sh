@@ -6,6 +6,28 @@
 
 set -e
 
+# CLI control flags
+# --reinstall           => force reinstall gemini-cli v0.28.0
+# --update-cli-latest   => update gemini-cli to the latest stable version
+# --update-cli-nightly  => update gemini-cli to the latest nightly version
+FORCE_REINSTALL="false"
+UPDATE_CLI="false"
+UPDATE_CHANNEL="latest"
+
+if [[ "$*" == *"--reinstall"* ]]; then
+    FORCE_REINSTALL="true"
+fi
+
+if [[ "$*" == *"--update-cli-latest"* ]]; then
+    UPDATE_CLI="true"
+    UPDATE_CHANNEL="latest"
+fi
+
+if [[ "$*" == *"--update-cli-nightly"* ]]; then
+    UPDATE_CLI="true"
+    UPDATE_CHANNEL="nightly"
+fi
+
 # Visual constants
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -53,13 +75,16 @@ fi
 
 # Translations
 if [[ "$SELECTED_LANG" == "ES" ]]; then
+    MSG_STEP_INSTALL_CLI="Instalando Gemini CLI..."
+    MSG_INFO_INSTALLING_PINNED="Instalando Gemini CLI fijado: v0.28.0..."
+    MSG_INFO_REINSTALLING_PINNED="Reinstalando Gemini CLI fijado: v0.28.0..."
+    MSG_INFO_UPDATING_CHANNEL="Actualizando Gemini CLI al canal:"
+    MSG_SUCCESS_UPDATED_CHANNEL="Gemini CLI actualizado al canal:"
     MSG_TITLE="Gemini Elite Core v5.6"
     MSG_SUBTITLE="La suite de aprovisionamiento inteligente (Skill Mastery Update)"
-    MSG_STEP_CHECK_CLI="Comprobando Gemini CLI..."
-    MSG_WARN_CLI_NOT_FOUND="Gemini CLI no detectado. Instalando versión @nightly..."
+    MSG_WARN_CLI_NOT_FOUND="Gemini CLI no detectado."
     MSG_SUCCESS_CLI_INSTALLED="Gemini CLI instalado."
     MSG_SUCCESS_CLI_DETECTED="Gemini CLI detectado."
-    MSG_INFO_UPDATING_CLI="Actualizando Gemini CLI a la última versión @nightly..."
     MSG_SEC_CONFIG="Configuración de Seguridad:"
     MSG_ENTER_API_KEY="Introduce tu Gemini API Key (o pulsa Enter para omitir): "
     MSG_SAVE_PERM="¿Guardar permanentemente en la configuración de tu shell? (s/n): "
@@ -97,13 +122,16 @@ if [[ "$SELECTED_LANG" == "ES" ]]; then
     MSG_PROMPT_BROWSER_USE="browser-use permite a Gemini navegar por internet, extraer datos y completar tareas en sitios web. ¿Deseas instalarlo? (Requiere Python 3 y uv) [S/n]: "
     YES_REGEX="^[Ss]?$"
 else
+    MSG_STEP_INSTALL_CLI="Installing Gemini CLI..."
+    MSG_INFO_INSTALLING_PINNED="Installing pinned Gemini CLI: v0.28.0..."
+    MSG_INFO_REINSTALLING_PINNED="Reinstalling pinned Gemini CLI: v0.28.0..."
+    MSG_INFO_UPDATING_CHANNEL="Updating Gemini CLI to channel:"
+    MSG_SUCCESS_UPDATED_CHANNEL="Gemini CLI updated to channel:"
     MSG_TITLE="Gemini Elite Core v5.6"
     MSG_SUBTITLE="The Intelligent Provisioning Suite (Skill Mastery Update)"
-    MSG_STEP_CHECK_CLI="Checking Gemini CLI..."
-    MSG_WARN_CLI_NOT_FOUND="Gemini CLI not detected. Installing @nightly version..."
+    MSG_WARN_CLI_NOT_FOUND="Gemini CLI not detected."
     MSG_SUCCESS_CLI_INSTALLED="Gemini CLI installed."
     MSG_SUCCESS_CLI_DETECTED="Gemini CLI detected."
-    MSG_INFO_UPDATING_CLI="Updating Gemini CLI to the latest @nightly version..."
     MSG_SEC_CONFIG="Security Configuration:"
     MSG_ENTER_API_KEY="Enter your Gemini API Key (or press Enter to skip): "
     MSG_SAVE_PERM="Save permanently in your shell config? (y/n): "
@@ -159,20 +187,48 @@ clear
 echo -e "${MAGENTA}${MSG_TITLE}${NC}"
 echo -e "${CYAN}${MSG_SUBTITLE}${NC}\n"
 
-# 1. Verification and Installation of Gemini CLI
-step "$MSG_STEP_CHECK_CLI"
-if command -v gemini &> /dev/null; then
-    info "$MSG_INFO_UPDATING_CLI"
-else
-    warn "$MSG_WARN_CLI_NOT_FOUND"
+# 1. Installation / Update of Gemini CLI
+step "$MSG_STEP_INSTALL_CLI"
+
+# If reinstall is requested, always reinstall pinned first
+if [[ "$FORCE_REINSTALL" == "true" ]]; then
+    info "$MSG_INFO_REINSTALLING_PINNED"
+    if command -v bun &> /dev/null; then
+        bun install -g @google/gemini-cli@0.28.0 > /dev/null
+    else
+        npm install -g @google/gemini-cli@0.28.0 > /dev/null
+    fi
+    success "$MSG_SUCCESS_CLI_INSTALLED"
 fi
 
-if command -v bun &> /dev/null; then
-    bun install -g @google/gemini-cli@nightly > /dev/null
+# If update is requested, update after reinstall (if reinstall happened)
+if [[ "$UPDATE_CLI" == "true" ]]; then
+    info "$MSG_INFO_UPDATING_CHANNEL @$UPDATE_CHANNEL"
+    if command -v bun &> /dev/null; then
+        bun install -g @google/gemini-cli@"$UPDATE_CHANNEL" > /dev/null
+    else
+        npm install -g @google/gemini-cli@"$UPDATE_CHANNEL" > /dev/null
+    fi
+    success "$MSG_SUCCESS_UPDATED_CHANNEL @$UPDATE_CHANNEL"
+
+# Default behavior: install v0.28.0 only if gemini is not installed
+elif ! command -v gemini &> /dev/null; then
+    warn "$MSG_WARN_CLI_NOT_FOUND"
+    info "$MSG_INFO_INSTALLING_PINNED"
+    if command -v bun &> /dev/null; then
+        bun install -g @google/gemini-cli@0.28.0 > /dev/null
+    else
+        npm install -g @google/gemini-cli@0.28.0 > /dev/null
+    fi
+    success "$MSG_SUCCESS_CLI_INSTALLED"
+
+# If reinstall happened and no update was requested, we're done
+elif [[ "$FORCE_REINSTALL" == "true" ]]; then
+    success "$MSG_SUCCESS_CLI_INSTALLED"
+
 else
-    npm install -g @google/gemini-cli@nightly > /dev/null
+    success "$MSG_SUCCESS_CLI_DETECTED"
 fi
-success "$MSG_SUCCESS_CLI_INSTALLED"
 
 # 2. API KEY Configuration
 if [ -z "$GEMINI_API_KEY" ]; then
