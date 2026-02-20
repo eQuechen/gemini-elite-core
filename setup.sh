@@ -42,6 +42,99 @@ success() { echo -e "${GREEN}success${NC} $1"; }
 warn() { echo -e "${YELLOW}warn${NC} $1"; }
 step() { echo -e "\n${CYAN}🚀 $1${NC}"; }
 
+# ------------------------------------------------------------
+# CLI Installation / Update Logic
+# Encapsulates the installation, reinstall and update behavior
+# for the Gemini CLI.
+# ------------------------------------------------------------
+install_cli() {
+
+    # 1. Installation / Update of Gemini CLI
+    step "$MSG_STEP_INSTALL_CLI"
+
+    # If reinstall is requested, always reinstall pinned first
+    if [[ "$FORCE_REINSTALL" == "true" ]]; then
+        info "$MSG_INFO_REINSTALLING_PINNED"
+        install_global_package "@google/gemini-cli@0.28.0"
+        success "$MSG_SUCCESS_CLI_INSTALLED"
+    fi
+
+    # If update is requested, update after reinstall (if reinstall happened)
+    if [[ "$UPDATE_CLI" == "true" ]]; then
+        info "$MSG_INFO_UPDATING_CHANNEL @$UPDATE_CHANNEL"
+        install_global_package "@google/gemini-cli@$UPDATE_CHANNEL"
+        success "$MSG_SUCCESS_UPDATED_CHANNEL @$UPDATE_CHANNEL"
+
+    # Default behavior: install v0.28.0 only if gemini is not installed
+    elif ! command -v gemini &> /dev/null; then
+        warn "$MSG_WARN_CLI_NOT_FOUND"
+        info "$MSG_INFO_INSTALLING_PINNED"
+        install_global_package "@google/gemini-cli@0.28.0"
+        success "$MSG_SUCCESS_CLI_INSTALLED"
+
+    else
+        success "$MSG_SUCCESS_CLI_DETECTED"
+    fi
+}
+
+# ------------------------------------------------------------
+# Package Manager Detection
+# Priority:
+#   1) bun (faster / modern)
+#   2) npm (universal fallback)
+#
+# Centralizes package manager selection to avoid repeating
+# conditional logic across multiple install steps.
+# ------------------------------------------------------------
+detect_package_manager() {
+    if command -v bun &> /dev/null; then
+        PKG_MANAGER="bun"
+    elif command -v npm &> /dev/null; then
+        PKG_MANAGER="npm"
+    else
+        echo "ERROR: neither bun nor npm found. Cannot install Gemini CLI."
+        exit 1
+    fi
+}
+
+# ------------------------------------------------------------
+# Global Package Installation Abstraction
+# Installs a package globally using the detected package manager.
+#
+# bun  -> bun add -g
+# npm  -> npm install -g
+#
+# Centralizes global installation logic to avoid duplication
+# and ensure consistent behavior across CLI install/update.
+# ------------------------------------------------------------
+install_global_package() {
+    if [ "$PKG_MANAGER" = "bun" ]; then
+        bun add -g "$1" > /dev/null
+    else
+        npm install -g "$1" > /dev/null
+    fi
+}
+
+# ------------------------------------------------------------
+# Runner Detection
+# Priority:
+#   1) bun (preferred modern runtime)
+#   2) node (universal fallback)
+#
+# Centralizes runtime selection to avoid repeating
+# conditional logic when executing inline JS scripts.
+# ------------------------------------------------------------
+detect_runner() {
+    if command -v bun &> /dev/null; then
+        RUNNER="bun"
+    elif command -v node &> /dev/null; then
+        RUNNER="node"
+    else
+        echo "ERROR: neither bun nor node found, cannot edit Gemini settings.json"
+        exit 1
+    fi
+}
+
 # Auto-Update Logic
 if [[ "$*" == *"--update"* ]]; then
     step "Updating Gemini Elite Core from repository..."
@@ -56,7 +149,7 @@ fi
 # Language Selection
 if [[ "$*" == *"--update"* ]]; then
     # Auto-select English or Spanish based on existing config if possible, else English
-    SELECTED_LANG="EN" 
+    SELECTED_LANG="EN"
     CONSERVATIVE_MODE="false"
 else
     clear
@@ -187,54 +280,12 @@ clear
 echo -e "${MAGENTA}${MSG_TITLE}${NC}"
 echo -e "${CYAN}${MSG_SUBTITLE}${NC}\n"
 
-# 1. Installation / Update of Gemini CLI
-step "$MSG_STEP_INSTALL_CLI"
-
-# If reinstall is requested, always reinstall pinned first
-if [[ "$FORCE_REINSTALL" == "true" ]]; then
-    info "$MSG_INFO_REINSTALLING_PINNED"
-    if command -v bun &> /dev/null; then
-        bun install -g @google/gemini-cli@0.28.0 > /dev/null
-    else
-        npm install -g @google/gemini-cli@0.28.0 > /dev/null
-    fi
-    success "$MSG_SUCCESS_CLI_INSTALLED"
-fi
-
-# If update is requested, update after reinstall (if reinstall happened)
-if [[ "$UPDATE_CLI" == "true" ]]; then
-    info "$MSG_INFO_UPDATING_CHANNEL @$UPDATE_CHANNEL"
-    if command -v bun &> /dev/null; then
-        bun install -g @google/gemini-cli@"$UPDATE_CHANNEL" > /dev/null
-    else
-        npm install -g @google/gemini-cli@"$UPDATE_CHANNEL" > /dev/null
-    fi
-    success "$MSG_SUCCESS_UPDATED_CHANNEL @$UPDATE_CHANNEL"
-
-# Default behavior: install v0.28.0 only if gemini is not installed
-elif ! command -v gemini &> /dev/null; then
-    warn "$MSG_WARN_CLI_NOT_FOUND"
-    info "$MSG_INFO_INSTALLING_PINNED"
-    if command -v bun &> /dev/null; then
-        bun install -g @google/gemini-cli@0.28.0 > /dev/null
-    else
-        npm install -g @google/gemini-cli@0.28.0 > /dev/null
-    fi
-    success "$MSG_SUCCESS_CLI_INSTALLED"
-
-else
-    success "$MSG_SUCCESS_CLI_DETECTED"
-fi
-
-# Determine runner early
-if command -v bun &> /dev/null; then
-    RUNNER="bun"
-elif command -v node &> /dev/null; then
-    RUNNER="node"
-else
-    echo "ERROR: neither bun nor node found, cannot edit Gemini settings.json"
-    exit 1
-fi
+# ------------------------------------------------------------
+# Detect package manager before any CLI installation
+# ------------------------------------------------------------
+detect_package_manager
+detect_runner
+install_cli
 
 # 2. API KEY Configuration
 if [ -z "$GEMINI_API_KEY" ]; then
