@@ -222,10 +222,6 @@ elif ! command -v gemini &> /dev/null; then
     fi
     success "$MSG_SUCCESS_CLI_INSTALLED"
 
-# If reinstall happened and no update was requested, we're done
-elif [[ "$FORCE_REINSTALL" == "true" ]]; then
-    success "$MSG_SUCCESS_CLI_INSTALLED"
-
 else
     success "$MSG_SUCCESS_CLI_DETECTED"
 fi
