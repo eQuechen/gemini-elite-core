@@ -6,8 +6,21 @@
 
 set -e
 
+# ------------------------------------------------------------
+# Local overrides (optional)
+# - Put GEMINI_VERSION=0.29.0 in .env to override the default
+# ------------------------------------------------------------
+if [ -f .env ]; then
+  set -a
+  . ./.env
+  set +a
+fi
+
+# Default pinned CLI version (override via .env or env var)
+GEMINI_VERSION="${GEMINI_VERSION:-0.28.0}"
+
 # CLI control flags
-# --reinstall           => force reinstall gemini-cli v0.28.0
+# --reinstall           => force reinstall pinned gemini-cli (GEMINI_VERSION)
 # --update-cli-latest   => update gemini-cli to the latest stable version
 # --update-cli-nightly  => update gemini-cli to the latest nightly version
 FORCE_REINSTALL="false"
@@ -55,7 +68,7 @@ install_cli() {
     # If reinstall is requested, always reinstall pinned first
     if [[ "$FORCE_REINSTALL" == "true" ]]; then
         info "$MSG_INFO_REINSTALLING_PINNED"
-        install_global_package "@google/gemini-cli@0.28.0"
+        install_global_package "@google/gemini-cli@${GEMINI_VERSION}"
         success "$MSG_SUCCESS_CLI_INSTALLED"
     fi
 
@@ -69,7 +82,7 @@ install_cli() {
     elif ! command -v gemini &> /dev/null; then
         warn "$MSG_WARN_CLI_NOT_FOUND"
         info "$MSG_INFO_INSTALLING_PINNED"
-        install_global_package "@google/gemini-cli@0.28.0"
+        install_global_package "@google/gemini-cli@${GEMINI_VERSION}"
         success "$MSG_SUCCESS_CLI_INSTALLED"
 
     else
@@ -133,6 +146,38 @@ detect_runner() {
         echo "ERROR: neither bun nor node found, cannot edit Gemini settings.json"
         exit 1
     fi
+}
+
+# ------------------------------------------------------------
+# Skills Installation
+# Installs all local skills found in ./skills, skipping deploy
+# when SKILL.md hash matches already installed version.
+# ------------------------------------------------------------
+install_skills() {
+    step "$MSG_STEP_INST_SKILLS"
+    SKILLS_COUNT=0
+    cd skills
+    for skill_dir in */; do
+        [ -d "$skill_dir" ] || continue
+        SKILL_NAME="${skill_dir%/}"
+        LOCAL_SKILL="$SKILL_NAME/SKILL.md"
+        INSTALLED_SKILL="$HOME/.gemini/skills/$SKILL_NAME/SKILL.md"
+
+        if [ -f "$LOCAL_SKILL" ] && [ -f "$INSTALLED_SKILL" ]; then
+            LOCAL_HASH=$(shasum -a 256 "$LOCAL_SKILL" | awk '{ print $1 }')
+            INSTALLED_HASH=$(shasum -a 256 "$INSTALLED_SKILL" | awk '{ print $1 }')
+            if [ "$LOCAL_HASH" == "$INSTALLED_HASH" ]; then
+                SKILLS_COUNT=$((SKILLS_COUNT + 1))
+                continue
+            fi
+        fi
+        info "$MSG_INFO_DEPLOYING $SKILL_NAME..."
+        # En v26 nightly, --consent es un flag global
+        gemini skills install "$skill_dir" --consent &> /dev/null || true
+        SKILLS_COUNT=$((SKILLS_COUNT + 1))
+    done
+    cd ..
+    success "$MSG_SUCCESS_SKILLS_DEPLOYED"
 }
 
 # Auto-Update Logic
@@ -334,30 +379,7 @@ fi
 # fi
 
 # 3. Massive Skill Installation
-step "$MSG_STEP_INST_SKILLS"
-SKILLS_COUNT=0
-cd skills
-for skill_dir in */; do
-    [ -d "$skill_dir" ] || continue
-    SKILL_NAME="${skill_dir%/}"
-    LOCAL_SKILL="$SKILL_NAME/SKILL.md"
-    INSTALLED_SKILL="$HOME/.gemini/skills/$SKILL_NAME/SKILL.md"
-
-    if [ -f "$LOCAL_SKILL" ] && [ -f "$INSTALLED_SKILL" ]; then
-        LOCAL_HASH=$(shasum -a 256 "$LOCAL_SKILL" | awk '{ print $1 }')
-        INSTALLED_HASH=$(shasum -a 256 "$INSTALLED_SKILL" | awk '{ print $1 }')
-        if [ "$LOCAL_HASH" == "$INSTALLED_HASH" ]; then 
-            SKILLS_COUNT=$((SKILLS_COUNT + 1))
-            continue
-        fi
-    fi
-    info "$MSG_INFO_DEPLOYING $SKILL_NAME..."
-    # En v26 nightly, --consent es un flag global
-    gemini skills install "$skill_dir" --consent &> /dev/null || true
-    SKILLS_COUNT=$((SKILLS_COUNT + 1))
-done
-cd ..
-success "$MSG_SUCCESS_SKILLS_DEPLOYED"
+install_skills
 
 # 4. Global MCP Registration
 step "$MSG_STEP_CONFIG_MCP"
