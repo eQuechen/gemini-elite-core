@@ -116,7 +116,30 @@ STARTED_BY_ME=0
 # Setup explícito (--setup)
 # ============================================================
 if [ "$RUN_SETUP" -eq 1 ]; then
-  docker run --rm -it \
+  SETUP_CMD='cd /gemini && chmod +x setup.sh && ./setup.sh'
+
+  # Caso A: contenedor ya corriendo
+  if docker ps --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+    docker exec -it "$CONTAINER_NAME" sh -c "$SETUP_CMD"
+    exit $?
+  fi
+
+  # Caso B: contenedor existe pero está parado
+  if docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+    docker start "$CONTAINER_NAME" >/dev/null
+    STARTED_BY_ME=1
+    docker exec -it "$CONTAINER_NAME" sh -c "$SETUP_CMD"
+    STATUS=$?
+
+    if [ "$STARTED_BY_ME" -eq 1 ]; then
+      docker stop "$CONTAINER_NAME" >/dev/null
+    fi
+
+    exit $STATUS
+  fi
+
+  # Caso C: contenedor no existe, se crea con nombre fijo
+  docker run --name "$CONTAINER_NAME" --init -it \
     --entrypoint sh \
     -e GEMINI_API_KEY="$GEMINI_API_KEY" \
     -e IS_REINSTALL="$IS_REINSTALL" \
@@ -125,7 +148,7 @@ if [ "$RUN_SETUP" -eq 1 ]; then
     -v "$PWD/.env:/workspace/.env:ro" \
     -w /workspace \
     "$IMAGE" \
-    -lc "cd /gemini && chmod +x setup.sh && ./setup.sh"
+    -c "$SETUP_CMD"
   exit $?
 fi
 
@@ -133,7 +156,7 @@ fi
 # Caso 1: contenedor corriendo
 # ============================================================
 if docker ps --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
-  docker exec -it "$CONTAINER_NAME" sh -lc "$CMD" -- "${GEMINI_ARGS[@]}"
+  docker exec -it "$CONTAINER_NAME" sh -c "$CMD" -- "${GEMINI_ARGS[@]}"
   exit $?
 fi
 
@@ -144,7 +167,7 @@ if docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
   docker start "$CONTAINER_NAME" >/dev/null
   STARTED_BY_ME=1
 
-  docker exec -it "$CONTAINER_NAME" sh -lc "$CMD" -- "${GEMINI_ARGS[@]}"
+  docker exec -it "$CONTAINER_NAME" sh -c "$CMD" -- "${GEMINI_ARGS[@]}"
   STATUS=$?
 
   if [ "$STARTED_BY_ME" -eq 1 ]; then
@@ -166,4 +189,4 @@ docker run --name "$CONTAINER_NAME" --init -it \
   -v "$PWD/.env:/workspace/.env:ro" \
   -w /workspace \
   "$IMAGE" \
-  -lc "$CMD" -- "${GEMINI_ARGS[@]}"
+  -c "$CMD" -- "${GEMINI_ARGS[@]}"

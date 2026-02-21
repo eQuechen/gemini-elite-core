@@ -15,6 +15,7 @@ FROM node:20-bookworm
 # - Application code lives inside the image
 # - User project is mounted at runtime
 # - Persistent config stored in Docker volume
+# - bun is preferred package manager (installed at build time)
 # ============================================================
 
 
@@ -52,6 +53,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
+# ------------------------------------------------------------
+# bun install
+# ------------------------------------------------------------
+RUN curl -fsSL https://bun.sh/install | bash \
+    && ln -s /root/.bun/bin/bun /usr/local/bin/bun
+ENV PATH="/root/.bun/bin:${PATH}"
 
 # ------------------------------------------------------------
 # Application directory inside container
