@@ -1,0 +1,169 @@
+#!/bin/zsh
+# ============================================================
+# gemini-safe
+#
+# Objetivo:
+# - Lanzar Gemini CLI dentro de un contenedor Docker seguro
+# - Reutilizar el contenedor si ya existe (corriendo o parado)
+# - Permitir pasar argumentos tipo:
+#       gemini-safe -r
+#       gemini-safe -R
+#
+# Comportamiento:
+# - Si el contenedor "gemini-safe" ya está corriendo:
+#     -> usa docker exec y reutiliza el contenedor existente
+# - Si el contenedor existe pero está parado:
+#     -> lo arranca con docker start y luego docker exec
+#     -> cuando termina el proceso, lo vuelve a parar
+# - Si no existe:
+#     -> crea el contenedor con docker run
+#
+# Persistencia:
+# - gemini-config:/root/.gemini
+#
+# Seguridad:
+# - Solo monta el proyecto actual en /workspace (RW)
+#
+# Trust prompt:
+# - Borra trustedFolders.json SIEMPRE antes de arrancar Gemini
+#   para forzar el prompt de confianza en cada ejecución.
+#
+# Reinstall ligero (-r):
+# - Elimina solo el contenedor
+# - Mantiene volumen y configuración
+#
+# Reinstall total (-R):
+# - Elimina contenedor
+# - Elimina volumen gemini-config
+# - Instalación completamente limpia
+# ============================================================
+
+CONTAINER_NAME="gemini-safe"
+IMAGE="gemini-elite:local"
+VOLUME_NAME="gemini-config"
+
+# ============================================================
+# Detectar flags
+# ============================================================
+REINSTALL_LIGHT=0
+REINSTALL_FULL=0
+IS_REINSTALL=0
+GEMINI_ARGS=()
+RUN_SETUP=0
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -r) REINSTALL_LIGHT=1; shift ;;
+    -R) REINSTALL_FULL=1; shift ;;
+    --setup) RUN_SETUP=1; shift ;;
+    --) shift; GEMINI_ARGS+=("$@"); break ;;
+    *) GEMINI_ARGS+=("$1"); shift ;;
+  esac
+done
+
+# ============================================================
+# Reinstall ligero (-r)
+# ============================================================
+if [ "$REINSTALL_LIGHT" -eq 1 ]; then
+  if docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+    docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1
+  fi
+fi
+
+# ============================================================
+# Reinstall total (-R)
+# ============================================================
+if [ "$REINSTALL_FULL" -eq 1 ]; then
+  if docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+    docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1
+  fi
+
+  if docker volume ls --format '{{.Name}}' | grep -qx "$VOLUME_NAME"; then
+    docker volume rm "$VOLUME_NAME" >/dev/null 2>&1
+  fi
+fi
+
+if [ "$REINSTALL_LIGHT" -eq 1 ] || [ "$REINSTALL_FULL" -eq 1 ]; then
+  IS_REINSTALL=1
+fi
+
+# ============================================================
+# Script interno dentro del contenedor
+# ============================================================
+CMD='
+  rm -f /root/.gemini/trustedFolders.json 2>/dev/null;
+
+  cd /gemini || exit 1;
+  chmod +x setup.sh;
+
+  if ! command -v gemini >/dev/null 2>&1; then
+    if [ "$IS_REINSTALL" = "1" ]; then
+      ./setup.sh || exit 1
+    else
+      echo "ERROR: gemini CLI not installed inside container."
+      echo "Run: gemini-safe --setup"
+      exit 1
+    fi
+  fi
+
+  cd /workspace || exit 1;
+  exec gemini "$@"
+'
+
+STARTED_BY_ME=0
+
+# ============================================================
+# Setup explícito (--setup)
+# ============================================================
+if [ "$RUN_SETUP" -eq 1 ]; then
+  docker run --rm -it \
+    --entrypoint sh \
+    -e GEMINI_API_KEY="$GEMINI_API_KEY" \
+    -e IS_REINSTALL="$IS_REINSTALL" \
+    -v "$VOLUME_NAME":/root/.gemini \
+    -v "$PWD:/workspace:rw" \
+    -v "$PWD/.env:/workspace/.env:ro" \
+    -w /workspace \
+    "$IMAGE" \
+    -lc "cd /gemini && chmod +x setup.sh && ./setup.sh"
+  exit $?
+fi
+
+# ============================================================
+# Caso 1: contenedor corriendo
+# ============================================================
+if docker ps --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+  docker exec -it "$CONTAINER_NAME" sh -lc "$CMD" -- "${GEMINI_ARGS[@]}"
+  exit $?
+fi
+
+# ============================================================
+# Caso 2: contenedor existe pero parado
+# ============================================================
+if docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+  docker start "$CONTAINER_NAME" >/dev/null
+  STARTED_BY_ME=1
+
+  docker exec -it "$CONTAINER_NAME" sh -lc "$CMD" -- "${GEMINI_ARGS[@]}"
+  STATUS=$?
+
+  if [ "$STARTED_BY_ME" -eq 1 ]; then
+    docker stop "$CONTAINER_NAME" >/dev/null
+  fi
+
+  exit $STATUS
+fi
+
+# ============================================================
+# Caso 3: contenedor no existe
+# ============================================================
+docker run --name "$CONTAINER_NAME" --init -it \
+  --entrypoint sh \
+  -e GEMINI_API_KEY="$GEMINI_API_KEY" \
+  -e IS_REINSTALL="$IS_REINSTALL" \
+  -v "$VOLUME_NAME":/root/.gemini \
+  -v "$PWD:/workspace:rw" \
+  -v "$PWD/.env:/workspace/.env:ro" \
+  -w /workspace \
+  "$IMAGE" \
+  -lc "$CMD" -- "${GEMINI_ARGS[@]}"
