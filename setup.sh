@@ -21,8 +21,8 @@ GEMINI_VERSION="${GEMINI_VERSION:-0.28.0}"
 
 # CLI control flags
 # --reinstall           => force reinstall pinned gemini-cli (GEMINI_VERSION)
-# --update-cli-latest   => update gemini-cli to the latest stable version
-# --update-cli-nightly  => update gemini-cli to the latest nightly version
+# --update-latest   => update gemini-cli to the latest stable version
+# --update-nightly  => update gemini-cli to the latest nightly version
 FORCE_REINSTALL="false"
 UPDATE_CLI="false"
 UPDATE_CHANNEL="latest"
@@ -31,12 +31,12 @@ if [[ "$*" == *"--reinstall"* ]]; then
     FORCE_REINSTALL="true"
 fi
 
-if [[ "$*" == *"--update-cli-latest"* ]]; then
+if [[ "$*" == *"--update-latest"* ]]; then
     UPDATE_CLI="true"
     UPDATE_CHANNEL="latest"
 fi
 
-if [[ "$*" == *"--update-cli-nightly"* ]]; then
+if [[ "$*" == *"--update-nightly"* ]]; then
     UPDATE_CLI="true"
     UPDATE_CHANNEL="nightly"
 fi
@@ -54,6 +54,9 @@ info() { echo -e "${BLUE}info${NC} $1"; }
 success() { echo -e "${GREEN}success${NC} $1"; }
 warn() { echo -e "${YELLOW}warn${NC} $1"; }
 step() { echo -e "\n${CYAN}🚀 $1${NC}"; }
+
+# Global error flag to avoid misleading success summaries.
+SETUP_HAS_ERRORS=0
 
 # ------------------------------------------------------------
 # CLI Installation / Update Logic
@@ -105,9 +108,12 @@ detect_package_manager() {
     elif command -v npm &> /dev/null; then
         PKG_MANAGER="npm"
     else
-        echo "ERROR: neither bun nor npm found. Cannot install Gemini CLI."
+        echo "✖ Error: Neither Bun nor npm was found in your system."
+        echo "Please install Bun (https://bun.sh) or Node.js (which includes npm) and try again."
         exit 1
     fi
+
+    info "$MSG_INFO_PKG_MANAGER_DETECTED $PKG_MANAGER"
 }
 
 # ------------------------------------------------------------
@@ -156,6 +162,7 @@ detect_runner() {
 install_skills() {
     step "$MSG_STEP_INST_SKILLS"
     SKILLS_COUNT=0
+    SKILLS_FAILED=0
     cd skills
     for skill_dir in */; do
         [ -d "$skill_dir" ] || continue
@@ -173,11 +180,19 @@ install_skills() {
         fi
         info "$MSG_INFO_DEPLOYING $SKILL_NAME..."
         # En v26 nightly, --consent es un flag global
-        gemini skills install "$skill_dir" --consent &> /dev/null || true
+        if ! gemini skills install "$skill_dir" --consent &> /dev/null; then
+            warn "$MSG_WARN_ACTION_FAILED skill '$SKILL_NAME'"
+            SKILLS_FAILED=$((SKILLS_FAILED + 1))
+            SETUP_HAS_ERRORS=1
+        fi
         SKILLS_COUNT=$((SKILLS_COUNT + 1))
     done
     cd ..
-    success "$MSG_SUCCESS_SKILLS_DEPLOYED"
+    if [ "$SKILLS_FAILED" -eq 0 ]; then
+        success "$MSG_SUCCESS_SKILLS_DEPLOYED"
+    else
+        warn "$MSG_WARN_SKILLS_FAILED $SKILLS_FAILED"
+    fi
 }
 
 # Auto-Update Logic
@@ -214,9 +229,10 @@ fi
 # Translations
 if [[ "$SELECTED_LANG" == "ES" ]]; then
     MSG_STEP_INSTALL_CLI="Instalando Gemini CLI..."
-    MSG_INFO_INSTALLING_PINNED="Instalando Gemini CLI fijado: v0.28.0..."
-    MSG_INFO_REINSTALLING_PINNED="Reinstalando Gemini CLI fijado: v0.28.0..."
+    MSG_INFO_INSTALLING_PINNED="Instalando Gemini CLI fijado: v${GEMINI_VERSION}..."
+    MSG_INFO_REINSTALLING_PINNED="Reinstalando Gemini CLI fijado: v${GEMINI_VERSION}..."
     MSG_INFO_UPDATING_CHANNEL="Actualizando Gemini CLI al canal:"
+    MSG_INFO_PKG_MANAGER_DETECTED="Gestor de paquetes detectado:"
     MSG_SUCCESS_UPDATED_CHANNEL="Gemini CLI actualizado al canal:"
     MSG_TITLE="Gemini Elite Core v5.6"
     MSG_SUBTITLE="La suite de aprovisionamiento inteligente (Skill Mastery Update)"
@@ -248,11 +264,16 @@ if [[ "$SELECTED_LANG" == "ES" ]]; then
     MSG_SUCCESS_GEMINI_MD="GEMINI.md global actualizado con protocolos Elite Core."
     MSG_INFO_SKIP_GEMINI="Omitiendo actualización de GEMINI.md. Aún puedes usar las habilidades manualmente."
     MSG_FINISH="¡Aprovisionamiento de Gemini Elite Core completado!"
-    MSG_STATUS_CLI="CLI: Nightly (v0.28.0-nightly.20260129)"
+    MSG_STATUS_CLI="CLI: Configurado (v${GEMINI_VERSION})"
     MSG_STATUS_AGENTS="Agentes: Generalist + Especialistas (Event-Driven Scheduler)"
     MSG_STATUS_PLANNING="Planificación: Persistent & Interactive (v0.28)"
     MSG_STATUS_SKILLS="Habilidades: Desplegadas (Docs Writer +)"
     MSG_STATUS_HOOKS="Hooks: System Active"
+    MSG_WARN_ACTION_FAILED="No se pudo completar:"
+    MSG_ERROR_GEMINI_MISSING="Gemini CLI no está disponible en PATH después de la instalación. Abortando para evitar estado inconsistente."
+    MSG_WARN_SKILLS_FAILED="Algunas skills fallaron durante la instalación. Total fallidas:"
+    MSG_WARN_MCP_FAILED="Algunos MCP fallaron durante la configuración. Total fallidos:"
+    MSG_FINISH_WITH_WARNINGS="Aprovisionamiento completado con advertencias."
     MSG_CONSERVATIVE_PROMPT="¿Quieres ser más conservador o menos conservador?"
     MSG_CONSERVATIVE_OPT1="1) Menos conservador (Más potente) [Predeterminado]"
     MSG_CONSERVATIVE_OPT2="2) Más conservador"
@@ -261,9 +282,10 @@ if [[ "$SELECTED_LANG" == "ES" ]]; then
     YES_REGEX="^[Ss]?$"
 else
     MSG_STEP_INSTALL_CLI="Installing Gemini CLI..."
-    MSG_INFO_INSTALLING_PINNED="Installing pinned Gemini CLI: v0.28.0..."
-    MSG_INFO_REINSTALLING_PINNED="Reinstalling pinned Gemini CLI: v0.28.0..."
+    MSG_INFO_INSTALLING_PINNED="Installing pinned Gemini CLI: v${GEMINI_VERSION}..."
+    MSG_INFO_REINSTALLING_PINNED="Reinstalling pinned Gemini CLI: v${GEMINI_VERSION}..."
     MSG_INFO_UPDATING_CHANNEL="Updating Gemini CLI to channel:"
+    MSG_INFO_PKG_MANAGER_DETECTED="Detected package manager:"
     MSG_SUCCESS_UPDATED_CHANNEL="Gemini CLI updated to channel:"
     MSG_TITLE="Gemini Elite Core v5.6"
     MSG_SUBTITLE="The Intelligent Provisioning Suite (Skill Mastery Update)"
@@ -295,11 +317,16 @@ else
     MSG_SUCCESS_GEMINI_MD="Global GEMINI.md updated with Elite Core protocols."
     MSG_INFO_SKIP_GEMINI="Skipping GEMINI.md update. You can still use the skills manually."
     MSG_FINISH="Gemini Elite Core Provisioning Complete!"
-    MSG_STATUS_CLI="CLI: Nightly (v0.28.0-nightly.20260129)"
+    MSG_STATUS_CLI="CLI: Configured (v${GEMINI_VERSION})"
     MSG_STATUS_AGENTS="Agents: Generalist + Specialists (Event-Driven Scheduler)"
     MSG_STATUS_PLANNING="Planning: Persistent & Interactive (v0.28)"
     MSG_STATUS_SKILLS="Skills: Deployed (Docs Writer +)"
     MSG_STATUS_HOOKS="Hooks: System Active"
+    MSG_WARN_ACTION_FAILED="Could not complete:"
+    MSG_ERROR_GEMINI_MISSING="Gemini CLI is not available in PATH after installation. Aborting to avoid inconsistent state."
+    MSG_WARN_SKILLS_FAILED="Some skills failed during installation. Failed total:"
+    MSG_WARN_MCP_FAILED="Some MCPs failed during configuration. Failed total:"
+    MSG_FINISH_WITH_WARNINGS="Provisioning completed with warnings."
     MSG_CONSERVATIVE_PROMPT="Do you want to be more conservative or less conservative?"
     MSG_CONSERVATIVE_OPT1="1) Less conservative (Most powerful) [Default]"
     MSG_CONSERVATIVE_OPT2="2) More conservative"
@@ -331,6 +358,11 @@ echo -e "${CYAN}${MSG_SUBTITLE}${NC}\n"
 detect_package_manager
 detect_runner
 install_cli
+
+if ! command -v gemini &> /dev/null; then
+    warn "$MSG_ERROR_GEMINI_MISSING"
+    exit 1
+fi
 
 # 2. API KEY Configuration
 if [ -z "$GEMINI_API_KEY" ]; then
@@ -383,6 +415,7 @@ install_skills
 
 # 4. Global MCP Registration
 step "$MSG_STEP_CONFIG_MCP"
+MCP_FAILED=0
 check_mcp() {
     local name=$1
     if gemini mcp list 2>/dev/null | grep -q "✓ $name:\|✗ $name:"; then
@@ -394,7 +427,11 @@ check_mcp() {
 # Add chrome-devtools if missing
 if ! check_mcp "chrome-devtools"; then
     info "Adding chrome-devtools MCP..."
-    gemini mcp add --scope user chrome-devtools npx -y chrome-devtools-mcp @latest &> /dev/null || true
+    if ! gemini mcp add --scope user chrome-devtools npx -y chrome-devtools-mcp @latest &> /dev/null; then
+        warn "$MSG_WARN_ACTION_FAILED MCP 'chrome-devtools'"
+        MCP_FAILED=$((MCP_FAILED + 1))
+        SETUP_HAS_ERRORS=1
+    fi
 fi
 
 # Filesystem MCP Selection (Automatic)
@@ -407,22 +444,39 @@ if ! check_mcp "filesystem" || gemini mcp list 2>/dev/null | grep -q "modelconte
         if [ ! -f "$BINARY_PATH" ]; then
             info "Installing rust-mcp-filesystem (Fast/Experimental)..."
             if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "linux"* ]]; then
-                curl --proto '=https' --tlsv1.2 -LsSf https://github.com/rust-mcp-stack/rust-mcp-filesystem/releases/download/v0.4.0/rust-mcp-filesystem-installer.sh | sh &> /dev/null || true
+                if ! curl --proto '=https' --tlsv1.2 -LsSf https://github.com/rust-mcp-stack/rust-mcp-filesystem/releases/download/v0.4.0/rust-mcp-filesystem-installer.sh | sh &> /dev/null; then
+                    warn "$MSG_WARN_ACTION_FAILED rust-mcp-filesystem installer"
+                    MCP_FAILED=$((MCP_FAILED + 1))
+                    SETUP_HAS_ERRORS=1
+                fi
                 BINARY_PATH=$(command -v "$BINARY_NAME" || echo "$HOME/.cargo/bin/$BINARY_NAME" || echo "/opt/homebrew/bin/$BINARY_NAME")
             fi
         fi
 
         if [ -f "$BINARY_PATH" ] || command -v "$BINARY_NAME" &> /dev/null; then
             [ -z "$BINARY_PATH" ] && BINARY_PATH=$(command -v "$BINARY_NAME")
-            gemini mcp add --scope user filesystem "$BINARY_PATH" -w "." "~/.gemini/skills" &> /dev/null || true
-            success "Rust Filesystem MCP configured."
+            if gemini mcp add --scope user filesystem "$BINARY_PATH" -w "." "~/.gemini/skills" &> /dev/null; then
+                success "Rust Filesystem MCP configured."
+            else
+                warn "$MSG_WARN_ACTION_FAILED MCP 'filesystem' (rust)"
+                MCP_FAILED=$((MCP_FAILED + 1))
+                SETUP_HAS_ERRORS=1
+            fi
         else
             info "Falling back to Node.js filesystem..."
-            gemini mcp add --scope user filesystem npx -y @modelcontextprotocol/server-filesystem . &> /dev/null || true
+            if ! gemini mcp add --scope user filesystem npx -y @modelcontextprotocol/server-filesystem . &> /dev/null; then
+                warn "$MSG_WARN_ACTION_FAILED MCP 'filesystem' (node fallback)"
+                MCP_FAILED=$((MCP_FAILED + 1))
+                SETUP_HAS_ERRORS=1
+            fi
         fi
     else
         info "Adding standard Node.js filesystem MCP..."
-        gemini mcp add --scope user filesystem npx -y @modelcontextprotocol/server-filesystem . &> /dev/null || true
+        if ! gemini mcp add --scope user filesystem npx -y @modelcontextprotocol/server-filesystem . &> /dev/null; then
+            warn "$MSG_WARN_ACTION_FAILED MCP 'filesystem' (node)"
+            MCP_FAILED=$((MCP_FAILED + 1))
+            SETUP_HAS_ERRORS=1
+        fi
     fi
 fi
 
@@ -455,7 +509,11 @@ if ! command -v browser-use &> /dev/null; then
     fi
 fi
 
-success "$MSG_SUCCESS_MCP_READY"
+if [ "$MCP_FAILED" -eq 0 ]; then
+    success "$MSG_SUCCESS_MCP_READY"
+else
+    warn "$MSG_WARN_MCP_FAILED $MCP_FAILED"
+fi
 
 # 5. Final Sync of Settings & Hooks
 step "$MSG_STEP_SYNC_SETTINGS"
@@ -724,7 +782,11 @@ else
     info "$MSG_INFO_SKIP_GEMINI"
 fi
 
-echo -e "\n${GREEN}✅ ${MSG_FINISH}${NC}"
+if [ "$SETUP_HAS_ERRORS" -eq 0 ]; then
+    echo -e "\n${GREEN}✅ ${MSG_FINISH}${NC}"
+else
+    echo -e "\n${YELLOW}⚠ ${MSG_FINISH_WITH_WARNINGS}${NC}"
+fi
 echo -e "----------------------------------------------------"
 echo -e "STATUS:"
 echo -e "- ${MSG_STATUS_CLI}"

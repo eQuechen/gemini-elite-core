@@ -34,6 +34,7 @@ tsconfig.tsbuildinfo
 repomix-output.*
 .grepai/
 *.log
+.aiassistant
 
 # IDEs
 .vscode/
